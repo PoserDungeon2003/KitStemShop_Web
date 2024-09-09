@@ -37,8 +37,8 @@ export default function App() {
         <link rel="preconnect" href="https://fonts.googleapis.com"></link>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin={"anonymous"}></link>
         <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"></link>
-        <title>EgoFlask</title>
-        <meta name="description" content="Ego Flask" />
+        <title>STEM Shop</title>
+        <meta name="description" content="STEM Shop" />
         <Meta />
         <Links />
       </head>
