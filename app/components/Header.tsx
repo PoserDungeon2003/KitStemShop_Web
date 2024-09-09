@@ -1,5 +1,26 @@
-import { Link } from "@remix-run/react";
-import { IoCart, IoHeartOutline, IoPersonOutline, IoSearchOutline } from "react-icons/io5";
+import { Link, NavLink } from "@remix-run/react";
+import { IoCartOutline, IoHeartOutline, IoPersonOutline, IoSearchOutline } from "react-icons/io5";
+import _ from 'lodash';
+
+const navbar = [
+  {
+    name: "Wishlist",
+    to: "/wishlist",
+    length: 8,
+    icon: IoHeartOutline
+  },
+  {
+    name: "Cart",
+    to: "/cart",
+    length: 2,
+    icon: IoCartOutline
+  },
+  {
+    name: "Account",
+    to: "/account",
+    icon: IoPersonOutline
+  },
+]
 
 export const Header = () => {
   return (
@@ -21,32 +42,26 @@ export const Header = () => {
         </div>
 
         <div className="flex items-center space-x-4">
-          <Link to="#" className="text-center text-gray-700 hover:text-primary transition flex flex-col items-center justify-center">
-            <div className="relative">
-              <IoHeartOutline className="text-2xl" />
-              <div
-                className="absolute -right-2 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
-                8
-              </div>
-            </div>
-            <div className="text-xs leading-3">
-              Wishlist
-            </div>
-          </Link>
-          <Link to="#" className="text-center text-gray-700 hover:text-primary transition flex flex-col items-center justify-center">
-            <div className="relative">
-              <IoCart className="text-2xl" />
-              <div
-                className="absolute -right-3 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
-                2
-              </div>
-            </div>
-            <div className="text-xs leading-3">Cart</div>
-          </Link>
-          <Link to="#" className="text-center text-gray-700 hover:text-primary transition flex flex-col items-center justify-center">
-            <IoPersonOutline className="text-2xl" />
-            <div className="text-xs leading-3">Account</div>
-          </Link>
+          {_.map(navbar, (item, index) => {
+            return (
+              <NavLink key={index} to={item.to} className={({ isActive }) =>
+                `${isActive ? 'text-primary' : ''} text-center text-gray-700 hover:text-primary transition flex flex-col items-center justify-center`
+              }>
+                <div className="relative">
+                  <item.icon className="text-2xl" />
+                  {item.length && (
+                    <div
+                      className="absolute -right-2 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
+                      {item.length}
+                    </div>
+                  )}
+                </div>
+                <div className="text-xs leading-3">
+                  {item.name}
+                </div>
+              </NavLink>
+            )
+          })}
         </div>
       </div>
     </header>
