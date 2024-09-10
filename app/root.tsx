@@ -10,7 +10,7 @@ import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LinksFunction } from "@remix-run/node";
 import styles from "./tailwind.css?url";
-import { Header } from "./components";
+import { Copyright, Footer, Header, NavBar } from "./components";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles, as: "style" },
@@ -46,11 +46,14 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <body>
           <Header />
+          <NavBar />
           <div id="wrapper">
             <Outlet />
           </div>
           <ScrollRestoration />
           <Scripts />
+          <Footer />
+          <Copyright />
         </body>
       </QueryClientProvider>
     </html>
