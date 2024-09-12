@@ -11,6 +11,7 @@ import { authenticator } from "~/services/auth.server";
 let loginSchema = object({
   username: string().trim().required("Username is a required field"),
   passwordHash: string().trim().required("Password is a required field"),
+  loginType: string().trim().required(),
 })
 
 export type LoginFormData = InferType<typeof loginSchema>
@@ -44,7 +45,7 @@ export default function Login() {
 
   useEffect(() => {
     if (location.search == '?success') {
-      // navigate('/')
+      navigate('/')
     }
   }, [location.search])
 
@@ -59,11 +60,12 @@ export default function Login() {
         <h2 className="text-2xl uppercase font-medium mb-1">Login</h2>
         <p className="text-gray-600 mb-6 text-sm">Welcome back customer</p>
         <Form onSubmit={submit} reloadDocument method="post" autoComplete="off">
+          <input type="text" hidden value={'user-pass'} {...register('loginType')} />
           <div className="space-y-2">
             <div>
               <label htmlFor="email" className="text-gray-600 mb-2 block">Email address</label>
               <input
-                type="email"
+                type="text"
                 id="email"
                 className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                 placeholder="Email"

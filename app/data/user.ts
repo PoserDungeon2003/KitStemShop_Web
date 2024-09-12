@@ -1,7 +1,8 @@
 import request, { BASE_URL } from "./request";
+import { LoginRS } from "./types";
 
-async function login(username: string, password: string) {
-  return request.post(`${BASE_URL}/api/LoginController/LoginKitStemShop`, { username, password }, {
+export async function login(username: string, password: string): Promise<LoginRS> {
+  return request.post(`${BASE_URL}/api/Login`, { username, password }, {
     headers: {
       'Content-Type': 'application/json',
     }
