@@ -25,7 +25,7 @@ export async function action({ request }: ActionFunctionArgs) {
       throwOnError: true,
     })
   } catch (error: any) {
-    console.log('error', error.cause?.cause.name);
+    console.log('error', error.cause?.cause?.name);
     let cause = (error.cause?.cause) as any
     if (error instanceof Response) return error;
     if (error instanceof AuthorizationError) {

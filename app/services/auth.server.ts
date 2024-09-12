@@ -1,8 +1,8 @@
 import axios from "axios";
-import { Authenticator } from "remix-auth";
+import { Authenticator, AuthorizationError } from "remix-auth";
 import { FormStrategy } from "remix-auth-form";
 import { parseFormData } from "remix-hook-form";
-import { login } from "~/data";
+import { login, LoginRS } from "~/data";
 import { BASE_URL } from "~/data/request";
 import { LoginFormData } from "~/routes/login";
 import { sessionStorage } from "~/services/session.server";
@@ -15,16 +15,17 @@ authenticator.use(
     console.log('loginType', loginType);
     try {
       if (loginType == 'user-pass') {
-        const result = await axios.post(`${BASE_URL}/api/Login`, { username, passwordHash }, {
+        const result = await axios.post(`${BASE_URL}/api/Login`, { username, passwordHash: passwordHash.toString() }, {
           headers: {
             'Content-Type': 'application/json',
           },
         })
         console.log('====login result', JSON.stringify(result.data))
-        return result.data
+        return result.data as LoginRS;
       }
     } catch (error: any) {
-      console.log('====login error', error);
+      console.log('====login error', error.response.data);
+      throw new AuthorizationError("Internal Server Error", { name: `${error}`, message: `${error}` })
     }
   }),
   "user-pass"
