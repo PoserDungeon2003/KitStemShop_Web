@@ -7,7 +7,7 @@ export type LoginRS = {
 }
 
 export type User = {
-  token: string;
+  token?: string;
   userId: number;
   userName?: string;
   role?: string;
@@ -16,7 +16,7 @@ export type User = {
 
 export type UserProfile = {
   user?: User;
-  detail: UserDetail;
+  detail?: UserDetail;
 }
 
 export type UserDetail = {

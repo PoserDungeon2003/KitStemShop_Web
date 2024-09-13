@@ -1,6 +1,9 @@
-import { Link, NavLink } from "@remix-run/react"
+import { Link, NavLink, useLocation, useNavigate } from "@remix-run/react"
+import { useQueryClient } from "@tanstack/react-query"
 import _ from "lodash"
+import { useEffect } from "react"
 import { IoMenu } from "react-icons/io5"
+import { useGetProfile } from "~/data"
 
 const dropDownList = [
   {
@@ -36,6 +39,23 @@ const dropDownList = [
 ]
 
 export const NavBar = () => {
+  const profile = useGetProfile();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const location = useLocation();
+  const user = profile.data?.user
+  const searchParams = new URLSearchParams(location.search)
+  const action = searchParams.get('action')
+
+  useEffect(() => {
+    if (action == 'logout') {
+      queryClient.invalidateQueries({
+        queryKey: ['profile']
+      })
+      // navigate('/')
+    }
+  }, [location.search])
+
   return (
     <nav className="bg-gray-800">
       <div className="container flex">
@@ -65,16 +85,23 @@ export const NavBar = () => {
             <Link to="/contact" className="text-gray-200 hover:text-white transition">Contact us</Link>
           </div>
           <div className="text-gray-200 transition flex flex-1 justify-end">
-            <div className="flex items-center justify-center">
-              <Link to={'/login'} className="hover:text-white">
-                Login
-              </Link>
-              <span>/</span>
-              <Link to={'/register'} className="hover:text-white">
-                Register
-              </Link>
-            </div>
-
+            {user ? (
+              <div className="flex items-center justify-center">
+                <Link to={'/logout?redirectTo=/?action=logout'} className="hover:text-white cursor-pointer">
+                  Logout
+                </Link>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center">
+                <Link to={'/login'} className="hover:text-white">
+                  Login
+                </Link>
+                <span>/</span>
+                <Link to={'/register'} className="hover:text-white">
+                  Register
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

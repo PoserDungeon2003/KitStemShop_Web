@@ -1,6 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { Form, Link, useLocation, useNavigate } from "@remix-run/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { FormEvent, useEffect } from "react";
 import { IoLogoFacebook, IoLogoGoogle } from "react-icons/io5";
 import { AuthorizationError } from "remix-auth";
@@ -42,9 +43,11 @@ export default function Login() {
   })
   const location = useLocation()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     if (location.search == '?success') {
+      queryClient.clear()
       navigate('/')
     }
   }, [location.search])
