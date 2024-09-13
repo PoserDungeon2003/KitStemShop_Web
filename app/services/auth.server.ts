@@ -21,7 +21,8 @@ authenticator.use(
           },
         })
         console.log('====login result', JSON.stringify(result.data))
-        return result.data as LoginRS;
+        let response = result.data as LoginRS;
+        return response.data;
       }
     } catch (error: any) {
       console.log('====login error', error.response.data);

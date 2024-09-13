@@ -4,18 +4,24 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  redirect,
 } from "@remix-run/react";
 import "./tailwind.css";
 import { useState } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LinksFunction } from "@remix-run/node";
 import styles from "./tailwind.css?url";
 import { Copyright, Footer, Header, NavBar } from "./components";
+import _ from "lodash";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles, as: "style" },
   { rel: "stylesheet", href: "/css/tailwind1.css" },
 ];
+
+const redirectLogin = _.throttle(() => {
+  redirect('/login')
+}, 100)
 
 export default function App() {
   const [queryClient] = useState(
@@ -26,6 +32,13 @@ export default function App() {
             staleTime: 60 * 1000,
           },
         },
+        queryCache: new QueryCache({
+          onError: (error: any) => {
+            if (error?.response?.status === 401) {
+              redirectLogin()
+            }
+          },
+        }),
       })
   );
 
@@ -50,10 +63,10 @@ export default function App() {
           <div id="wrapper">
             <Outlet />
           </div>
-          <ScrollRestoration />
-          <Scripts />
           <Footer />
           <Copyright />
+          <ScrollRestoration />
+          <Scripts />
         </body>
       </QueryClientProvider>
     </html>
