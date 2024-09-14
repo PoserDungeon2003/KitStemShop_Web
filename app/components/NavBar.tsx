@@ -43,7 +43,7 @@ export const NavBar = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const location = useLocation();
-  const user = profile.data?.user
+  const user = profile.data?.detail?.username  
   const searchParams = new URLSearchParams(location.search)
   const action = searchParams.get('action')
 
