@@ -1,5 +1,7 @@
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { FaAddressCard, FaBoxArchive, FaChevronRight, FaCreditCard, FaHeart, FaHouse, FaRightFromBracket } from "react-icons/fa6";
+import { Link } from "@remix-run/react";
+import { FaAddressCard, FaBoxArchive, FaCreditCard, FaHeart, FaRightFromBracket } from "react-icons/fa6";
+import { useGetProfile } from "~/data";
 import { authenticator } from "~/services/auth.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -10,21 +12,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({}, { status: 200 });
 }
 
-export default function Account() {
-  return (
-    <div>
-      {/* breadcrumb */}
-      <div className="container py-4 flex items-center gap-3">
-        <a href="/home" className="text-primary text-base">
-          <FaHouse />
-        </a>
-        <span className="text-sm text-gray-400">
-          <FaChevronRight />
-        </span>
-        <p className="text-gray-600 font-medium">Account</p>
-      </div>
-      {/* ./breadcrumb */}
+export const handle = {
+  breadcrumb: true,
+}
 
+export default function Account() {
+  const profile = useGetProfile();
+  const username = profile.data?.user?.userName
+  return (
+    <main>
       {/* account wrapper */}
       <div className="container grid grid-cols-12 items-start gap-6 pt-4 pb-16">
 
@@ -37,7 +33,7 @@ export default function Account() {
             </div>
             <div className="flex-grow">
               <p className="text-gray-600">Hello,</p>
-              <h4 className="text-gray-800 font-medium">John Doe</h4>
+              <h4 className="text-gray-800 font-medium">{username}</h4>
             </div>
           </div>
 
@@ -100,12 +96,12 @@ export default function Account() {
             </div>
 
             <div className="space-y-1 pl-8 pt-4">
-              <a href="#" className="relative hover:text-primary block font-medium capitalize transition">
+              <Link to="/logout?redirectTo=/?action=logout" className="relative hover:text-primary block font-medium capitalize transition">
                 <span className="absolute -left-8 top-0 text-base">
                   <FaRightFromBracket />
                 </span>
                 Logout
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -153,6 +149,6 @@ export default function Account() {
         </div>
         {/* ./info */}
       </div>
-    </div>
+    </main>
   )
 }

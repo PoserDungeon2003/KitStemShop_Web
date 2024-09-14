@@ -11,7 +11,7 @@ import { useState } from "react";
 import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LinksFunction } from "@remix-run/node";
 import styles from "./tailwind.css?url";
-import { Copyright, Footer, Header, NavBar } from "./components";
+import { Breadcrumb, Copyright, Footer, Header, NavBar } from "./components";
 import _ from "lodash";
 
 export const links: LinksFunction = () => [
@@ -60,6 +60,7 @@ export default function App() {
         <body>
           <Header />
           <NavBar />
+          <Breadcrumb />
           <div id="wrapper">
             <Outlet />
           </div>

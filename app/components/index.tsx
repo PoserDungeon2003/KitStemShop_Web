@@ -3,3 +3,4 @@ export * from "./Footer";
 export * from './NavBar';
 export * from './Copyright';
 export * from './Product';
+export * from './Breadcrumb';
