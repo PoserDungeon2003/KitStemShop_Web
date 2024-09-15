@@ -2,7 +2,7 @@ import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import _ from "lodash";
 import { IoHeart, IoSearch, IoSearchOutline, IoStar, IoStarHalf } from "react-icons/io5";
-import { Product } from "~/components";
+import { ProductCard } from "~/components";
 import { authenticator } from "~/services/auth.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -112,7 +112,7 @@ export default function Index() {
       <div className="container pb-16">
         <h2 className="text-2xl font-medium text-gray-800 uppercase mb-6">Top New Arrival</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Product />
+          <ProductCard />
           {/* Repeat for other products with adjusted image paths and product details */}
         </div>
       </div>
@@ -130,7 +130,7 @@ export default function Index() {
           Recomended for you
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <Product />
+          <ProductCard />
         </div>
       </div>
     </main>

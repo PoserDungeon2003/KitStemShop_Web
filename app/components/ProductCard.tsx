@@ -1,6 +1,6 @@
 import { IoHeart, IoSearch, IoStar, IoStarHalf } from "react-icons/io5"
 
-export const Product = () => {
+export const ProductCard = () => {
   return (
     <div className="bg-white shadow rounded overflow-hidden group">
       <div className="relative">
