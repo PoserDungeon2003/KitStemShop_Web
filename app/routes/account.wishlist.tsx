@@ -1,5 +1,9 @@
 import { WishlistItem } from "~/components";
 
+export const handle = {
+  breadcrumb: true,
+}
+
 export default function AccountWishList() {
   return (
     // Wishlist
