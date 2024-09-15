@@ -5,7 +5,7 @@ import _ from 'lodash';
 const navbar = [
   {
     name: "Wishlist",
-    to: "/wishlist",
+    to: "/account/wishlist",
     length: 8,
     icon: IoHeartOutline
   },
@@ -44,9 +44,7 @@ export const Header = () => {
         <div className="flex items-center space-x-4">
           {_.map(navbar, (item, index) => {
             return (
-              <NavLink key={index} to={item.to} className={({ isActive }) =>
-                `${isActive ? 'text-primary' : ''} text-center text-gray-700 hover:text-primary transition flex flex-col items-center justify-center`
-              }>
+              <Link key={index} to={item.to} className={`text-center text-gray-700 hover:text-primary transition flex flex-col items-center justify-center`}>
                 <div className="relative">
                   <item.icon className="text-2xl" />
                   {item.length && (
@@ -59,7 +57,7 @@ export const Header = () => {
                 <div className="text-xs leading-3">
                   {item.name}
                 </div>
-              </NavLink>
+              </Link>
             )
           })}
         </div>
