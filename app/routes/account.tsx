@@ -105,12 +105,12 @@ export default function Account() {
             </div>
 
             <div className="space-y-1 pl-8 pt-4">
-              <a href="#" className="relative hover:text-primary block font-medium capitalize transition">
+              <NavLink to="/account/wishlist" className={({ isActive}) => `${isActive ? 'text-primary' : ''} relative hover:text-primary block font-medium capitalize transition`}>
                 <span className="absolute -left-8 top-0 text-base">
                   <FaHeart />
                 </span>
                 My wishlist
-              </a>
+              </NavLink>
             </div>
 
             <div className="space-y-1 pl-8 pt-4">
