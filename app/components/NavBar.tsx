@@ -2,7 +2,7 @@ import { Link, NavLink, useLocation, useNavigate } from "@remix-run/react"
 import { useQueryClient } from "@tanstack/react-query"
 import _ from "lodash"
 import { useEffect } from "react"
-import { IoMenu } from "react-icons/io5"
+import { FaBars } from "react-icons/fa6"
 import { useGetProfile } from "~/data"
 
 const dropDownList = [
@@ -43,7 +43,7 @@ export const NavBar = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const location = useLocation();
-  const user = profile.data?.detail?.username  
+  const user = profile.data?.detail?.username
   const searchParams = new URLSearchParams(location.search)
   const action = searchParams.get('action')
 
@@ -61,7 +61,7 @@ export const NavBar = () => {
       <div className="container flex">
         <div className="px-8 py-4 bg-primary flex items-center cursor-pointer relative group">
           <span className="text-white">
-            <IoMenu />
+            <FaBars />
           </span>
           <span className="capitalize ml-2 text-white">All Categories</span>
 

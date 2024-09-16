@@ -1,24 +1,24 @@
 import { Link, NavLink } from "@remix-run/react";
-import { IoCartOutline, IoHeartOutline, IoPersonOutline, IoSearchOutline } from "react-icons/io5";
 import _ from 'lodash';
+import { FaBagShopping, FaHeart, FaMagnifyingGlass, FaUser } from "react-icons/fa6";
 
 const navbar = [
   {
     name: "Wishlist",
     to: "/account/wishlist",
     length: 8,
-    icon: IoHeartOutline
+    icon: FaHeart
   },
   {
     name: "Cart",
     to: "/cart",
     length: 2,
-    icon: IoCartOutline
+    icon: FaBagShopping
   },
   {
     name: "Account",
     to: "/account",
-    icon: IoPersonOutline
+    icon: FaUser
   },
 ]
 
@@ -32,7 +32,7 @@ export const Header = () => {
 
         <div className="w-full max-w-xl relative flex">
           <span className="absolute left-4 top-4 text-lg text-gray-400">
-            <IoSearchOutline />
+            <FaMagnifyingGlass />
           </span>
           <input type="text" name="search" id="search"
             className="w-full border border-primary border-r-0 pl-12 py-3 pr-3 rounded-l-md focus:outline-none"

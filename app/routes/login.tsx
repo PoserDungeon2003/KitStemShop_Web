@@ -3,7 +3,7 @@ import { ActionFunctionArgs } from "@remix-run/node";
 import { Form, Link, useLocation, useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { FormEvent, useEffect } from "react";
-import { IoLogoFacebook, IoLogoGoogle } from "react-icons/io5";
+import { FaFacebook, FaGoogle } from "react-icons/fa6";
 import { AuthorizationError } from "remix-auth";
 import { useRemixForm } from "remix-hook-form";
 import { InferType, object, string } from "yup";
@@ -120,14 +120,14 @@ export default function Login() {
             to="#"
             className="w-1/2 flex flex-1 items-center justify-center gap-2 py-2 text-center text-white bg-blue-800 rounded uppercase font-roboto font-medium text-sm hover:bg-blue-700"
           >
-            <IoLogoFacebook className="aspect-square w-5 h-5" />
+            <FaFacebook className="aspect-square w-5 h-5" />
             <span>Facebook</span>
           </Link>
           <Link
             to="#"
             className="w-1/2 flex flex-1 items-center justify-center gap-2 py-2 text-center text-white bg-red-600 rounded uppercase font-roboto font-medium text-sm hover:bg-red-500"
           >
-            <IoLogoGoogle className="aspect-square w-5 h-5" />
+            <FaGoogle className="aspect-square w-5 h-5" />
             <span>Google</span>
           </Link>
         </div>

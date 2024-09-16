@@ -1,4 +1,5 @@
-import { IoHeart, IoSearch, IoStar, IoStarHalf } from "react-icons/io5"
+import _ from "lodash"
+import { FaHeart, FaMagnifyingGlass, FaStar } from "react-icons/fa6"
 
 export const ProductCard = () => {
   return (
@@ -9,12 +10,12 @@ export const ProductCard = () => {
           <a href="#"
             className="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
             title="view product">
-            <IoSearch />
+            <FaMagnifyingGlass />
           </a>
           <a href="#"
             className="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
             title="add to wishlist">
-            <IoHeart />
+            <FaHeart />
           </a>
         </div>
       </div>
@@ -28,11 +29,11 @@ export const ProductCard = () => {
         </div>
         <div className="flex items-center">
           <div className="flex gap-1 text-sm text-yellow-400">
-            <span><IoStar /></span>
-            <span><IoStar /></span>
-            <span><IoStar /></span>
-            <span><IoStar /></span>
-            <span><IoStarHalf /></span>
+            {_.map([1, 2, 3, 4, 5], (item, index) => {
+              return (
+                <span><FaStar /></span>
+              )
+            })}
           </div>
           <div className="text-xs text-gray-500 ml-3">(150)</div>
         </div>

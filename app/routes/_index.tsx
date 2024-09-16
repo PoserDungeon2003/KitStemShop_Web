@@ -1,9 +1,7 @@
-import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import _ from "lodash";
-import { IoHeart, IoSearch, IoSearchOutline, IoStar, IoStarHalf } from "react-icons/io5";
 import { ProductCard } from "~/components";
-import { authenticator } from "~/services/auth.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // let user = await authenticator.isAuthenticated(request);

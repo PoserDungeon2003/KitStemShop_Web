@@ -1,4 +1,4 @@
-import { IoLogoFacebook, IoLogoGithub, IoLogoInstagram, IoLogoTwitter } from "react-icons/io5"
+import { FaFacebook, FaGithub, FaInstagram, FaSquareXTwitter } from "react-icons/fa6"
 
 export const Footer = () => {
   return (
@@ -13,16 +13,16 @@ export const Footer = () => {
           </div>
           <div className="flex space-x-5">
             <a href="#" className="text-gray-400 hover:text-gray-500">
-              <IoLogoFacebook />
+              <FaFacebook />
             </a>
             <a href="#" className="text-gray-400 hover:text-gray-500">
-              <IoLogoInstagram />
+              <FaInstagram />
             </a>
             <a href="#" className="text-gray-400 hover:text-gray-500">
-              <IoLogoTwitter />
+              <FaSquareXTwitter />
             </a>
             <a href="#" className="text-gray-400 hover:text-gray-500">
-              <IoLogoGithub />
+              <FaGithub />
             </a>
           </div>
         </div>
