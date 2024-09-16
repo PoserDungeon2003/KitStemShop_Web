@@ -2,6 +2,10 @@ import _ from "lodash";
 import { FaBagShopping, FaFacebookF, FaInstagram, FaStar, FaTwitter } from "react-icons/fa6";
 import { ProductCard } from "~/components";
 
+export const handle = {
+  breadcrumb: true,
+}
+
 export default function ProductDetail() {
   return (
     <main>
