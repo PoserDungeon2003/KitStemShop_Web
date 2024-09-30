@@ -1,7 +1,9 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import _ from "lodash";
+import { useMemo } from "react";
 import { ProductCard } from "~/components";
+import { useGetAllCombos, useGetAllKits } from "~/data";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // let user = await authenticator.isAuthenticated(request);
@@ -47,6 +49,30 @@ const categories = [
 ];
 
 export default function Index() {
+  const kits = useGetAllKits();
+  const combos = useGetAllCombos();
+
+  const filterKits = useMemo(() => {
+    return _(kits.data?.data)
+      .shuffle()
+      .slice(0, 4)
+      .value();
+  }, [kits.data?.data]);
+
+  const topNewArrivalCombos = useMemo(() => {
+    return _(combos.data?.data)
+      .shuffle()
+      .slice(0, 4)
+      .value();
+  }, [combos.data?.data]);
+
+  const recommendedCombos = useMemo(() => {
+    return _(combos.data?.data)
+      .shuffle()
+      .slice(0, 8)
+      .value();
+  }, [combos.data?.data]);
+
   return (
     <main>
       {/* Banner */}
@@ -110,7 +136,9 @@ export default function Index() {
       <div className="container pb-16">
         <h2 className="text-2xl font-medium text-gray-800 uppercase mb-6">Top New Arrival</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <ProductCard />
+          {_.map(topNewArrivalCombos, (combo, index) => (
+            <ProductCard imageUrl={combo.image} link={`/product/${combo.compoId}`} price={combo.price} discountPrice={combo.price} title={combo.labKitName} key={index} />
+          ))}
           {/* Repeat for other products with adjusted image paths and product details */}
         </div>
       </div>
@@ -128,7 +156,9 @@ export default function Index() {
           Recomended for you
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <ProductCard />
+          {_.map(recommendedCombos, (combo, index) => (
+            <ProductCard imageUrl={combo.image} link={`/product/${combo.compoId}`} price={combo.price} discountPrice={combo.price} title={combo.labKitName} key={index} />
+          ))}
         </div>
       </div>
     </main>
