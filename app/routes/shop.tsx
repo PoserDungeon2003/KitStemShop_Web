@@ -1,11 +1,63 @@
+import _ from "lodash";
+import { SetStateAction, useMemo, useState } from "react";
 import { FaGripVertical, FaList } from "react-icons/fa6";
+import { Pagination } from "antd";
 import { ProductCard } from "~/components";
+import { useGetAllCombos, useGetAllKits } from "~/data";
 
 export const handle = {
   breadcrumb: true,
 }
 
 export default function Shop() {
+  const kits = useGetAllKits();
+  const combos = useGetAllCombos();
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [sortOption, setSortOption] = useState("");
+
+  const handleChange = (pageNumber: number, pageSize: number) => {
+    setPage(pageNumber);
+    setPageSize(pageSize);
+    console.log(`Page changed to: ${pageNumber}, size: ${pageSize}`);
+  };
+
+  const handleSortChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+    setSortOption(event.target.value);
+    setPage(1);
+  };
+
+  const sortedData = useMemo(() => {
+    if (!combos.data?.data) return [];
+
+    let filteredData = [...combos.data.data];
+
+    switch (sortOption) {
+      case "price-low-to-high":
+        filteredData = _(filteredData).orderBy("price", "asc").value();
+        break;
+      case "price-high-to-low":
+        filteredData = _(filteredData).orderBy("price", "desc").value();
+        break;
+      case "latest":
+        filteredData = _(filteredData).orderBy("createdAt", "desc").value();
+        break;
+      default:
+        break;
+    }
+
+    return filteredData;
+  }, [combos.data?.data, sortOption]);
+
+  const data = useMemo(() => {
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+
+    return _(sortedData)
+      .slice(startIndex, endIndex)
+      .value();
+  }, [sortedData, page, pageSize]);
+
   return (
     <main className="container grid md:grid-cols-4 grid-cols-2 gap-6 pt-4 pb-16 items-start">
       {/* Sidebar */}
@@ -275,7 +327,7 @@ export default function Shop() {
                 <label
                   htmlFor="color-red"
                   className="block h-6 w-6 border border-gray-200 rounded-sm cursor-pointer shadow-sm bg-red-600"
-                ></label>
+                />
               </div>
               <div className="color-selector">
                 <input type="radio" name="color" id="color-white" className="hidden" />
@@ -462,6 +514,8 @@ export default function Shop() {
           <select
             name="sort"
             id="sort"
+            defaultValue=""
+            onChange={handleSortChange}
             className="w-44 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary"
           >
             <option value="">Default sorting</option>
@@ -486,9 +540,19 @@ export default function Shop() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 grid-cols-2 gap-6">
-          <ProductCard />
+        <div className="grid md:grid-cols-3 grid-cols-2 gap-6 mb-5">
+          {_.map(data, (combo, index) => (
+            <ProductCard imageUrl={combo.image} link={`/product/${combo.compoId}`} price={combo.price} discountPrice={combo.price} title={combo.labKitName} key={index} />
+          ))}
         </div>
+
+        <Pagination
+          showSizeChanger
+          align="center"
+          defaultCurrent={page}
+          total={pageSize}
+          onChange={handleChange}
+        />
       </div>
     </main>
   )

@@ -30,7 +30,7 @@ export const Breadcrumb = () => {
         const parsedName = parsePathname(match.pathname);
         if (!parsedName) return null;
         return (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3" key={index}>
             {index > 1 && (
               <span className="text-sm text-gray-400">
                 <FaChevronRight />
