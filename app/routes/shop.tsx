@@ -1,11 +1,62 @@
+import _ from "lodash";
+import { SetStateAction, useMemo, useState } from "react";
 import { FaGripVertical, FaList } from "react-icons/fa6";
+import Pagination from '@mui/material/Pagination';
 import { ProductCard } from "~/components";
+import { useGetAllCombos, useGetAllKits } from "~/data";
 
 export const handle = {
   breadcrumb: true,
 }
 
 export default function Shop() {
+  const kits = useGetAllKits();
+  const combos = useGetAllCombos();
+  const [page, setPage] = useState(1);
+  const [sortOption, setSortOption] = useState(""); 
+  const itemsPerPage = 6;
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+    console.log(`Page changed to: ${value}`);
+  };
+
+  const handleSortChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+    setSortOption(event.target.value);
+    setPage(1);
+  };
+
+  const sortedData = useMemo(() => {
+    if (!combos.data?.data) return [];
+
+    let filteredData = [...combos.data.data];
+
+    switch (sortOption) {
+      case "price-low-to-high":
+        filteredData = _.sortBy(filteredData, "price");
+        break;
+      case "price-high-to-low":
+        filteredData = _.sortBy(filteredData, "price").reverse();
+        break;
+      case "latest":
+        filteredData = _.sortBy(filteredData, "createdAt").reverse();
+        break;
+      default:
+        break;
+    }
+
+    return filteredData;
+  }, [combos.data?.data, sortOption]);
+
+  const data = useMemo(() => {
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    return _(sortedData)  
+      .slice(startIndex, endIndex)
+      .value();
+  }, [sortedData, page]);
+
   return (
     <main className="container grid md:grid-cols-4 grid-cols-2 gap-6 pt-4 pb-16 items-start">
       {/* Sidebar */}
@@ -196,21 +247,21 @@ export default function Shop() {
           <div className="pt-4">
             <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">Price</h3>
             <div className="mt-4 flex items-center">
-              <input
-                type="text"
-                name="min"
-                id="min"
-                className="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
-                placeholder="min"
-              />
-              <span className="mx-3 text-gray-500">-</span>
-              <input
-                type="text"
-                name="max"
-                id="max"
-                className="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
-                placeholder="max"
-              />
+            <input
+          type="text"
+          name="min"
+          id="min"
+          className="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
+          placeholder="min"
+        />
+        <span className="mx-3 text-gray-500">-</span>
+        <input
+          type="text"
+          name="max"
+          id="max"
+          className="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
+          placeholder="max"
+        />
             </div>
           </div>
 
@@ -275,7 +326,7 @@ export default function Shop() {
                 <label
                   htmlFor="color-red"
                   className="block h-6 w-6 border border-gray-200 rounded-sm cursor-pointer shadow-sm bg-red-600"
-                ></label>
+                 />
               </div>
               <div className="color-selector">
                 <input type="radio" name="color" id="color-white" className="hidden" />
@@ -462,6 +513,8 @@ export default function Shop() {
           <select
             name="sort"
             id="sort"
+            defaultValue=""
+            onChange={handleSortChange}
             className="w-44 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary"
           >
             <option value="">Default sorting</option>
@@ -486,9 +539,21 @@ export default function Shop() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 grid-cols-2 gap-6">
-          <ProductCard />
+        <div className="grid md:grid-cols-3 grid-cols-2 gap-6 mb-5">
+        {_.map(data, (combo, index) => (
+            <ProductCard imageUrl={combo.image} link={`/product/${combo.compoId}`} price={combo.price} discountPrice={combo.price} title={combo.labKitName} key={index} />
+          ))}
+          
+
         </div>
+
+        <Pagination
+            count={Math.ceil((combos.data?.data?.length ?? 0) / 6) }
+            page={page}
+            defaultValue={1}
+            onChange={handleChange}
+            color="primary"
+          />
       </div>
     </main>
   )
