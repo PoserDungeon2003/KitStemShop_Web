@@ -33,13 +33,13 @@ export default function Shop() {
 
     switch (sortOption) {
       case "price-low-to-high":
-        filteredData = _.sortBy(filteredData, "price");
+        filteredData = _(filteredData).orderBy("price", "asc").value();
         break;
       case "price-high-to-low":
-        filteredData = _.sortBy(filteredData, "price").reverse();
+        filteredData = _(filteredData).orderBy("price", "desc").value();
         break;
       case "latest":
-        filteredData = _.sortBy(filteredData, "createdAt").reverse();
+        filteredData = _(filteredData).orderBy("createdAt", "desc").value();
         break;
       default:
         break;
@@ -553,6 +553,7 @@ export default function Shop() {
             defaultValue={1}
             onChange={handleChange}
             color="primary"
+            className="flex justify-center"
           />
       </div>
     </main>
