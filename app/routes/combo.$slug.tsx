@@ -35,7 +35,7 @@ export default function ComboDetail() {
     <main>
       <div className="container grid grid-cols-2 gap-6">
         <div>
-          <img src={detail.image} alt={detail.labKitName} className="w-full" />
+          <img src={detail.image || '/images/products/product2.jpg'} alt={detail.labKitName} className="w-full h-full aspect-[612/453]" />
           <div className="grid grid-cols-5 gap-4 mt-4">
             {/* <img src="/images/products/product2.jpg" alt="product2" className="w-full cursor-pointer border border-primary" />
             <img src="/images/products/product3.jpg" alt="product2" className="w-full cursor-pointer border" />
@@ -78,8 +78,8 @@ export default function ComboDetail() {
           </div>
 
           <div className="flex items-baseline mb-1 space-x-2 font-roboto mt-4">
-            <p className="text-xl text-primary font-semibold">$45.00</p>
-            <p className="text-base text-gray-400 line-through">$55.00</p>
+            <p className="text-xl text-primary font-semibold">${detail.price}</p>
+            <p className="text-base text-gray-400 line-through">${detail.price}</p>
           </div>
 
           <p className="mt-4 text-gray-600">
@@ -168,10 +168,10 @@ export default function ComboDetail() {
       <div className="container pb-16">
         <h3 className="border-b border-gray-200 font-roboto text-gray-800 pb-3 font-medium">Lab details</h3>
         <div className="w-3/5 pt-6 space-y-2">
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <h4 className="text-xl font-medium text-gray-800">Lab Name: {labDetail.data?.data.labName}</h4>
             <h4 className="text-xl font-medium text-gray-800">Lab Category: {labDetail.data?.data.categoryLabName}</h4>
-          </div>
+          </div> */}
           <div className="text-gray-600">
             <p>{labDetail.data?.data.labDescription}</p>
             {/* <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, quae accusantium voluptatem blanditiis sapiente voluptatum. Autem ab, dolorum assumenda earum veniam eius illo fugiat possimus illum dolor totam, ducimus excepturi.</p>
@@ -199,7 +199,7 @@ export default function ComboDetail() {
       <div className="container pb-16">
         <h2 className="text-2xl font-medium text-gray-800 uppercase mb-6">Related kits</h2>
         <div className="grid grid-cols-4 gap-6">
-          <ProductCard />
+          {/* <ProductCard /> */}
         </div>
       </div>
     </main>
