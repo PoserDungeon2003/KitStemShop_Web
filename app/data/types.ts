@@ -61,3 +61,35 @@ export type ComboLabKitsResponse = {
   message: string | null;
   data?: ComboLabKit[];
 };
+
+export type ComboLabKitDetail = {
+  labKitName: string;
+  labKitDescription: string;
+  price: number;
+  image?: string;
+  categoryName: string;
+  labName: string;
+  labId: number;
+};
+
+export type ComboLabKitDetailResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message?: string | null;
+  data?: ComboLabKitDetail;
+};
+
+export type LabDetail = {
+  labId: number;
+  labName: string;
+  labDescription: string;
+  videoUrl: string;
+  categoryLabName: string;
+};
+
+export type LabDetailResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message: string | null;
+  data: LabDetail;
+};
