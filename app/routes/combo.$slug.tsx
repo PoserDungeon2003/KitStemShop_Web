@@ -6,7 +6,7 @@ export const handle = {
   breadcrumb: true,
 }
 
-export default function ProductDetail() {
+export default function ComboDetail() {
   return (
     <main>
       <div className="container grid grid-cols-2 gap-6">
