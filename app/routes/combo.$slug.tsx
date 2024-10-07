@@ -4,7 +4,7 @@ import _ from "lodash";
 import { useMemo, useState } from "react";
 import { FaBagShopping, FaFacebookF, FaInstagram, FaStar, FaTwitter } from "react-icons/fa6";
 import { ProductCard } from "~/components";
-import { ComboLabKitDetail, getComboById, useGetAllItems, useGetAllKits, useGetLabById } from "~/data";
+import { ComboLabKitDetail, getComboById, useGetAllItems, useGetAllKits, useGetLabById, useGetProfile } from "~/data";
 
 export const handle = {
   breadcrumb: true,
@@ -33,6 +33,8 @@ export default function ComboDetail() {
   const labDetail = useGetLabById(detail.labId || 0);
   const items = useGetAllItems();
   const kits = useGetAllKits();
+  const profile = useGetProfile();
+  const isLogin = !!profile.data?.detail?.username;
 
   const filterKitsByComboId = useMemo(() => {
     if (!kits.data?.data) return [];
@@ -44,11 +46,8 @@ export default function ComboDetail() {
   const relatedItems = useMemo(() => {
     return _(items.data?.data)
       .filter((it) => _(filterKitsByComboId).some((item) => item.kitId === it.kitId))
-      .take(4)
       .value();
-  }, [items.data]);
-  console.log('relatedItems', relatedItems);
-
+  }, [items.data, filterKitsByComboId]);
 
   return (
     <main>
@@ -186,41 +185,49 @@ export default function ComboDetail() {
       </div>
       <div className="container pb-16">
         <h3 className="border-b border-gray-200 font-roboto text-gray-800 pb-3 font-medium">Lab details</h3>
-        <div className="w-3/5 pt-6 space-y-2">
-          {/* <div className="space-y-2">
-            <h4 className="text-xl font-medium text-gray-800">Lab Name: {labDetail.data?.data.labName}</h4>
-            <h4 className="text-xl font-medium text-gray-800">Lab Category: {labDetail.data?.data.categoryLabName}</h4>
-          </div> */}
-          <div className="text-gray-600">
-            <p>{labDetail.data?.data?.labDescription}</p>
-            {/* <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, quae accusantium voluptatem blanditiis sapiente voluptatum. Autem ab, dolorum assumenda earum veniam eius illo fugiat possimus illum dolor totam, ducimus excepturi.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error quia modi ut expedita! Iure molestiae labore cumque nobis quasi fuga, quibusdam rem? Temporibus consectetur corrupti rerum veritatis numquam labore amet.</p> */}
+        {isLogin ? (
+          <div className="w-3/5 pt-6 space-y-2">
+            {/* <div className="space-y-2">
+                  <h4 className="text-xl font-medium text-gray-800">Lab Name: {labDetail.data?.data.labName}</h4>
+                  <h4 className="text-xl font-medium text-gray-800">Lab Category: {labDetail.data?.data.categoryLabName}</h4>
+                </div> */}
+            <div className="text-gray-600">
+              <p>{labDetail.data?.data?.labDescription}</p>
+              {/* <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, quae accusantium voluptatem blanditiis sapiente voluptatum. Autem ab, dolorum assumenda earum veniam eius illo fugiat possimus illum dolor totam, ducimus excepturi.</p>
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error quia modi ut expedita! Iure molestiae labore cumque nobis quasi fuga, quibusdam rem? Temporibus consectetur corrupti rerum veritatis numquam labore amet.</p> */}
+            </div>
+
+            <iframe src={labDetail.data?.data?.videoUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ?si=7BXV8q5SAzRVvZkl'}></iframe>
+
+            <table className="table-auto border-collapse w-full text-left text-gray-600 text-sm mt-6">
+              <tbody>
+                <tr>
+                  <th className="py-2 px-4 border border-gray-300 w-40 font-medium">Lab Name</th>
+                  <th className="py-2 px-4 border border-gray-300">{labDetail.data?.data?.labName}</th>
+                </tr>
+                <tr>
+                  <th className="py-2 px-4 border border-gray-300 w-40 font-medium">Lab Category</th>
+                  <th className="py-2 px-4 border border-gray-300">{labDetail.data?.data?.categoryLabName}</th>
+                </tr>
+                {/* <tr>
+                    <th className="py-2 px-4 border border-gray-300 w-40 font-medium">Kit</th>
+                    <th className="py-2 px-4 border border-gray-300">{detail.labKitName}</th>
+                  </tr> */}
+              </tbody>
+            </table>
           </div>
-
-          <iframe src={labDetail.data?.data?.videoUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ?si=7BXV8q5SAzRVvZkl'}></iframe>
-
-          <table className="table-auto border-collapse w-full text-left text-gray-600 text-sm mt-6">
-            <tr>
-              <th className="py-2 px-4 border border-gray-300 w-40 font-medium">Lab Name</th>
-              <th className="py-2 px-4 border border-gray-300">{labDetail.data?.data?.labName}</th>
-            </tr>
-            <tr>
-              <th className="py-2 px-4 border border-gray-300 w-40 font-medium">Lab Category</th>
-              <th className="py-2 px-4 border border-gray-300">{labDetail.data?.data?.categoryLabName}</th>
-            </tr>
-            {/* <tr>
-              <th className="py-2 px-4 border border-gray-300 w-40 font-medium">Kit</th>
-              <th className="py-2 px-4 border border-gray-300">{detail.labKitName}</th>
-            </tr> */}
-          </table>
-        </div>
+        ) : (
+          <div>
+            <p className="text-gray-600">Please login and purchase to view lab details</p>
+          </div>
+        )}
       </div>
       <div className="container pb-16">
         <h2 className="text-2xl font-medium text-gray-800 uppercase mb-6">Items people also buy</h2>
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-4 gap-6 w-full max-w-full overflow-y-hidden overflow-x-auto">
           {_.map(relatedItems, (item, index) => {
             return (
-              <ProductCard key={index} price={item.price} discountPrice={item.price} title={item.istemName} imageUrl={item.img || '/images/combo/1.jpg'}/>
+              <ProductCard key={index} price={item.price} discountPrice={item.price} title={item.istemName} imageUrl={item.img || '/images/combo/1.jpg'} />
             )
           })}
         </div>

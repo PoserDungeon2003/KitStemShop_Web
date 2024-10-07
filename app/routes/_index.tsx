@@ -61,15 +61,15 @@ export default function Index() {
 
   const topNewArrivalCombos = useMemo(() => {
     return _(combos.data?.data)
-      .shuffle()
-      .slice(0, 4)
+      .orderBy(it => it.categoryCompoId, "desc")
+      .take(4)
       .value();
   }, [combos.data?.data]);
 
   const recommendedCombos = useMemo(() => {
     return _(combos.data?.data)
       .shuffle()
-      .slice(0, 8)
+      .take(8)
       .value();
   }, [combos.data?.data]);
 
