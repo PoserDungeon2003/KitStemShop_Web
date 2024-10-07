@@ -1,17 +1,18 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import _ from "lodash";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FaBagShopping, FaFacebookF, FaInstagram, FaStar, FaTwitter } from "react-icons/fa6";
 import { ProductCard } from "~/components";
-import { ComboLabKitDetail, getComboById, useGetLabById } from "~/data";
+import { ComboLabKitDetail, getComboById, useGetAllItems, useGetAllKits, useGetLabById } from "~/data";
 
 export const handle = {
   breadcrumb: true,
 }
 
 type LoaderData = {
-  detail: ComboLabKitDetail
+  detail: ComboLabKitDetail,
+  slug?: string,
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -20,16 +21,34 @@ export async function loader({ params }: LoaderFunctionArgs) {
     let comboDetail = await getComboById(slug || '');
     let detail = comboDetail?.data;
     if (!detail) return json({ detail: {} }, { status: 404 });
-    return json({ detail }, { status: 200 });
+    return json({ detail, slug }, { status: 200 });
   } catch (error) {
     return json({}, { status: 404 });
   }
 }
 
 export default function ComboDetail() {
-  const { detail } = useLoaderData<LoaderData>();
+  const { detail, slug } = useLoaderData<LoaderData>();
   const [quantity, setQuantity] = useState<number>(1);
   const labDetail = useGetLabById(detail.labId || 0);
+  const items = useGetAllItems();
+  const kits = useGetAllKits();
+
+  const filterKitsByComboId = useMemo(() => {
+    if (!kits.data?.data) return [];
+    return _(kits.data?.data)
+      .filter((it) => it.compoId == Number(slug || 0))
+      .value();
+  }, [kits.data]);
+
+  const relatedItems = useMemo(() => {
+    return _(items.data?.data)
+      .filter((it) => _(filterKitsByComboId).some((item) => item.kitId === it.kitId))
+      .take(4)
+      .value();
+  }, [items.data]);
+  console.log('relatedItems', relatedItems);
+
 
   return (
     <main>
@@ -173,21 +192,21 @@ export default function ComboDetail() {
             <h4 className="text-xl font-medium text-gray-800">Lab Category: {labDetail.data?.data.categoryLabName}</h4>
           </div> */}
           <div className="text-gray-600">
-            <p>{labDetail.data?.data.labDescription}</p>
+            <p>{labDetail.data?.data?.labDescription}</p>
             {/* <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, quae accusantium voluptatem blanditiis sapiente voluptatum. Autem ab, dolorum assumenda earum veniam eius illo fugiat possimus illum dolor totam, ducimus excepturi.</p>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error quia modi ut expedita! Iure molestiae labore cumque nobis quasi fuga, quibusdam rem? Temporibus consectetur corrupti rerum veritatis numquam labore amet.</p> */}
           </div>
 
-          <iframe src={labDetail.data?.data.videoUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ?si=7BXV8q5SAzRVvZkl'}></iframe>
+          <iframe src={labDetail.data?.data?.videoUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ?si=7BXV8q5SAzRVvZkl'}></iframe>
 
           <table className="table-auto border-collapse w-full text-left text-gray-600 text-sm mt-6">
             <tr>
               <th className="py-2 px-4 border border-gray-300 w-40 font-medium">Lab Name</th>
-              <th className="py-2 px-4 border border-gray-300">{labDetail.data?.data.labName}</th>
+              <th className="py-2 px-4 border border-gray-300">{labDetail.data?.data?.labName}</th>
             </tr>
             <tr>
               <th className="py-2 px-4 border border-gray-300 w-40 font-medium">Lab Category</th>
-              <th className="py-2 px-4 border border-gray-300">{labDetail.data?.data.categoryLabName}</th>
+              <th className="py-2 px-4 border border-gray-300">{labDetail.data?.data?.categoryLabName}</th>
             </tr>
             {/* <tr>
               <th className="py-2 px-4 border border-gray-300 w-40 font-medium">Kit</th>
@@ -197,9 +216,13 @@ export default function ComboDetail() {
         </div>
       </div>
       <div className="container pb-16">
-        <h2 className="text-2xl font-medium text-gray-800 uppercase mb-6">Related kits</h2>
+        <h2 className="text-2xl font-medium text-gray-800 uppercase mb-6">Items people also buy</h2>
         <div className="grid grid-cols-4 gap-6">
-          {/* <ProductCard /> */}
+          {_.map(relatedItems, (item, index) => {
+            return (
+              <ProductCard key={index} price={item.price} discountPrice={item.price} title={item.istemName} imageUrl={item.img || '/images/combo/1.jpg'}/>
+            )
+          })}
         </div>
       </div>
     </main>

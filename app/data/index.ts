@@ -3,3 +3,4 @@ export * from "./user";
 export * from "./kit";
 export * from "./combo";
 export * from "./lab";
+export * from "./items";

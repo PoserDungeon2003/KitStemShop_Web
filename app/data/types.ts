@@ -50,8 +50,8 @@ export type ComboLabKit = {
   image?: string;
   categoryCompoId: number;
   categoryCompo?: string | null;
-  kits?: any[]; // Adjust the type of kits if you have a more specific structure
-  lab?: any | null; // Adjust the type of lab if you have a more specific structure
+  kits?: KitItem[]; // Adjust the type of kits if you have a more specific structure
+  lab?: LabDetail | null; // Adjust the type of lab if you have a more specific structure
   orderDetails?: any[]; // Adjust the type of orderDetails if you have a more specific structure
 };
 
@@ -90,6 +90,25 @@ export type LabDetail = {
 export type LabDetailResponse = {
   isSuccess: boolean;
   statusCode: number;
-  message: string | null;
-  data: LabDetail;
+  message?: string | null;
+  data?: LabDetail;
+};
+
+export type Item = {
+  istemId: number;
+  istemName: string;
+  warrantyMonths: number;
+  img?: string;
+  kitId: number;
+  price: number;
+  stock: number;
+  kit?: KitItem | null; // Adjust the type of kit if you have a more specific structure
+  orderDetails: any[]; // Adjust the type of orderDetails if you have a more specific structure
+};
+
+export type ItemsResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message?: string | null;
+  data?: Item[];
 };
