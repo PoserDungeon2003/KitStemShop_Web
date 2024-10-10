@@ -6,3 +6,7 @@ export * from './ProductCard';
 export * from './Breadcrumb';
 export * from './WishlistItem';
 export * from './CartItems';
+export * from './AdminSideBar';
+export * from './AdminLayout';
+export * from './AdminHeader';
+export * from './AdminFooter';

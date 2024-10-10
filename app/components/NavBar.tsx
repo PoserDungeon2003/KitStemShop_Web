@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation, useNavigate } from "@remix-run/react"
+import { Link, NavLink, useLocation, useMatches } from "@remix-run/react"
 import { useQueryClient } from "@tanstack/react-query"
 import _ from "lodash"
 import { useEffect } from "react"
@@ -40,12 +40,13 @@ const dropDownList = [
 
 export const NavBar = () => {
   const profile = useGetProfile();
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const location = useLocation();
   const user = profile.data?.detail?.username
   const searchParams = new URLSearchParams(location.search)
   const action = searchParams.get('action')
+  const matches = useMatches();
+  const last = (_.last(matches) as any)?.handle;
 
   useEffect(() => {
     if (action == 'logout') {
@@ -56,6 +57,7 @@ export const NavBar = () => {
     }
   }, [location.search])
 
+  if (last?.hideNavbar) return;
   return (
     <nav className="bg-gray-800">
       <div className="container flex">

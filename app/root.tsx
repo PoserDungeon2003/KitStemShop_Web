@@ -17,6 +17,8 @@ import _ from "lodash";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles, as: "style" },
   { rel: "stylesheet", href: "/css/tailwind1.css" },
+  { rel: "stylesheet", href: "/css/ant-design.css" },
+  { rel: "stylesheet", href: "/css/responsive.css" },
 ];
 
 const redirectLogin = _.throttle(() => {

@@ -29,6 +29,7 @@
     "remix-auth-form": "^1.5.0",
     "remix-hook-form": "^5.0.4",
     "stemshop-fe": "file:",
+    "styled-components": "^6.1.13",
     "yup": "^1.4.0"
   },
   "devDependencies": {

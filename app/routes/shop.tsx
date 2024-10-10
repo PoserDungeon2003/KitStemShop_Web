@@ -4,10 +4,22 @@ import { FaGripVertical, FaList } from "react-icons/fa6";
 import { Pagination } from "antd";
 import { ProductCard } from "~/components";
 import { useGetAllCombos, useGetAllKits } from "~/data";
+import { useLocation } from "@remix-run/react";
 
 export const handle = {
   breadcrumb: true,
 }
+
+const categories = [
+  {
+    name: "Kit",
+    value: "kit",
+  },
+  {
+    name: "Combo Kit & Lab",
+    value: "combo",
+  },
+];
 
 export default function Shop() {
   const kits = useGetAllKits();
@@ -15,6 +27,9 @@ export default function Shop() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [sortOption, setSortOption] = useState("");
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const category = searchParams.get("category");
 
   const handleChange = (pageNumber: number, pageSize: number) => {
     setPage(pageNumber);
@@ -54,7 +69,7 @@ export default function Shop() {
     const endIndex = startIndex + pageSize;
 
     return _(sortedData)
-      .slice(startIndex, endIndex)
+      .take(pageSize)
       .value();
   }, [sortedData, page, pageSize]);
 
@@ -267,7 +282,7 @@ export default function Shop() {
           </div>
 
           {/* Size */}
-          <div className="pt-4">
+          {/* <div className="pt-4">
             <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">Size</h3>
             <div className="flex items-center gap-2">
               <div className="size-selector">
@@ -316,7 +331,7 @@ export default function Shop() {
                 </label>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Colors */}
           <div className="pt-4">
@@ -375,13 +390,15 @@ export default function Shop() {
           <div>
             <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">Categories</h3>
             <div className="space-y-2">
-              <div className="flex items-center">
-                <input type="checkbox" name="cat-1" id="cat-1"
-                  className="text-primary focus:ring-0 rounded-sm cursor-pointer" />
-                <label htmlFor="cat-1" className="text-gray-600 ml-3 cursor-pointer">Bedroom</label>
-                <div className="ml-auto text-gray-600 text-sm">(15)</div>
-              </div>
-              <div className="flex items-center">
+              {_.map(categories, (category, index) => (
+                <div key={index} className="flex items-center">
+                  <input onChange={(e) => console.log(e.target.value)} value={category.value} type="checkbox" name="cat-1" id="cat-1"
+                    className="text-primary focus:ring-0 rounded-sm cursor-pointer" />
+                  <label htmlFor="cat-1" className="text-gray-600 ml-3 cursor-pointer">{category.name}</label>
+                  <div className="ml-auto text-gray-600 text-sm">(15)</div>
+                </div>
+              ))}
+              {/* <div className="flex items-center">
                 <input type="checkbox" name="cat-2" id="cat-2"
                   className="text-primary focus:ring-0 rounded-sm cursor-pointer" />
                 <label htmlFor="cat-2" className="text-gray-600 ml-3 cursor-pointer">Sofa</label>
@@ -398,7 +415,7 @@ export default function Shop() {
                   className="text-primary focus:ring-0 rounded-sm cursor-pointer" />
                 <label htmlFor="cat-4" className="text-gray-600 ml-3 cursor-pointer">Outdoor</label>
                 <div className="ml-auto text-gray-600 text-sm">(10)</div>
-              </div>
+              </div> */}
             </div>
           </div>
 

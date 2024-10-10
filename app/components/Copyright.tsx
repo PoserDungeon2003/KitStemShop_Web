@@ -1,7 +1,13 @@
+import { useMatches } from "@remix-run/react";
 import { getYear } from "date-fns"
+import _ from "lodash";
 
 export const Copyright = () => {
   const currentYear = getYear(new Date())
+  const matches = useMatches();
+  const last = (_.last(matches) as any)?.handle;
+
+  if (last?.hideCopyright) return;
 
   return (
     <div className="bg-gray-800 py-4">

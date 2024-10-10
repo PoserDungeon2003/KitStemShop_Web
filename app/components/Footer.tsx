@@ -1,6 +1,12 @@
+import { useMatches } from "@remix-run/react"
+import _ from "lodash";
 import { FaFacebook, FaGithub, FaInstagram, FaSquareXTwitter } from "react-icons/fa6"
 
 export const Footer = () => {
+  const matches = useMatches();
+  const last = (_.last(matches) as any)?.handle;
+
+  if (last?.hideFooter) return;
   return (
     <footer className="bg-white pt-16 pb-12 border-t border-gray-100">
       <div className="container grid grid-cols-1 ">

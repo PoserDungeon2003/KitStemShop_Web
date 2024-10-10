@@ -1,4 +1,4 @@
-import { Link, NavLink } from "@remix-run/react";
+import { Link, useMatches } from "@remix-run/react";
 import _ from 'lodash';
 import { FaBagShopping, FaHeart, FaMagnifyingGlass, FaUser } from "react-icons/fa6";
 
@@ -23,6 +23,10 @@ const navbar = [
 ]
 
 export const Header = () => {
+  const matches = useMatches();
+  const last = (_.last(matches) as any)?.handle;
+
+  if (last?.hideHeader) return;
   return (
     <header className="py-4 shadow-sm bg-white">
       <div className="container flex items-center justify-between">
