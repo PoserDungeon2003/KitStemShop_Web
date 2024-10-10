@@ -1,7 +1,7 @@
 import { Link, NavLink } from "@remix-run/react";
-import { Badge, Breadcrumb, Button, Col, Drawer, Dropdown, Input, Row, Switch, Typography } from "antd";
+import { Avatar, Badge, Breadcrumb, Button, Col, Drawer, Dropdown, Input, List, Row, Switch, Typography } from "antd";
 import { useEffect, useState } from "react";
-import { FaBars, FaBell, FaCircleUser, FaFacebook, FaGear, FaMagnifyingGlass, FaSquareXTwitter, FaStar, FaToggleOff } from "react-icons/fa6";
+import { FaBell, FaCircleUser, FaClock, FaCreditCard, FaFacebook, FaGear, FaMagnifyingGlass, FaSquareXTwitter, FaStar, FaToggleOff, FaWifi } from "react-icons/fa6";
 import { styled } from "styled-components";
 
 const ButtonContainer = styled.div`
@@ -24,6 +24,44 @@ const ButtonContainer = styled.div`
     background-color: #1890ff;
   }
 `;
+
+const data = [
+  {
+    title: "New message from Sophie",
+    description: <><FaClock /> 2 days ago</>,
+
+    avatar: "/images/face-2.jpg",
+  },
+  {
+    title: "New album by Travis Scott",
+    description: <><FaClock /> 2 days ago</>,
+
+    avatar: <Avatar shape="square"><FaWifi /></Avatar>,
+  },
+  {
+    title: "Payment completed",
+    description: <><FaClock /> 2 days ago</>,
+    avatar: <Avatar shape="square"><FaCreditCard /></Avatar>,
+  },
+];
+
+const menu = (
+  <List
+    min-width="100%"
+    className="header-notifications-dropdown "
+    itemLayout="horizontal"
+    dataSource={data}
+    renderItem={(item) => (
+      <List.Item>
+        <List.Item.Meta
+          avatar={<Avatar shape="square" src={item.avatar} />}
+          title={item.title}
+          description={item.description}
+        />
+      </List.Item>
+    )}
+  />
+);
 
 type AdminHeaderProps = {
   placement?: any | undefined,
@@ -80,7 +118,7 @@ export const AdminHeader = ({
         </Col>
         <Col span={24} md={18} className="header-control">
           <Badge size="small" count={4}>
-            <Dropdown overlay={<FaBars />} trigger={["click"]}>
+            <Dropdown overlay={menu} trigger={["click"]}>
               <a
                 href="#pablo"
                 className="ant-dropdown-link"
