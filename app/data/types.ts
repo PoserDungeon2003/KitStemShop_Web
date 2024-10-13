@@ -112,3 +112,16 @@ export type ItemsResponse = {
   message?: string | null;
   data?: Item[];
 };
+
+export type SupportRequest = {
+  supportRequestId: number;
+  userId?: number;
+  LabId?: number;
+  supportCount?: number;
+  MaxSupportCount?: number;
+  lastSupportDate?: Date;
+  requestTitle?: string;
+  requestDescription?: string;
+  ManagerId?: number;
+  Status?: string;
+}
