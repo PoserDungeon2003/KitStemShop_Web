@@ -144,7 +144,7 @@ export const AdminHeader = ({
             width={360}
             onClose={hideDrawer}
             placement={placement}
-            visible={visible}
+            open={visible}
           >
             <div>
               <div className="header-top">
