@@ -3,7 +3,7 @@ import { Link } from "@remix-run/react";
 import _ from "lodash";
 import { useMemo } from "react";
 import { ProductCard } from "~/components";
-import { useGetAllCombos, useGetAllKits } from "~/data";
+import { useGetAllCategoriesCombo, useGetAllCombos, useGetAllKits } from "~/data";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // let user = await authenticator.isAuthenticated(request);
@@ -51,9 +51,11 @@ const categories = [
 export default function Index() {
   const kits = useGetAllKits();
   const combos = useGetAllCombos();
+  const categoryCombos = useGetAllCategoriesCombo();
 
   const filterKits = useMemo(() => {
     return _(kits.data?.data)
+      .filter(it => it.status === 'Active')
       .shuffle()
       .slice(0, 4)
       .value();
@@ -72,6 +74,13 @@ export default function Index() {
       .take(8)
       .value();
   }, [combos.data?.data]);
+
+  const categoryCombosData = useMemo(() => {
+    return _(categoryCombos.data?.data)
+      .orderBy(it => it.createdAt, "desc")
+      .take(6)
+      .value();
+  }, [categoryCombos.data?.data]);
 
   return (
     <main>
@@ -121,12 +130,12 @@ export default function Index() {
       <div className="container py-16">
         <h2 className="text-2xl font-medium text-gray-800 uppercase mb-6">shop by category</h2>
         <div className="grid grid-cols-3 gap-3">
-          {_.map(categories, (category, index) => (
+          {_.map(categoryCombosData, (category, index) => (
             <div key={index} className="relative rounded-sm overflow-hidden group">
-              <img src={category.image} alt="category 1" className="w-full" />
-              <Link to={category.to}
-                className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-xl text-white font-roboto font-medium group-hover:bg-opacity-60 transition">
-                {category.title}
+              <img src={`/images/category/combo/${index + 1}.jpg`} alt={category.categoryName} className="w-full h-auto aspect-[1540/960]" />
+              <Link to={`/shop?categoryComboId=${category.categoryCompoId}`}
+                className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-xl text-white text-center font-roboto font-medium group-hover:bg-opacity-60 transition">
+                {category.categoryName}
               </Link>
             </div>
           ))}

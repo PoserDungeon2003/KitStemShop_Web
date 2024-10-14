@@ -32,6 +32,7 @@ export type KitItem = {
   compoId: number;
   compo?: string | null;
   istems: any[];
+  status?: 'Active' | 'Inactive' | undefined
 };
 
 export type KitsResponse = {
@@ -85,6 +86,7 @@ export type LabDetail = {
   labDescription: string;
   videoUrl: string;
   categoryLabName: string;
+  status?: 'Active' | 'Inactive' | undefined
 };
 
 export type LabDetailResponse = {
@@ -111,4 +113,19 @@ export type ItemsResponse = {
   statusCode: number;
   message?: string | null;
   data?: Item[];
+};
+
+export type CategoryCompos = {
+  categoryCompoId: number;
+  categoryName: string;
+  createdAt: string;
+  updatedAt: string;
+  compos: ComboLabKit[];
+};
+
+export type CategoryComposResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message?: string | null;
+  data?: CategoryCompos[];
 };
