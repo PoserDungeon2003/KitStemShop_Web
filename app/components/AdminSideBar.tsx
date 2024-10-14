@@ -3,6 +3,7 @@ import { Button, Menu } from "antd"
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import _ from "lodash";
 import { FaCircleUser, FaCreditCard, FaFlag, FaHouseUser, FaRightFromBracket, FaRightToBracket, FaTable } from "react-icons/fa6";
+import { IoAddCircle } from "react-icons/io5";
 
 type AdminSideBarProps = {
   color: string;
@@ -88,9 +89,24 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
       key: 'combo',
       icon: dashboard,
       label: 'Combo',
-      onClick: () => {
-        navigate('/admin/combo');
-      },
+      children: [
+        {
+          key: "view-combo",
+          icon: <IoAddCircle />,
+          label: "View Combo",
+          onClick: () => {
+            navigate('/admin/combo');
+          },
+        },
+        {
+          key: "create-combo",
+          icon: <IoAddCircle />,
+          label: "Create Combo",
+          onClick: () => {
+            navigate('/admin/combo/create');
+          },
+        },
+      ],
     },
   ]
 

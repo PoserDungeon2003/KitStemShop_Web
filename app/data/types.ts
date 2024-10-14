@@ -149,3 +149,12 @@ export type LabsResponse = {
   message?: string | null;
   data?: Lab[];
 };
+
+export type CreateCombo = {
+  labKitName: string;
+  labKitDescription: string;
+  image: string;
+  price: number;
+  labId: number;
+  categoryCompoId: number;
+};
