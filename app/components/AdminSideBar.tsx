@@ -55,6 +55,19 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
             <span className="label">Dashboard</span>
           </NavLink>
         </Menu.Item>
+        <Menu.Item key="5">
+          <NavLink to="/admin/combo">
+            <span
+              className="icon"
+              style={{
+                background: page === "admincombo" ? color : "",
+              }}
+            >
+              {dashboard}
+            </span>
+            <span className="label">Combo</span>
+          </NavLink>
+        </Menu.Item>
         <Menu.Item key="2">
           <NavLink to="/tables">
             <span

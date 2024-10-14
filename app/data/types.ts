@@ -129,3 +129,23 @@ export type CategoryComposResponse = {
   message?: string | null;
   data?: CategoryCompos[];
 };
+
+export type Lab = {
+  labId: number;
+  labName: string;
+  labDescription: string;
+  videoUrl: string;
+  categoryLabId: number;
+  status: string;
+  categoryLab: any | null; // Adjust the type of categoryLab if you have a more specific structure
+  compos: ComboLabKit[]; // Adjust the type of compos if you have a more specific structure
+  orders: any[]; // Adjust the type of orders if you have a more specific structure
+  supportRequests: any[]; // Adjust the type of supportRequests if you have a more specific structure
+};
+
+export type LabsResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message?: string | null;
+  data?: Lab[];
+};

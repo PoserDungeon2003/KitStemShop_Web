@@ -107,7 +107,7 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
             />
           </AntHeader>
         )}
-        <Content className="content-ant">{children}</Content>
+        <Content className="content-ant overflow-auto">{children}</Content>
         <AdminFooter />
       </Layout>
     </Layout>
