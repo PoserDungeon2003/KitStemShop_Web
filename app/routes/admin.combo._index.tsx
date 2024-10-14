@@ -25,6 +25,7 @@ export default function AdminCombo() {
 
   const datasource = useMemo(() => {
     return _(combo.data?.data)
+      .orderBy(it => it.compoId, "desc")
       .value();
   }, [combo.data?.data]);
 
