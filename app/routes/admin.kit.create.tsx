@@ -1,4 +1,5 @@
 import { useNavigate } from "@remix-run/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button, Col, Form, Input, Layout, notification, Row, Select, Typography } from "antd"
 import _ from "lodash";
 import { useState } from "react";
@@ -21,6 +22,7 @@ export default function AdminKitCreate() {
   const profile = useGetProfile();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [api, contextHolder] = notification.useNotification();
 
@@ -42,6 +44,9 @@ export default function AdminKitCreate() {
       if (response.data) {
         openNotificationWithIcon('success', true, true, 'Success', 'Create new combo successfully!');
         setIsLoading(false);
+        queryClient.invalidateQueries({
+          queryKey: ['kits']
+        })
         navigate('/admin/kit');
       }
     } catch (error: any) {
