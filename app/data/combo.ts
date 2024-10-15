@@ -1,6 +1,7 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL } from "./request";
-import { CategoryComposResponse, ComboLabKitDetailResponse, ComboLabKitsResponse, CreateCombo } from "./types";
+import { CategoryComposResponse, ComboLabKitDetailResponse, ComboLabKitsResponse, CreateCombo, UpdateComboRQ } from "./types";
+import _ from "lodash";
 
 export async function getAllCombos(): Promise<ComboLabKitsResponse> {
   return await request.get(`${BASE_URL}/api/Compo/get-all-Combo`);
@@ -12,6 +13,27 @@ export async function getComboById(id: string): Promise<ComboLabKitDetailRespons
 
 export async function getAllCategoriesCombo(): Promise<CategoryComposResponse> {
   return await request.get(`${BASE_URL}/api/CategoryCompo/get-all-category-Compo`);
+}
+
+export async function updateComboById(token: string, id: number, body: UpdateComboRQ): Promise<any> {
+  return await request.put(`${BASE_URL}/api/Compo/update-Compo-by-id`, {
+    ...body,
+    compoId: id,
+  }, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+}
+
+export async function deleteComboById(token: string, CompoById: number[]): Promise<any> {
+  const queryString = _.map(CompoById, (id) => `CompoById=${id}`).join('&');
+  return request.deleteWithOptions(`${BASE_URL}/api/Compo/delete-Compo-by-id?${queryString}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }
 
 export async function createNewCombo(token: string, body: CreateCombo) {

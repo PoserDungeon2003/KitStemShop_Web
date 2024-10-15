@@ -158,3 +158,10 @@ export type CreateCombo = {
   labId: number;
   categoryCompoId: number;
 };
+
+export type UpdateComboRQ = {
+  price: number;
+  labKitName?: string;
+  labKitDescription?: string;
+  image?: string;
+}
