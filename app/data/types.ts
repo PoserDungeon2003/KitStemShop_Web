@@ -32,6 +32,7 @@ export type KitItem = {
   compoId: number;
   compo?: string | null;
   istems: any[];
+  status?: 'Active' | 'Inactive' | undefined
 };
 
 export type KitsResponse = {
@@ -85,6 +86,7 @@ export type LabDetail = {
   labDescription: string;
   videoUrl: string;
   categoryLabName: string;
+  status?: 'Active' | 'Inactive' | undefined
 };
 
 export type LabDetailResponse = {
@@ -125,3 +127,46 @@ export type SupportRequest = {
   ManagerId?: number;
   Status?: string;
 }
+export type CategoryCompos = {
+  categoryCompoId: number;
+  categoryName: string;
+  createdAt: string;
+  updatedAt: string;
+  compos: ComboLabKit[];
+};
+
+export type CategoryComposResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message?: string | null;
+  data?: CategoryCompos[];
+};
+
+export type Lab = {
+  labId: number;
+  labName: string;
+  labDescription: string;
+  videoUrl: string;
+  categoryLabId: number;
+  status: string;
+  categoryLab: any | null; // Adjust the type of categoryLab if you have a more specific structure
+  compos: ComboLabKit[]; // Adjust the type of compos if you have a more specific structure
+  orders: any[]; // Adjust the type of orders if you have a more specific structure
+  supportRequests: any[]; // Adjust the type of supportRequests if you have a more specific structure
+};
+
+export type LabsResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message?: string | null;
+  data?: Lab[];
+};
+
+export type CreateCombo = {
+  labKitName: string;
+  labKitDescription: string;
+  image: string;
+  price: number;
+  labId: number;
+  categoryCompoId: number;
+};

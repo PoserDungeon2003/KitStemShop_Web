@@ -3,6 +3,7 @@ import { Avatar, Badge, Breadcrumb, Button, Col, Drawer, Dropdown, Input, List, 
 import { useEffect, useState } from "react";
 import { FaBell, FaCircleUser, FaClock, FaCreditCard, FaFacebook, FaGear, FaMagnifyingGlass, FaSquareXTwitter, FaStar, FaToggleOff, FaWifi } from "react-icons/fa6";
 import { styled } from "styled-components";
+import { useGetProfile } from "~/data";
 
 const ButtonContainer = styled.div`
   .ant-btn-primary {
@@ -86,6 +87,8 @@ export const AdminHeader = ({
 
   const [visible, setVisible] = useState(false);
   const [sidenavType, setSidenavType] = useState("transparent");
+  const profile = useGetProfile();
+  const isLogin = !!profile.data?.detail?.username;
 
   useEffect(() => window.scrollTo(0, 0));
 
@@ -144,7 +147,7 @@ export const AdminHeader = ({
             width={360}
             onClose={hideDrawer}
             placement={placement}
-            visible={visible}
+            open={visible}
           >
             <div>
               <div className="header-top">
@@ -245,9 +248,11 @@ export const AdminHeader = ({
               </div>
             </div>
           </Drawer>
-          <Link to="/sign-in" className="btn-sign-in">
+          <Link to={isLogin ? "#": "/login"} className="btn-sign-in">
             <FaCircleUser />
-            <span>Sign in</span>
+            {isLogin ? <span>
+              {profile.data?.detail?.username}
+            </span> : <span>Sign in</span>}
           </Link>
           <Input
             className="header-search"
