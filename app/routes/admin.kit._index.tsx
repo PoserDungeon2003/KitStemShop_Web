@@ -65,10 +65,10 @@ export default function AdminKit() {
     {
       title: 'Actions',
       key: 'actions',
-      render: (record: ComboLabKit) => (
+      render: (record: KitItem) => (
         <IoEye
           style={{ cursor: 'pointer' }}
-          onClick={() => navigate(`/admin/kit/${record.compoId}`)}
+          onClick={() => navigate(`/admin/kit/${record.kitId}`)}
         />
       ),
     },

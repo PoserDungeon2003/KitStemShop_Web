@@ -165,3 +165,24 @@ export type UpdateComboRQ = {
   labKitDescription?: string;
   image?: string;
 }
+
+export type Kit = {
+  kitName: string;
+  createdAt: string;
+  comboName: string;
+  compoId: number;
+  status?: "Active" | "Inactive";
+};
+
+export type KitResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message?: string | null;
+  data?: Kit;
+};
+
+export type UpdateKitRQ = {
+  kitName: string;
+  status: string;
+  compoId: number;
+}

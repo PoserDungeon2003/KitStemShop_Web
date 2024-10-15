@@ -1,11 +1,11 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node"
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button, Col, Form, Input, InputNumber, Layout, Modal, Row, Select, Typography } from "antd";
+import { Button, Col, Form, Input, Layout, Modal, Row, Select, Switch, Typography } from "antd";
 import _ from "lodash";
 import { useState } from "react";
 import { IoTrashOutline } from "react-icons/io5";
-import { ComboLabKitDetail, deleteComboById, getComboById, updateComboById, UpdateComboRQ, useGetAllCategoriesCombo, useGetAllLabs, useGetProfile } from "~/data";
+import { deleteComboById, deleteKitById, getKitById, Kit, updateKitById, UpdateKitRQ, useGetAllCombos, useGetProfile } from "~/data";
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -18,16 +18,16 @@ export const handle = {
 }
 
 type LoaderData = {
-  combo: ComboLabKitDetail;
+  kit: Kit;
   slug: string;
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
   let slug = params.slug;
   try {
-    let combo = await getComboById(slug || '');
-    if (combo.data) {
-      return json({ combo: combo.data, slug }, { status: 200 });
+    let kit = await getKitById(slug || '');
+    if (kit.data) {
+      return json({ kit: kit.data, slug }, { status: 200 });
     }
     return json({ slug }, { status: 404 });
   } catch (error) {
@@ -35,14 +35,13 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 }
 
-export default function AdminComboSlug() {
-  const { combo, slug } = useLoaderData<LoaderData>();
-  const labs = useGetAllLabs();
-  const categoryCombo = useGetAllCategoriesCombo();
+export default function AdminKitSlug() {
+  const { kit, slug } = useLoaderData<LoaderData>();
+  const combo = useGetAllCombos();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Do you want to delete this combo?');
+  const [modalText, setModalText] = useState('Do you want to delete this kit?');
   const profile = useGetProfile();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -51,17 +50,17 @@ export default function AdminComboSlug() {
     setOpen(true);
   };
 
-  const onFinish = async (values: UpdateComboRQ) => {
+  const onFinish = async (values: UpdateKitRQ) => {
     console.log('Received values of form: ', values);
     setIsLoading(true);
     try {
-      let response = await updateComboById(profile.data?.user?.token || '', Number(slug), values);
+      let response = await updateKitById(profile.data?.user?.token || '', Number(slug), values);
       if (response.data) {
         setIsLoading(false);
         queryClient.invalidateQueries({
-          queryKey: ['combos']
+          queryKey: ['kits']
         })
-        navigate('/admin/combo');
+        navigate('/admin/kit');
       }
     } catch (error: any) {
       setIsLoading(false);
@@ -73,14 +72,14 @@ export default function AdminComboSlug() {
   const handleOk = async () => {
     setConfirmLoading(true);
     try {
-      let response = await deleteComboById(profile.data?.user?.token || '', [Number(slug)]);
+      let response = await deleteKitById(profile.data?.user?.token || '', [Number(slug)]);
       if (response) {
         queryClient.invalidateQueries({
-          queryKey: ['combos']
+          queryKey: ['kits']
         })
         setConfirmLoading(false);
         setOpen(false);
-        navigate('/admin/combo');
+        navigate('/admin/kit');
       }
     } catch (error: any) {
       setConfirmLoading(false);
@@ -102,61 +101,38 @@ export default function AdminComboSlug() {
           <Row justify="center">
             <Col span={12}>
               <Row justify={"space-between"}>
-                <Title level={2} className="text-center">Combo Info</Title>
+                <Title level={2} className="text-center">Kit Info</Title>
                 <IoTrashOutline className="cursor-pointer self-center text-red-500"
                   onClick={showModal}
                 />
               </Row>
               <Form
-                name="create_combo"
-                initialValues={{ remember: true, ...combo }}
+                name="update_combo"
+                initialValues={{ remember: true, ...kit }}
                 onFinish={onFinish}
                 layout="vertical"
               >
-                <Form.Item label="Combo Name" name="labKitName" rules={[{ required: true, message: 'Please input!' }]}>
+                <Form.Item label="Kit Name" name="kitName" rules={[{ required: true, message: 'Please input!' }]}>
                   <Input allowClear />
                 </Form.Item>
                 <Form.Item
-                  label="Description"
-                  name="labKitDescription"
+                  label="Combo"
+                  name="compoId"
                   rules={[{ required: true, message: 'Please input!' }]}
                 >
-                  <Input.TextArea allowClear />
-                </Form.Item>
-                <Form.Item label="Image URL" name="image" rules={[{ required: true, message: 'Please input!', type: 'url' }]}>
-                  <Input allowClear />
-                </Form.Item>
-                <Form.Item
-                  label="Price"
-                  name="price"
-                  rules={[{ required: true, message: 'Please input!', type: 'number', min: 1 }]}
-                >
-                  <InputNumber style={{ width: '100%' }} />
-                </Form.Item>
-                {/* <Form.Item
-                  label="Lab"
-                  name="labId"
-                  rules={[{ required: true, message: 'Please input!' }]}
-                >
-                  <Select defaultValue={combo.labName} options={_.map(labs.data?.data, (item) => {
+                  <Select options={_.map(combo.data?.data, (item) => {
                     return {
-                      label: item.labName,
-                      value: item.labId
+                      label: item.labKitName,
+                      value: item.compoId,
                     }
                   })} />
                 </Form.Item>
                 <Form.Item
-                  label="Category Combo"
-                  name="categoryCompoId"
-                  rules={[{ required: true, message: 'Please input!' }]}
+                  label="Status"
+                  name="status"
                 >
-                  <Select defaultValue={combo.categoryName} options={_.map(categoryCombo.data?.data, (item) => {
-                    return {
-                      label: item.categoryName,
-                      value: item.categoryCompoId,
-                    }
-                  })} />
-                </Form.Item> */}
+                  <Switch defaultChecked />
+                </Form.Item>
                 <Form.Item>
                   <Button loading={isLoading} block type="primary" htmlType="submit" className="bg-blue-500">
                     Update
