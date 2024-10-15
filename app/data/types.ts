@@ -171,7 +171,6 @@ export type Kit = {
   createdAt: string;
   comboName: string;
   compoId: number;
-  status?: "Active" | "Inactive";
 };
 
 export type KitResponse = {
@@ -183,7 +182,6 @@ export type KitResponse = {
 
 export type UpdateKitRQ = {
   kitName: string;
-  status: string;
   compoId: number;
 }
 

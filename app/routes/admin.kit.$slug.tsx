@@ -1,11 +1,11 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node"
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button, Col, Form, Input, Layout, Modal, Row, Select, Switch, Typography } from "antd";
+import { Button, Col, Form, Input, Layout, Modal, Row, Select, Typography } from "antd";
 import _ from "lodash";
 import { useState } from "react";
 import { IoTrashOutline } from "react-icons/io5";
-import { deleteComboById, deleteKitById, getKitById, Kit, updateKitById, UpdateKitRQ, useGetAllCombos, useGetProfile } from "~/data";
+import { deleteKitById, getKitById, Kit, updateKitById, UpdateKitRQ, useGetAllCombos, useGetProfile } from "~/data";
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -126,12 +126,6 @@ export default function AdminKitSlug() {
                       value: item.compoId,
                     }
                   })} />
-                </Form.Item>
-                <Form.Item
-                  label="Status"
-                  name="status"
-                >
-                  <Switch defaultChecked />
                 </Form.Item>
                 <Form.Item>
                   <Button loading={isLoading} block type="primary" htmlType="submit" className="bg-blue-500">

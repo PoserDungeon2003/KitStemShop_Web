@@ -1,10 +1,10 @@
 import { useNavigate } from "@remix-run/react";
-import { Image, Table, TableProps } from "antd"
+import { Table, TableProps, Tag } from "antd"
 import { format } from "date-fns";
 import _ from "lodash";
 import { useMemo } from "react";
 import { IoEye } from "react-icons/io5";
-import { ComboLabKit, KitItem, useGetAllCategoriesCombo, useGetAllCombos, useGetAllKits, useGetAllLabs } from "~/data"
+import { KitItem, useGetAllCombos, useGetAllKits } from "~/data"
 
 export const handle = {
   hideFooter: true,
@@ -49,6 +49,13 @@ export default function AdminKit() {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      render: (status: string) => {
+        return (
+          <Tag color={status.toLowerCase() == "active" ? "green" : "red"}>
+            {status}
+          </Tag>
+        )
+      },
     },
     {
       title: 'Created At',
