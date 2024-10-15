@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL } from "./request";
-import { KitResponse, KitsResponse, UpdateKitRQ } from "./types";
+import { CreateKitRQ, KitResponse, KitsResponse, UpdateKitRQ } from "./types";
 import _ from "lodash";
 
 export async function getAllKits(): Promise<KitsResponse> {
@@ -16,6 +16,15 @@ export async function updateKitById(token: string, id: number, body: UpdateKitRQ
     ...body,
     kitId: id,
   }, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+}
+
+export async function createNewKit(token: string, body: CreateKitRQ) {
+  return await request.post(`${BASE_URL}/api/Kit/insert-Kit-by-id`, body, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',

@@ -186,3 +186,8 @@ export type UpdateKitRQ = {
   status: string;
   compoId: number;
 }
+
+export type CreateKitRQ = {
+  kitName: string;
+  compoId: number;
+}
