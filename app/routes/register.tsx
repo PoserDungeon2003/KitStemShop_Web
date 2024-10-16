@@ -1,8 +1,9 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Link } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 import { useForm } from "react-hook-form";
 import { FaFacebook, FaGoogle } from "react-icons/fa6";
 import { object, ref, string, InferType, number } from "yup";
+import { registerAccount } from "~/data";
 
 const schema = object({
   fullName: string().required('Full name is required').trim(),
@@ -24,15 +25,30 @@ const schema = object({
 
 const resolver = yupResolver(schema)
 
-type LoginForm = InferType<typeof schema>
+type RegisterForm = InferType<typeof schema>
 
 export default function Register() {
-  const { register, formState: { errors, isSubmitting }, handleSubmit, setError, watch } = useForm<LoginForm>({
+  const { register, formState: { errors, isSubmitting }, handleSubmit, setError, watch } = useForm<RegisterForm>({
     mode: 'onChange',
     resolver,
   })
-  const onSubmit = (data: LoginForm) => {
+  const navigate = useNavigate()
 
+  const onSubmit = async (data: RegisterForm) => {
+    console.log(data)
+    try {
+      let response = await registerAccount({
+        ...data,
+        phone: data.phone.toString(),
+      })
+      if (response) {
+        navigate('/login')
+      }
+    } catch (error: any) {
+      setError('root', {
+        message: error?.message
+      })
+    }
   }
 
   return (
@@ -51,6 +67,7 @@ export default function Register() {
                 className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                 placeholder="fulan fulana"
               />
+              {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>}
             </div>
             <div>
               <label htmlFor="name" className="text-gray-600 mb-2 block">Username</label>
@@ -60,6 +77,7 @@ export default function Register() {
                 className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                 placeholder="username"
               />
+              {errors.userName && <p className="text-red-500 text-sm mt-1">{errors.userName.message}</p>}
             </div>
             <div>
               <label htmlFor="email" className="text-gray-600 mb-2 block">Email address</label>
@@ -69,6 +87,7 @@ export default function Register() {
                 className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                 placeholder="youremail.@domain.com"
               />
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
             </div>
             <div>
               <label htmlFor="address" className="text-gray-600 mb-2 block">Address</label>
@@ -76,8 +95,9 @@ export default function Register() {
                 type="text"
                 {...register('address')}
                 className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                placeholder="145 Đường Nguyễn Cơ Thạch"
+                placeholder="Số 123, Đường Nguyễn Huệ, Phường Bến Nghé, Quận 1"
               />
+              {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>}
             </div>
             <div>
               <label htmlFor="phone" className="text-gray-600 mb-2 block">Phone number</label>
@@ -88,6 +108,7 @@ export default function Register() {
                 className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                 placeholder="0906"
               />
+              {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
             </div>
             <div>
               <label htmlFor="password" className="text-gray-600 mb-2 block">Password</label>
@@ -97,6 +118,7 @@ export default function Register() {
                 className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                 placeholder="*******"
               />
+              {errors.passwordHash && <p className="text-red-500 text-sm mt-1">{errors.passwordHash.message}</p>}
             </div>
             <div>
               <label htmlFor="confirm" className="text-gray-600 mb-2 block">Confirm password</label>
@@ -106,12 +128,14 @@ export default function Register() {
                 className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
                 placeholder="*******"
               />
+              {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>}
             </div>
           </div>
           <div className="mt-6">
             <div className="flex items-center">
               <input
                 type="checkbox"
+                required
                 name="aggrement"
                 id="aggrement"
                 className="text-primary focus:ring-0 rounded-sm cursor-pointer"
@@ -121,6 +145,7 @@ export default function Register() {
                 <a href="#" className="text-primary">terms & conditions</a>
               </label>
             </div>
+            {errors.root && <p className="text-red-500 text-sm mt-1">{errors.root.message}</p>}
           </div>
           <div className="mt-4">
             <button

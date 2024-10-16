@@ -265,3 +265,13 @@ export type CategoryLabResponse = {
   message?: string | null;
   data?: CategoryLab[];
 };
+
+export type RegisterForm = {
+  fullName: string;
+  userName: string;
+  passwordHash: string;
+  confirmPassword: string;
+  email: string;
+  address: string;
+  phone: string;
+}

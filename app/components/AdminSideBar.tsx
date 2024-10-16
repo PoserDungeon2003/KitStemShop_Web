@@ -149,7 +149,7 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
           icon: <IoAddCircle />,
           label: "Create Lab",
           onClick: () => {
-            navigate('/admin/kit/lab');
+            navigate('/admin/lab/create');
           },
         },
       ],

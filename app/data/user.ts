@@ -1,9 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import request, { BASE_URL } from "./request";
-import { LoginRS, UserProfile } from "./types";
+import { LoginRS, RegisterForm, UserProfile } from "./types";
 
 export async function login(username: string, password: string): Promise<LoginRS> {
   return request.post(`${BASE_URL}/api/Login`, { username, password }, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+}
+
+export async function registerAccount(body: RegisterForm): Promise<any> {
+  return request.post(`${BASE_URL}/api/Register`, body, {
     headers: {
       'Content-Type': 'application/json',
     }
