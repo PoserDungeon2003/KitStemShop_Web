@@ -38,6 +38,29 @@ const dropDownList = [
   // },
 ]
 
+const navbar = [
+  {
+    name: 'Home',
+    to: '/'
+  },
+  {
+    name: 'Shop',
+    to: '/shop'
+  },
+  {
+    name: 'About us',
+    to: '#'
+  },
+  {
+    name: 'Contact us',
+    to: '#'
+  },
+  {
+    name: 'Support',
+    to: '/support'
+  },
+]
+
 export const NavBar = () => {
   const profile = useGetProfile();
   const queryClient = useQueryClient();
@@ -81,11 +104,11 @@ export const NavBar = () => {
 
         <div className="flex items-center justify-between flex-grow pl-12">
           <div className="flex items-center space-x-6 capitalize">
-            <Link to="/" className="text-gray-200 hover:text-white transition">Home</Link>
-            <Link to="/shop" className="text-gray-200 hover:text-white transition">Shop</Link>
-            <Link to="/about" className="text-gray-200 hover:text-white transition">About us</Link>
-            <Link to="/contact" className="text-gray-200 hover:text-white transition">Contact us</Link>
-            <Link to="/support" className="text-gray-200 hover:text-white transition">Support</Link>
+            {_.map(navbar, (item, index) => (
+              <Link key={index} to={item.to} className="text-gray-200 hover:text-white transition">
+                {item.name}
+              </Link>
+            ))}
           </div>
           <div className="text-gray-200 transition flex flex-1 justify-end">
             {user ? (
