@@ -205,3 +205,36 @@ export type CreateLabRQ = {
   videoUrl: string;
   categoryLabId: number;
 }
+
+export type ItemDetail = {
+  istemName: string;
+  warrantyMonths: number;
+  img: string;
+  kitName: string;
+  price: number;
+  stock: number;
+};
+
+export type ItemDetailResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message?: string | null;
+  data?: ItemDetail;
+};
+
+export type UpdateItemRQ = {
+  istemName: string;
+  warrantyMonths: number;
+  img: string;
+  price: number;
+  stock: number;
+}
+
+export type CreateItemRQ = {
+  istemName: string;
+  warrantyMonths: number;
+  img: string;
+  kitId: number;
+  price: number;
+  stock: number;
+}
