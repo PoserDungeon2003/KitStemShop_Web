@@ -1,6 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 export const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5253'
+export const GHN_API_TOKEN = import.meta.env.VITE_GHN_API_TOKEN || ''
+export const GHN_API_URL = import.meta.env.VITE_GHN_API_URL || ''
 
 export function setTokenHeader(token: string) {
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;

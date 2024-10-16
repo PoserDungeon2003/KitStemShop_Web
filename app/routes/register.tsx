@@ -1,9 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Link, useNavigate } from "@remix-run/react";
+import { Select } from "antd";
+import _ from "lodash";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { FaFacebook, FaGoogle } from "react-icons/fa6";
 import { object, ref, string, InferType, number } from "yup";
-import { registerAccount } from "~/data";
+import { registerAccount, useGetDistricts, useGetProvinces, useGetWards } from "~/data";
 
 const schema = object({
   fullName: string().required('Full name is required').trim(),
@@ -21,6 +24,9 @@ const schema = object({
   email: string().email('Invalid email').required('Email is required').trim(),
   address: string().required('Address is required').trim(),
   phone: number().required('Phone number is required').typeError('Phone number is required').positive('Phone number is required').integer('Phone number is required'),
+  province: string().required('Province is required').trim(),
+  district: string().required('District is required').trim(),
+  ward: string().required('Ward is required').trim(),
 })
 
 const resolver = yupResolver(schema)
@@ -28,11 +34,34 @@ const resolver = yupResolver(schema)
 type RegisterForm = InferType<typeof schema>
 
 export default function Register() {
-  const { register, formState: { errors, isSubmitting }, handleSubmit, setError, watch } = useForm<RegisterForm>({
+  const { register, formState: { errors, isSubmitting }, handleSubmit, setError, watch, setValue } = useForm<RegisterForm>({
     mode: 'onChange',
     resolver,
   })
   const navigate = useNavigate()
+  const provinces = useGetProvinces();
+  const districts = useGetDistricts();
+  const districtId = watch('district');
+  const wards = useGetWards(Number(districtId));
+  const provinceId = watch('province');
+
+  const mapProvinces = useMemo(() => {
+    return _.mapKeys(provinces.data?.data, it => it.ProvinceID)
+  }, [provinces.data?.data]);
+
+  const mapDistricts = useMemo(() => {
+    return _.mapKeys(districts.data?.data, it => it.DistrictID)
+  }, [districts.data?.data]);
+
+  const mapWards = useMemo(() => {
+    return _.mapKeys(wards.data?.data, it => it.WardCode)
+  }, [districts.data?.data, wards.data?.data]);
+
+  const filterDistrictsByProviceId = useMemo(() => {
+    return _(districts.data?.data)
+      .filter(it => it.ProvinceID === Number(provinceId))
+      .value()
+  }, [watch('province')])
 
   const onSubmit = async (data: RegisterForm) => {
     console.log(data)
@@ -40,9 +69,14 @@ export default function Register() {
       let response = await registerAccount({
         ...data,
         phone: data.phone.toString(),
+        address: `${data.address}, ${mapWards[data.ward]?.WardName}, ${mapDistricts[data.district]?.DistrictName}, ${mapProvinces[data.province]?.ProvinceName}`
       })
-      if (response) {
+      if (response.status == 1) {
         navigate('/login')
+      } else {
+        setError('root', {
+          message: response.message
+        })
       }
     } catch (error: any) {
       setError('root', {
@@ -57,10 +91,10 @@ export default function Register() {
         <h2 className="text-2xl uppercase font-medium mb-1">Create an account</h2>
         <p className="text-gray-600 mb-6 text-sm">Register for new customer</p>
 
-        <form method="post" onSubmit={handleSubmit(onSubmit)}>
+        <form method="post" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="space-y-2">
             <div>
-              <label htmlFor="name" className="text-gray-600 mb-2 block">Full Name</label>
+              <label htmlFor="fullname" className="text-gray-600 mb-2 block">Full Name</label>
               <input
                 type="text"
                 {...register('fullName')}
@@ -70,7 +104,7 @@ export default function Register() {
               {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>}
             </div>
             <div>
-              <label htmlFor="name" className="text-gray-600 mb-2 block">Username</label>
+              <label htmlFor="username" className="text-gray-600 mb-2 block">Username</label>
               <input
                 type="text"
                 {...register('userName')}
@@ -95,9 +129,63 @@ export default function Register() {
                 type="text"
                 {...register('address')}
                 className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                placeholder="Số 123, Đường Nguyễn Huệ, Phường Bến Nghé, Quận 1"
+                placeholder="Số 123, Đường Nguyễn Huệ"
               />
               {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>}
+              <div className="mt-2 flex gap-2">
+                {/* <select {...register('province')} id="">
+                  {_.map(provinces.data?.data, (province, index) => (
+                    <option key={index} value={province.ProvinceID}>{province.ProvinceName}</option>
+                  ))}
+                </select> */}
+                <Select
+                  onChange={(value) => {
+                    setValue('province', value)
+                  }}
+                  loading={provinces.isLoading}
+                  className="w-1/3"
+                  placeholder="Province/City"
+                  options={_.map(provinces.data?.data, (province) => {
+                    return {
+                      label: province.ProvinceName,
+                      value: province.ProvinceID,
+                    }
+                  })}
+                >
+                </Select>
+                <Select
+                  onChange={(value) => {
+                    setValue('district', value)
+                  }}
+                  loading={districts.isLoading}
+                  disabled={!watch('province')}
+                  className="w-1/3"
+                  placeholder="Districts"
+                  options={_.map(filterDistrictsByProviceId, (district) => {
+                    return {
+                      label: district.DistrictName,
+                      value: district.DistrictID,
+                    }
+                  })}
+                >
+                </Select>
+                <Select
+                  onChange={(value) => {
+                    setValue('ward', value)
+                  }}
+                  disabled={!watch('district')}
+                  loading={wards.isLoading}
+                  className="w-1/3"
+                  placeholder="Wards"
+                  options={_.map(wards.data?.data, (ward) => {
+                    return {
+                      label: ward.WardName,
+                      value: ward.WardCode,
+                    }
+                  })}
+                >
+                </Select>
+              </div>
             </div>
             <div>
               <label htmlFor="phone" className="text-gray-600 mb-2 block">Phone number</label>
@@ -106,7 +194,7 @@ export default function Register() {
                 inputMode="tel"
                 {...register('phone')}
                 className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                placeholder="0906"
+                placeholder="0123456789"
               />
               {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>}
             </div>
