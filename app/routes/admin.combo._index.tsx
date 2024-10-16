@@ -1,5 +1,5 @@
 import { useNavigate } from "@remix-run/react";
-import { Image, Table, TableProps } from "antd"
+import { Image, Table, TableProps, Tooltip } from "antd"
 import _ from "lodash";
 import { useMemo } from "react";
 import { IoEye } from "react-icons/io5";
@@ -47,6 +47,14 @@ export default function AdminCombo() {
       title: 'Description',
       dataIndex: 'labKitDescription',
       key: 'labKitDescription',
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (labKitDescription: string) => (
+        <Tooltip placement="topLeft" title={labKitDescription}>
+          {labKitDescription}
+        </Tooltip>
+      )
     },
     {
       title: 'Price',
@@ -64,7 +72,14 @@ export default function AdminCombo() {
       title: 'Lab Name',
       dataIndex: 'labId',
       key: 'labId',
-      render: (id: number) => mapLabId[id]?.labName,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (id: number) => (
+        <Tooltip placement="topLeft" title={mapLabId[id]?.labName}>
+          {mapLabId[id]?.labName}
+        </Tooltip>
+      ),
     },
     {
       title: 'Image',

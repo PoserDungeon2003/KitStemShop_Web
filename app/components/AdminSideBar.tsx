@@ -3,7 +3,7 @@ import { Button, Menu } from "antd"
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import _ from "lodash";
 import { FaCircleUser, FaCreditCard, FaFlag, FaHouseUser, FaRightFromBracket, FaRightToBracket, FaTable } from "react-icons/fa6";
-import { IoAddCircle } from "react-icons/io5";
+import { IoAddCircle, IoListOutline } from "react-icons/io5";
 
 type AdminSideBarProps = {
   color: string;
@@ -92,7 +92,7 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
       children: [
         {
           key: "view-combo",
-          icon: <IoAddCircle />,
+          icon: <IoListOutline />,
           label: "View Combo",
           onClick: () => {
             navigate('/admin/combo');
@@ -115,7 +115,7 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
       children: [
         {
           key: "view-kits",
-          icon: <IoAddCircle />,
+          icon: <IoListOutline />,
           label: "View Kits",
           onClick: () => {
             navigate('/admin/kit');
@@ -127,6 +127,29 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
           label: "Create Kit",
           onClick: () => {
             navigate('/admin/kit/create');
+          },
+        },
+      ],
+    },
+    {
+      key: 'lab',
+      icon: dashboard,
+      label: 'Lab',
+      children: [
+        {
+          key: "view-labs",
+          icon: <IoListOutline />,
+          label: "View Labs",
+          onClick: () => {
+            navigate('/admin/lab');
+          },
+        },
+        {
+          key: "create-lab",
+          icon: <IoAddCircle />,
+          label: "Create Lab",
+          onClick: () => {
+            navigate('/admin/kit/lab');
           },
         },
       ],

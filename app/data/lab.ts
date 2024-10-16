@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL } from "./request";
-import { CreateLabRQ, LabDetailResponse, LabsResponse, UpdateLabRQ } from "./types";
+import { CategoryLabResponse, CreateLabRQ, LabDetailResponse, LabsResponse, UpdateLabRQ } from "./types";
 import _ from "lodash";
 
 export async function getLabById(id: number): Promise<LabDetailResponse> {
@@ -39,6 +39,20 @@ export async function deleteLabById(token: string, labById: number[]): Promise<a
       Authorization: `Bearer ${token}`,
     },
   });
+}
+
+export async function getAllCategoriesLab(): Promise<CategoryLabResponse> {
+  return await request.get(`${BASE_URL}/api/CategoryLab/get-all-category-Lab`);
+}
+
+export const useGetAllCategoriesLab = (
+  config?: Partial<UseQueryOptions<CategoryLabResponse>>
+) => {
+  return useQuery({
+    queryKey: ['categories-lab'],
+    queryFn: () => getAllCategoriesLab(),
+    ...config,
+  })
 }
 
 export const useGetAllLabs = (

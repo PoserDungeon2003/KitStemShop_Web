@@ -250,3 +250,18 @@ export type CreateItemRQ = {
   price: number;
   stock: number;
 }
+
+export type CategoryLab = {
+  categoryLabId: number;
+  categoryLabName: string;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  labs: Lab[];
+};
+
+export type CategoryLabResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message?: string | null;
+  data?: CategoryLab[];
+};
