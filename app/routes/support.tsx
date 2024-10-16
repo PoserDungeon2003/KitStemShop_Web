@@ -1,15 +1,43 @@
-import { useState } from "react";
+import { json, LoaderFunctionArgs, redirect } from '@remix-run/node';
+import { da } from 'date-fns/locale';
+import { useState } from 'react';
+import { useGetProfile } from '~/data';
+import { createSupportRequest } from '~/data/supportrequest';
+import { authenticator } from '~/services/auth.server';
 
-const SupportRequest = () => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
+export async function loader({ request }: LoaderFunctionArgs) {
+  const user = await authenticator.isAuthenticated(request);
+  if (!user) {
+    return redirect("/");
+  }
+  return json({}, { status: 200 });
+}
 
-  const handleSubmit = (e) => {
+export default function SupportRequest() {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+
+  const userId = useGetProfile().data?.user?.userId;
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Thực hiện logic gửi dữ liệu tới backend
-    console.log({ title, description, category });
+  
+    const data = {
+      userId: userId,                      
+      requestTitle: title,       
+      requestDescription: description
+    };
+  
+    try {
+      const res = await createSupportRequest(data);
+      
+      console.log(res);
+    } catch (error) {
+      console.error("Error submitting support request:", error);
+    }
   };
+  
 
   return (
     <div className="py-16 flex items-center justify-center bg-gray-100">
@@ -69,6 +97,4 @@ const SupportRequest = () => {
       </div>
     </div>
   );
-};
-
-export default SupportRequest;
+}

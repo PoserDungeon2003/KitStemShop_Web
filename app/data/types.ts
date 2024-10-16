@@ -118,6 +118,18 @@ export type ItemsResponse = {
   data?: Item[];
 };
 
+export type SupportRequest = {
+  supportRequestId: number;
+  userId?: number;
+  LabId?: number;
+  supportCount?: number;
+  MaxSupportCount?: number;
+  lastSupportDate?: Date;
+  requestTitle?: string;
+  requestDescription?: string;
+  ManagerId?: number;
+  Status?: string;
+}
 export type CategoryCompos = {
   categoryCompoId: number;
   categoryName: string;
