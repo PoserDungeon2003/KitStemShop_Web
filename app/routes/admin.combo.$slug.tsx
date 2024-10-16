@@ -1,9 +1,11 @@
-import { useNavigate } from "@remix-run/react";
+import { json, LoaderFunctionArgs } from "@remix-run/node"
+import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button, Col, Form, Input, InputNumber, Layout, notification, Row, Select, Typography } from "antd"
+import { Button, Col, Form, Input, InputNumber, Layout, Modal, Row, Select, Typography } from "antd";
 import _ from "lodash";
 import { useState } from "react";
-import { CreateCombo, createNewCombo, useGetAllCategoriesCombo, useGetAllLabs, useGetProfile } from "~/data";
+import { IoTrashOutline } from "react-icons/io5";
+import { ComboLabKitDetail, deleteComboById, getComboById, updateComboById, UpdateComboRQ, useGetAllCategoriesCombo, useGetAllLabs, useGetProfile } from "~/data";
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -15,35 +17,46 @@ export const handle = {
   hideCopyright: true,
 }
 
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
+type LoaderData = {
+  combo: ComboLabKitDetail;
+  slug: string;
+}
 
-export default function AdminComboCreate() {
+export async function loader({ params }: LoaderFunctionArgs) {
+  let slug = params.slug;
+  try {
+    let combo = await getComboById(slug || '');
+    if (combo.data) {
+      return json({ combo: combo.data, slug }, { status: 200 });
+    }
+    return json({ slug }, { status: 404 });
+  } catch (error) {
+    return json({ slug }, { status: 500 });
+  }
+}
+
+export default function AdminComboSlug() {
+  const { combo, slug } = useLoaderData<LoaderData>();
   const labs = useGetAllLabs();
   const categoryCombo = useGetAllCategoriesCombo();
-  const profile = useGetProfile();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState('Do you want to delete this combo?');
+  const profile = useGetProfile();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [api, contextHolder] = notification.useNotification();
-
-  const openNotificationWithIcon = (type: NotificationType, showProgress: boolean, pauseOnHover: boolean, message?: string, description?: string) => {
-    api[type]({
-      message: message || 'Notification Title',
-      description: description ||
-        'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-      showProgress: true,
-      pauseOnHover: pauseOnHover,
-    });
+  const showModal = () => {
+    setOpen(true);
   };
 
-  const onFinish = async (values: CreateCombo) => {
+  const onFinish = async (values: UpdateComboRQ) => {
     console.log('Received values of form: ', values);
     setIsLoading(true);
     try {
-      let response = await createNewCombo(profile.data?.user?.token || '', values);
+      let response = await updateComboById(profile.data?.user?.token || '', Number(slug), values);
       if (response.data) {
-        openNotificationWithIcon('success', true, true, 'Success', 'Create new combo successfully!');
         setIsLoading(false);
         queryClient.invalidateQueries({
           queryKey: ['combos']
@@ -51,11 +64,35 @@ export default function AdminComboCreate() {
         navigate('/admin/combo');
       }
     } catch (error: any) {
-      openNotificationWithIcon('error', true, true, 'Error', error?.message);
       setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleOk = async () => {
+    setConfirmLoading(true);
+    try {
+      let response = await deleteComboById(profile.data?.user?.token || '', [Number(slug)]);
+      if (response) {
+        queryClient.invalidateQueries({
+          queryKey: ['combos']
+        })
+        setConfirmLoading(false);
+        setOpen(false);
+        navigate('/admin/combo');
+      }
+    } catch (error: any) {
+      setConfirmLoading(false);
+      alert(error?.message);
+    } finally {
+      setConfirmLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    console.log('Clicked cancel button');
+    setOpen(false);
   };
 
   return (
@@ -64,11 +101,15 @@ export default function AdminComboCreate() {
         <div className="site-layout-content">
           <Row justify="center">
             <Col span={12}>
-              <Title level={2} className="text-center">Create New Combo</Title>
-              {contextHolder}
+              <Row justify={"space-between"}>
+                <Title level={2} className="text-center">Combo Info</Title>
+                <IoTrashOutline className="cursor-pointer self-center text-red-500"
+                  onClick={showModal}
+                />
+              </Row>
               <Form
                 name="create_combo"
-                initialValues={{ remember: true }}
+                initialValues={{ remember: true, ...combo }}
                 onFinish={onFinish}
                 layout="vertical"
               >
@@ -92,12 +133,12 @@ export default function AdminComboCreate() {
                 >
                   <InputNumber style={{ width: '100%' }} />
                 </Form.Item>
-                <Form.Item
+                {/* <Form.Item
                   label="Lab"
                   name="labId"
                   rules={[{ required: true, message: 'Please input!' }]}
                 >
-                  <Select options={_.map(labs.data?.data, (item) => {
+                  <Select defaultValue={combo.labName} options={_.map(labs.data?.data, (item) => {
                     return {
                       label: item.labName,
                       value: item.labId
@@ -109,16 +150,16 @@ export default function AdminComboCreate() {
                   name="categoryCompoId"
                   rules={[{ required: true, message: 'Please input!' }]}
                 >
-                  <Select options={_.map(categoryCombo.data?.data, (item) => {
+                  <Select defaultValue={combo.categoryName} options={_.map(categoryCombo.data?.data, (item) => {
                     return {
                       label: item.categoryName,
                       value: item.categoryCompoId,
                     }
                   })} />
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item>
                   <Button loading={isLoading} block type="primary" htmlType="submit" className="bg-blue-500">
-                    Submit
+                    Update
                   </Button>
                 </Form.Item>
               </Form>
@@ -126,6 +167,17 @@ export default function AdminComboCreate() {
           </Row>
         </div>
       </Content>
+      <Modal
+        title="Delete Combo"
+        open={open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+        okType="text"
+        okText="Yes"
+      >
+        <p>{modalText}</p>
+      </Modal>
     </Layout>
   )
 }

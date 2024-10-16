@@ -1,9 +1,9 @@
 import { useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button, Col, Form, Input, InputNumber, Layout, notification, Row, Select, Typography } from "antd"
+import { Button, Col, Form, Input, Layout, notification, Row, Select, Typography } from "antd"
 import _ from "lodash";
 import { useState } from "react";
-import { CreateCombo, createNewCombo, useGetAllCategoriesCombo, useGetAllLabs, useGetProfile } from "~/data";
+import { CreateKitRQ, createNewKit, useGetAllCombos, useGetProfile } from "~/data";
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -17,9 +17,8 @@ export const handle = {
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
-export default function AdminComboCreate() {
-  const labs = useGetAllLabs();
-  const categoryCombo = useGetAllCategoriesCombo();
+export default function AdminKitCreate() {
+  const combo = useGetAllCombos();
   const profile = useGetProfile();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -37,18 +36,18 @@ export default function AdminComboCreate() {
     });
   };
 
-  const onFinish = async (values: CreateCombo) => {
+  const onFinish = async (values: CreateKitRQ) => {
     console.log('Received values of form: ', values);
     setIsLoading(true);
     try {
-      let response = await createNewCombo(profile.data?.user?.token || '', values);
+      let response = await createNewKit(profile.data?.user?.token || '', values);
       if (response.data) {
         openNotificationWithIcon('success', true, true, 'Success', 'Create new combo successfully!');
         setIsLoading(false);
         queryClient.invalidateQueries({
-          queryKey: ['combos']
+          queryKey: ['kits']
         })
-        navigate('/admin/combo');
+        navigate('/admin/kit');
       }
     } catch (error: any) {
       openNotificationWithIcon('error', true, true, 'Error', error?.message);
@@ -64,55 +63,26 @@ export default function AdminComboCreate() {
         <div className="site-layout-content">
           <Row justify="center">
             <Col span={12}>
-              <Title level={2} className="text-center">Create New Combo</Title>
+              <Title level={2} className="text-center">Create New Kit</Title>
               {contextHolder}
               <Form
-                name="create_combo"
+                name="create_kit"
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
                 layout="vertical"
               >
-                <Form.Item label="Combo Name" name="labKitName" rules={[{ required: true, message: 'Please input!' }]}>
+                <Form.Item label="Kit Name" name="kitName" rules={[{ required: true, message: 'Please input!' }]}>
                   <Input allowClear />
                 </Form.Item>
                 <Form.Item
-                  label="Description"
-                  name="labKitDescription"
+                  label="Combo"
+                  name="compoId"
                   rules={[{ required: true, message: 'Please input!' }]}
                 >
-                  <Input.TextArea allowClear />
-                </Form.Item>
-                <Form.Item label="Image URL" name="image" rules={[{ required: true, message: 'Please input!', type: 'url' }]}>
-                  <Input allowClear />
-                </Form.Item>
-                <Form.Item
-                  label="Price"
-                  name="price"
-                  rules={[{ required: true, message: 'Please input!', type: 'number', min: 1 }]}
-                >
-                  <InputNumber style={{ width: '100%' }} />
-                </Form.Item>
-                <Form.Item
-                  label="Lab"
-                  name="labId"
-                  rules={[{ required: true, message: 'Please input!' }]}
-                >
-                  <Select options={_.map(labs.data?.data, (item) => {
+                  <Select options={_.map(combo.data?.data, (item) => {
                     return {
-                      label: item.labName,
-                      value: item.labId
-                    }
-                  })} />
-                </Form.Item>
-                <Form.Item
-                  label="Category Combo"
-                  name="categoryCompoId"
-                  rules={[{ required: true, message: 'Please input!' }]}
-                >
-                  <Select options={_.map(categoryCombo.data?.data, (item) => {
-                    return {
-                      label: item.categoryName,
-                      value: item.categoryCompoId,
+                      label: item.labKitName,
+                      value: item.compoId,
                     }
                   })} />
                 </Form.Item>

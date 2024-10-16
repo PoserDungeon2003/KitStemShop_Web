@@ -1,6 +1,8 @@
+import { useNavigate } from "@remix-run/react";
 import { Image, Table, TableProps } from "antd"
 import _ from "lodash";
 import { useMemo } from "react";
+import { IoEye } from "react-icons/io5";
 import { ComboLabKit, useGetAllCategoriesCombo, useGetAllCombos, useGetAllLabs } from "~/data"
 
 export const handle = {
@@ -14,6 +16,7 @@ export default function AdminCombo() {
   const combo = useGetAllCombos();
   const labs = useGetAllLabs();
   const categoryCombo = useGetAllCategoriesCombo();
+  const navigate = useNavigate();
 
   const mapCategoryComboId = useMemo(() => {
     return _.mapKeys(categoryCombo.data?.data,  it => it.categoryCompoId);
@@ -68,6 +71,16 @@ export default function AdminCombo() {
       dataIndex: 'image',
       key: 'image',
       render: (text: string) => <Image src={text} width={50} />,
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (record: ComboLabKit) => (
+        <IoEye
+          style={{ cursor: 'pointer' }}
+          onClick={() => navigate(`/admin/combo/${record.compoId}`)}
+        />
+      ),
     },
   ];
   return (

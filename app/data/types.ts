@@ -12,6 +12,9 @@ export type User = {
   userName?: string;
   role?: string;
   email?: string;
+  fullName?: string;
+  phone?: string;
+  address?: string;
 }
 
 export type UserProfile = {
@@ -86,7 +89,7 @@ export type LabDetail = {
   labDescription: string;
   videoUrl: string;
   categoryLabName: string;
-  status?: 'Active' | 'Inactive' | undefined
+  // status?: 'Active' | 'Inactive' | undefined
 };
 
 export type LabDetailResponse = {
@@ -170,3 +173,80 @@ export type CreateCombo = {
   labId: number;
   categoryCompoId: number;
 };
+
+export type UpdateComboRQ = {
+  price: number;
+  labKitName?: string;
+  labKitDescription?: string;
+  image?: string;
+}
+
+export type Kit = {
+  kitName: string;
+  createdAt: string;
+  comboName: string;
+  compoId: number;
+};
+
+export type KitResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message?: string | null;
+  data?: Kit;
+};
+
+export type UpdateKitRQ = {
+  kitName: string;
+  compoId: number;
+}
+
+export type CreateKitRQ = {
+  kitName: string;
+  compoId: number;
+}
+
+export type UpdateLabRQ = {
+  labName: string;
+  labDescription: string;
+  videoUrl: string;
+}
+
+export type CreateLabRQ = {
+  labName: string;
+  labDescription: string;
+  videoUrl: string;
+  categoryLabId: number;
+}
+
+export type ItemDetail = {
+  istemName: string;
+  warrantyMonths: number;
+  img: string;
+  kitName: string;
+  price: number;
+  stock: number;
+};
+
+export type ItemDetailResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message?: string | null;
+  data?: ItemDetail;
+};
+
+export type UpdateItemRQ = {
+  istemName: string;
+  warrantyMonths: number;
+  img: string;
+  price: number;
+  stock: number;
+}
+
+export type CreateItemRQ = {
+  istemName: string;
+  warrantyMonths: number;
+  img: string;
+  kitId: number;
+  price: number;
+  stock: number;
+}

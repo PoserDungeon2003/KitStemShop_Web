@@ -108,6 +108,29 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
         },
       ],
     },
+    {
+      key: 'kit',
+      icon: dashboard,
+      label: 'Kit',
+      children: [
+        {
+          key: "view-kits",
+          icon: <IoAddCircle />,
+          label: "View Kits",
+          onClick: () => {
+            navigate('/admin/kit');
+          },
+        },
+        {
+          key: "create-kit",
+          icon: <IoAddCircle />,
+          label: "Create Kit",
+          onClick: () => {
+            navigate('/admin/kit/create');
+          },
+        },
+      ],
+    },
   ]
 
   return (

@@ -1,5 +1,5 @@
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { Link, NavLink, Outlet, useLocation } from "@remix-run/react";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "@remix-run/react";
 import _ from "lodash";
 import { FaAddressCard, FaBoxArchive, FaCreditCard, FaHeart, FaRightFromBracket } from "react-icons/fa6";
 import { useGetProfile } from "~/data";
@@ -41,6 +41,7 @@ export default function Account() {
   const profile = useGetProfile();
   const username = profile.data?.user?.userName
   const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <main>
@@ -52,7 +53,8 @@ export default function Account() {
           <div className="px-4 py-3 shadow flex items-center gap-4">
             <div className="flex-shrink-0">
               <img src="/images/avatar.png" alt="profile"
-                className="rounded-full w-14 h-14 border border-gray-200 p-1 object-cover" />
+                onClick={() => navigate('/account')}
+                className="rounded-full w-14 h-14 border border-gray-200 p-1 object-cover cursor-pointer" />
             </div>
             <div className="flex-grow">
               <p className="text-gray-600">Hello,</p>
@@ -134,9 +136,9 @@ export default function Account() {
                 <a href="#" className="text-primary">Edit</a>
               </div>
               <div className="space-y-1">
-                <h4 className="text-gray-700 font-medium">John Doe</h4>
-                <p className="text-gray-800">example@mail.com</p>
-                <p className="text-gray-800">0811 8877 988</p>
+                <h4 className="text-gray-700 font-medium">{profile.data?.user?.fullName || "John Doe"}</h4>
+                <p className="text-gray-800">{profile.data?.user?.email}</p>
+                <p className="text-gray-800">{profile.data?.user?.phone}</p>
               </div>
             </div>
 
@@ -146,14 +148,14 @@ export default function Account() {
                 <a href="#" className="text-primary">Edit</a>
               </div>
               <div className="space-y-1">
-                <h4 className="text-gray-700 font-medium">John Doe</h4>
-                <p className="text-gray-800">Medan, North Sumatera</p>
-                <p className="text-gray-800">20371</p>
-                <p className="text-gray-800">0811 8877 988</p>
+                <h4 className="text-gray-700 font-medium">{profile.data?.user?.fullName || "John Doe"}</h4>
+                <p className="text-gray-800">{profile.data?.user?.address}</p>
+                {/* <p className="text-gray-800">20371</p> */}
+                <p className="text-gray-800">{profile.data?.user?.phone}</p>
               </div>
             </div>
 
-            <div className="shadow rounded bg-white px-4 pt-6 pb-8">
+            {/* <div className="shadow rounded bg-white px-4 pt-6 pb-8">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-medium text-gray-800 text-lg">Billing address</h3>
                 <a href="#" className="text-primary">Edit</a>
@@ -164,7 +166,7 @@ export default function Account() {
                 <p className="text-gray-800">20317</p>
                 <p className="text-gray-800">0811 8877 988</p>
               </div>
-            </div>
+            </div> */}
           </div>
         )}
         {/* ./info */}

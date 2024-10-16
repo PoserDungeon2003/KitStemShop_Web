@@ -27,9 +27,10 @@ async function _postMultiPart(url: string, formData: FormData, options?: AxiosRe
   return response.data;
 }
 
-async function _put(url: string, data?: any) {
+async function _put(url: string, data?: any, options?: AxiosRequestConfig) {
   const response = await axios.put(url, JSON.stringify(data), {
     headers: { 'Content-Type': 'application/json' },
+    ...options,
   });
   return response.data;
 }
