@@ -85,7 +85,7 @@ export const NavBar = () => {
             <Link to="/shop" className="text-gray-200 hover:text-white transition">Shop</Link>
             <Link to="/about" className="text-gray-200 hover:text-white transition">About us</Link>
             <Link to="/contact" className="text-gray-200 hover:text-white transition">Contact us</Link>
-            <Link to="/supportrequest" className="text-gray-200 hover:text-white transition">Support</Link>
+            <Link to="/support" className="text-gray-200 hover:text-white transition">Support</Link>
           </div>
           <div className="text-gray-200 transition flex flex-1 justify-end">
             {user ? (
