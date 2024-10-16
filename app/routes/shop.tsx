@@ -30,6 +30,7 @@ export default function Shop() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get("category");
+  const categoryComboId = searchParams.get("categoryComboId");
 
   const handleChange = (pageNumber: number, pageSize: number) => {
     setPage(pageNumber);
@@ -47,6 +48,12 @@ export default function Shop() {
 
     let filteredData = [...combos.data.data];
 
+    if (categoryComboId) {
+      filteredData = _(filteredData)
+        .filter((combo) => combo.categoryCompoId === Number(categoryComboId))
+        .value();
+    }
+
     switch (sortOption) {
       case "price-low-to-high":
         filteredData = _(filteredData).orderBy("price", "asc").value();
@@ -62,7 +69,7 @@ export default function Shop() {
     }
 
     return filteredData;
-  }, [combos.data?.data, sortOption]);
+  }, [combos.data?.data, sortOption, categoryComboId]);
 
   const data = useMemo(() => {
     const startIndex = (page - 1) * pageSize;
@@ -392,7 +399,7 @@ export default function Shop() {
             <div className="space-y-2">
               {_.map(categories, (category, index) => (
                 <div key={index} className="flex items-center">
-                  <input onChange={(e) => console.log(e.target.value)} value={category.value} type="checkbox" name="cat-1" id="cat-1"
+                  <input onChange={(e) => console.log(e.target.value)} value={category.value} type="radio" name="cat-1" id="cat-1"
                     className="text-primary focus:ring-0 rounded-sm cursor-pointer" />
                   <label htmlFor="cat-1" className="text-gray-600 ml-3 cursor-pointer">{category.name}</label>
                   <div className="ml-auto text-gray-600 text-sm">(15)</div>

@@ -86,7 +86,7 @@ export type LabDetail = {
   labDescription: string;
   videoUrl: string;
   categoryLabName: string;
-  status?: 'Active' | 'Inactive' | undefined
+  // status?: 'Active' | 'Inactive' | undefined
 };
 
 export type LabDetailResponse = {
@@ -188,4 +188,17 @@ export type UpdateKitRQ = {
 export type CreateKitRQ = {
   kitName: string;
   compoId: number;
+}
+
+export type UpdateLabRQ = {
+  labName: string;
+  labDescription: string;
+  videoUrl: string;
+}
+
+export type CreateLabRQ = {
+  labName: string;
+  labDescription: string;
+  videoUrl: string;
+  categoryLabId: number;
 }

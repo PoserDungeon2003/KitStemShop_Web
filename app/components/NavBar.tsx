@@ -7,35 +7,35 @@ import { useGetProfile } from "~/data"
 
 const dropDownList = [
   {
-    name: "Sofa",
+    name: "Combo Kit & Lab",
     icon: "/images/icons/sofa.svg",
     to: '/products/sofa',
   },
   {
-    name: "Terrace",
+    name: "Items",
     icon: "/images/icons/terrace.svg",
     to: '/products/terrace',
   },
-  {
-    name: "Bed",
-    icon: "/images/icons/bed.svg",
-    to: '/products/bed',
-  },
-  {
-    name: "Office",
-    icon: "/images/icons/office.svg",
-    to: '/products/office',
-  },
-  {
-    name: "Outdoor",
-    icon: "/images/icons/outdoor-cafe.svg",
-    to: '/products/outdoor',
-  },
-  {
-    name: "Mattress",
-    icon: "/images/icons/bed-2.svg",
-    to: '/products/mattress',
-  },
+  // {
+  //   name: "Bed",
+  //   icon: "/images/icons/bed.svg",
+  //   to: '/products/bed',
+  // },
+  // {
+  //   name: "Office",
+  //   icon: "/images/icons/office.svg",
+  //   to: '/products/office',
+  // },
+  // {
+  //   name: "Outdoor",
+  //   icon: "/images/icons/outdoor-cafe.svg",
+  //   to: '/products/outdoor',
+  // },
+  // {
+  //   name: "Mattress",
+  //   icon: "/images/icons/bed-2.svg",
+  //   to: '/products/mattress',
+  // },
 ]
 
 export const NavBar = () => {
@@ -68,7 +68,7 @@ export const NavBar = () => {
           <span className="capitalize ml-2 text-white">All Categories</span>
 
           <div
-            className="absolute w-full left-0 top-full bg-white shadow-md py-3 divide-y divide-gray-300 divide-dashed opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible"
+            className="absolute w-full left-0 top-full bg-white shadow-md py-3 divide-y divide-gray-300 divide-dashed opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible z-[999]"
           >
             {_.map(dropDownList, (item, index) => (
               <NavLink to={item.to} key={index} className={({ isActive }) => `${isActive ? 'text-[#fd3d57]' : ''} flex items-center px-6 py-3 hover:bg-gray-100 transition`}>
