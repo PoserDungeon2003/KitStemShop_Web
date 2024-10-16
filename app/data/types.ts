@@ -12,6 +12,9 @@ export type User = {
   userName?: string;
   role?: string;
   email?: string;
+  fullName?: string;
+  phone?: string;
+  address?: string;
 }
 
 export type UserProfile = {
