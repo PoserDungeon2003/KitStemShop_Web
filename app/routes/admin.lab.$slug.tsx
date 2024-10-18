@@ -1,11 +1,11 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node"
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button, Col, Form, Input, Layout, Modal, Row, Select, Typography } from "antd";
+import { Button, Col, Form, Input, Layout, Modal, notification, Row, Select, Typography } from "antd";
 import _ from "lodash";
 import { useState } from "react";
 import { IoTrashOutline } from "react-icons/io5";
-import { deleteKitById, getKitById, Kit, updateKitById, UpdateKitRQ, useGetAllCombos, useGetProfile } from "~/data";
+import { deleteLabById, getLabById, Lab, NotificationType, updateLabById, UpdateLabRQ, useGetAllCategoriesLab, useGetProfile } from "~/data";
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -18,16 +18,16 @@ export const handle = {
 }
 
 type LoaderData = {
-  kit: Kit;
+  lab: Lab;
   slug: string;
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
   let slug = params.slug;
   try {
-    let kit = await getKitById(slug || '');
-    if (kit.data) {
-      return json({ kit: kit.data, slug }, { status: 200 });
+    let lab = await getLabById(Number(slug));
+    if (lab.data) {
+      return json({ lab: lab.data, slug }, { status: 200 });
     }
     return json({ slug }, { status: 404 });
   } catch (error) {
@@ -36,8 +36,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export default function AdminKitSlug() {
-  const { kit, slug } = useLoaderData<LoaderData>();
-  const combo = useGetAllCombos();
+  const { lab, slug } = useLoaderData<LoaderData>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -45,25 +44,39 @@ export default function AdminKitSlug() {
   const profile = useGetProfile();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const categoryLab = useGetAllCategoriesLab();
+
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotificationWithIcon = (type: NotificationType, showProgress: boolean, pauseOnHover: boolean, message?: string, description?: string) => {
+    api[type]({
+      message: message || 'Notification Title',
+      description: description ||
+        'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+      showProgress: true,
+      pauseOnHover: pauseOnHover,
+    });
+  };
 
   const showModal = () => {
     setOpen(true);
   };
 
-  const onFinish = async (values: UpdateKitRQ) => {
+  const onFinish = async (values: UpdateLabRQ) => {
     console.log('Received values of form: ', values);
     setIsLoading(true);
     try {
-      let response = await updateKitById(profile.data?.user?.token || '', Number(slug), values);
+      let response = await updateLabById(profile.data?.user?.token || '', Number(slug), values);
       if (response.data) {
         setIsLoading(false);
         queryClient.invalidateQueries({
-          queryKey: ['kits']
+          queryKey: ['labs']
         })
-        navigate('/admin/kit');
+        navigate('/admin/lab');
       }
     } catch (error: any) {
       setIsLoading(false);
+      openNotificationWithIcon('error', true, true, 'Error', error?.message);
     } finally {
       setIsLoading(false);
     }
@@ -72,18 +85,18 @@ export default function AdminKitSlug() {
   const handleOk = async () => {
     setConfirmLoading(true);
     try {
-      let response = await deleteKitById(profile.data?.user?.token || '', [Number(slug)]);
+      let response = await deleteLabById(profile.data?.user?.token || '', [Number(slug)]);
       if (response) {
         queryClient.invalidateQueries({
-          queryKey: ['kits']
+          queryKey: ['labs']
         })
         setConfirmLoading(false);
         setOpen(false);
-        navigate('/admin/kit');
+        navigate('/admin/lab');
       }
     } catch (error: any) {
       setConfirmLoading(false);
-      alert(error?.message);
+      openNotificationWithIcon('error', true, true, 'Error', error?.message);
     } finally {
       setConfirmLoading(false);
     }
@@ -96,34 +109,45 @@ export default function AdminKitSlug() {
 
   return (
     <Layout>
+      {contextHolder}
       <Content style={{ padding: '50px' }}>
         <div className="site-layout-content">
           <Row justify="center">
             <Col span={12}>
               <Row justify={"space-between"}>
-                <Title level={2} className="text-center">Kit Info</Title>
+                <Title level={2} className="text-center">Lab Info</Title>
                 <IoTrashOutline className="cursor-pointer self-center text-red-500"
                   onClick={showModal}
                 />
               </Row>
               <Form
-                name="update_combo"
-                initialValues={{ remember: true, ...kit }}
+                name="update_lab"
+                initialValues={{ remember: true, ...lab }}
                 onFinish={onFinish}
                 layout="vertical"
               >
-                <Form.Item label="Kit Name" name="kitName" rules={[{ required: true, message: 'Please input!' }]}>
+                <Form.Item label="Lab Name" name="labName" rules={[{ required: true, message: 'Please input!' }]}>
                   <Input allowClear />
                 </Form.Item>
                 <Form.Item
-                  label="Combo"
-                  name="compoId"
+                  label="Description"
+                  name="labDescription"
                   rules={[{ required: true, message: 'Please input!' }]}
                 >
-                  <Select options={_.map(combo.data?.data, (item) => {
+                  <Input.TextArea allowClear />
+                </Form.Item>
+                <Form.Item label="Video URL" name="videoUrl" rules={[{ required: true, message: 'Please input!', type: 'url' }]}>
+                  <Input allowClear />
+                </Form.Item>
+                <Form.Item
+                  label="Category Lab"
+                  name="categoryLabId"
+                  rules={[{ required: true, message: 'Please input!' }]}
+                >
+                  <Select options={_.map(categoryLab.data?.data, (item) => {
                     return {
-                      label: item.labKitName,
-                      value: item.compoId,
+                      label: item.categoryLabName,
+                      value: item.categoryLabId,
                     }
                   })} />
                 </Form.Item>
@@ -138,7 +162,7 @@ export default function AdminKitSlug() {
         </div>
       </Content>
       <Modal
-        title="Delete Kit"
+        title="Delete Lab"
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}

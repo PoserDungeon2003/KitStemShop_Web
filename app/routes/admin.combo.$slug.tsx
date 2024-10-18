@@ -133,7 +133,7 @@ export default function AdminComboSlug() {
                 >
                   <InputNumber style={{ width: '100%' }} />
                 </Form.Item>
-                {/* <Form.Item
+                <Form.Item
                   label="Lab"
                   name="labId"
                   rules={[{ required: true, message: 'Please input!' }]}
@@ -156,7 +156,7 @@ export default function AdminComboSlug() {
                       value: item.categoryCompoId,
                     }
                   })} />
-                </Form.Item> */}
+                </Form.Item>
                 <Form.Item>
                   <Button loading={isLoading} block type="primary" htmlType="submit" className="bg-blue-500">
                     Update

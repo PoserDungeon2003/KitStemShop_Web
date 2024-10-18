@@ -37,7 +37,7 @@ export default function App() {
         queryCache: new QueryCache({
           onError: (error: any) => {
             if (error?.response?.status === 401) {
-              redirectLogin()
+              window.location.href = '/logout'
             }
           },
         }),

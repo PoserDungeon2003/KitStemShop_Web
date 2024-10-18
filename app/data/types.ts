@@ -379,3 +379,5 @@ export type ProvinceResponse = {
   message: string;
   data: Province[];
 };
+
+export type NotificationType = 'success' | 'info' | 'warning' | 'error';
