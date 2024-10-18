@@ -89,7 +89,7 @@ export default function AdminKit() {
   ];
   return (
     <div>
-      <Table columns={columns} dataSource={datasource}>
+      <Table loading={labs.isLoading} columns={columns} dataSource={datasource}>
       </Table>
     </div>
   )

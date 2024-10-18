@@ -154,6 +154,29 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
         },
       ],
     },
+    {
+      key: 'item',
+      icon: dashboard,
+      label: 'Item',
+      children: [
+        {
+          key: "view-items",
+          icon: <IoListOutline />,
+          label: "View Items",
+          onClick: () => {
+            navigate('/admin/item');
+          },
+        },
+        {
+          key: "create-item",
+          icon: <IoAddCircle />,
+          label: "Create Item",
+          onClick: () => {
+            navigate('/admin/item/create');
+          },
+        },
+      ],
+    },
   ]
 
   return (

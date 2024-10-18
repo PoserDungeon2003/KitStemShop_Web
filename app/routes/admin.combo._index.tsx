@@ -42,6 +42,14 @@ export default function AdminCombo() {
       title: 'Name',
       dataIndex: 'labKitName',
       key: 'labKitName',
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (labKitName: string) => (
+        <Tooltip placement="topLeft" title={labKitName}>
+          {labKitName}
+        </Tooltip>
+      )
     },
     {
       title: 'Description',
@@ -100,7 +108,7 @@ export default function AdminCombo() {
   ];
   return (
     <div>
-      <Table columns={columns} dataSource={datasource}>
+      <Table loading={combo.isLoading} columns={columns} dataSource={datasource}>
       </Table>
     </div>
   )
