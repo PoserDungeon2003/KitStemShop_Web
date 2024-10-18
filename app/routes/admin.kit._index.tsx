@@ -1,5 +1,5 @@
 import { useNavigate } from "@remix-run/react";
-import { Table, TableProps, Tag } from "antd"
+import { Table, TableProps, Tag, Tooltip } from "antd"
 import { format } from "date-fns";
 import _ from "lodash";
 import { useMemo } from "react";
@@ -19,7 +19,7 @@ export default function AdminKit() {
   const navigate = useNavigate();
 
   const mapCombo = useMemo(() => {
-    return _.mapKeys(combo.data?.data,  it => it.compoId);
+    return _.mapKeys(combo.data?.data, it => it.compoId);
   }, [combo.data?.data]);
 
   const datasource = useMemo(() => {
@@ -43,7 +43,14 @@ export default function AdminKit() {
       title: 'Combo',
       dataIndex: 'compoId',
       key: 'compoId',
-      render: (id: number) => mapCombo[id]?.labKitName,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (id: number) => (
+        <Tooltip title={mapCombo[id]?.labKitName}>
+          {mapCombo[id]?.labKitName}
+        </Tooltip>
+      ),
     },
     {
       title: 'Status',

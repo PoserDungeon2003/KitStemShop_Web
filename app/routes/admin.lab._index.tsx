@@ -38,6 +38,14 @@ export default function AdminKit() {
       title: 'Name',
       dataIndex: 'labName',
       key: 'labName',
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (labName: string) => (
+        <Tooltip placement="topLeft" title={labName}>
+          {labName}
+        </Tooltip>
+      )
     },
     {
       title: 'Description',

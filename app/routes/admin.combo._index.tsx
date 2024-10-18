@@ -74,7 +74,14 @@ export default function AdminCombo() {
       title: 'Category Name',
       dataIndex: 'categoryCompoId',
       key: 'categoryCompoId',
-      render: (id: number) => mapCategoryComboId[id]?.categoryName,
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (id: number) => (
+        <Tooltip placement="topLeft" title={mapCategoryComboId[id]?.categoryName}>
+          {mapCategoryComboId[id]?.categoryName}
+        </Tooltip>
+      ),
     },
     {
       title: 'Lab Name',
