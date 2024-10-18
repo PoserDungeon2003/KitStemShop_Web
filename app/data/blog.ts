@@ -31,7 +31,7 @@ export async function updateBlogById(token: string, blogId: number, body: Update
   });
 }
 
-export async function deleteComboById(token: string, blogById: number[]): Promise<any> {
+export async function deleteBlogById(token: string, blogById: number[]): Promise<any> {
   const queryString = _.map(blogById, (id) => `blogById=${id}`).join('&');
   return request.deleteWithOptions(`${BASE_URL}/api/Blog/delete-Blog-by-id?${queryString}`, {
     headers: {

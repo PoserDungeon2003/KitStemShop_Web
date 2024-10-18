@@ -1,8 +1,8 @@
-import { NavLink, useLocation, useNavigate } from "@remix-run/react"
-import { Button, Menu } from "antd"
+import { Link, useLocation, useNavigate } from "@remix-run/react"
+import { Menu } from "antd"
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import _ from "lodash";
-import { FaCircleUser, FaCreditCard, FaFlag, FaHouseUser, FaRightFromBracket, FaRightToBracket, FaTable } from "react-icons/fa6";
+import { FaCircleUser, FaCreditCard, FaFlag, FaHouseUser, FaRightToBracket, FaTable } from "react-icons/fa6";
 import { IoAddCircle, IoListOutline } from "react-icons/io5";
 
 type AdminSideBarProps = {
@@ -188,8 +188,11 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
       <hr />
       <Menu items={menuItems} theme="light" mode="inline">
       </Menu>
-      {/* <div className="aside-footer">
-        <div
+      <div className="aside-footer">
+        <Link to="/logout?redirectTo=/?action=logout" className="text-center">
+          Logout
+        </Link>
+        {/* <div
           className="footer-box"
           style={{
             background: color,
@@ -203,8 +206,8 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
           <Button type="primary" className="ant-btn-sm ant-btn-block">
             DOCUMENTATION
           </Button>
-        </div>
-      </div> */}
+        </div> */}
+      </div>
     </>
   )
 }
