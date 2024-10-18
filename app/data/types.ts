@@ -240,6 +240,7 @@ export type UpdateItemRQ = {
   img: string;
   price: number;
   stock: number;
+  kitId: number;
 }
 
 export type CreateItemRQ = {

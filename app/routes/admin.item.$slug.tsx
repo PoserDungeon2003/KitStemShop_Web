@@ -1,11 +1,11 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node"
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button, Col, Form, Input, Layout, Modal, notification, Row, Select, Typography } from "antd";
+import { Button, Col, Form, Input, InputNumber, Layout, Modal, notification, Row, Select, Typography } from "antd";
 import _ from "lodash";
 import { useState } from "react";
 import { IoTrashOutline } from "react-icons/io5";
-import { deleteLabById, getLabById, Lab, NotificationType, updateLabById, UpdateLabRQ, useGetAllCategoriesLab, useGetProfile } from "~/data";
+import { deleteItemById, getItemById, Item, NotificationType, updateItemById, UpdateItemRQ, useGetAllKits, useGetProfile } from "~/data";
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -18,16 +18,16 @@ export const handle = {
 }
 
 type LoaderData = {
-  lab: Lab;
+  items: Item;
   slug: string;
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
   let slug = params.slug;
   try {
-    let lab = await getLabById(Number(slug));
-    if (lab.data) {
-      return json({ lab: lab.data, slug }, { status: 200 });
+    let item = await getItemById(slug || '');
+    if (item.data) {
+      return json({ items: item.data, slug }, { status: 200 });
     }
     return json({ slug }, { status: 404 });
   } catch (error) {
@@ -35,16 +35,16 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 }
 
-export default function AdminKitSlug() {
-  const { lab, slug } = useLoaderData<LoaderData>();
+export default function AdminComboSlug() {
+  const { items, slug } = useLoaderData<LoaderData>();
+  const kits = useGetAllKits();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Do you want to delete this lab?');
+  const [modalText, setModalText] = useState('Do you want to delete this item?');
   const profile = useGetProfile();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const categoryLab = useGetAllCategoriesLab();
 
   const [api, contextHolder] = notification.useNotification();
 
@@ -62,21 +62,21 @@ export default function AdminKitSlug() {
     setOpen(true);
   };
 
-  const onFinish = async (values: UpdateLabRQ) => {
+  const onFinish = async (values: UpdateItemRQ) => {
     console.log('Received values of form: ', values);
     setIsLoading(true);
     try {
-      let response = await updateLabById(profile.data?.user?.token || '', Number(slug), values);
+      let response = await updateItemById(profile.data?.user?.token || '', Number(slug), values);
       if (response.data) {
         setIsLoading(false);
         queryClient.invalidateQueries({
-          queryKey: ['labs']
+          queryKey: ['items']
         })
-        navigate('/admin/lab');
+        navigate('/admin/item');
       }
     } catch (error: any) {
-      setIsLoading(false);
       openNotificationWithIcon('error', true, true, 'Error', error?.message);
+      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
@@ -85,14 +85,14 @@ export default function AdminKitSlug() {
   const handleOk = async () => {
     setConfirmLoading(true);
     try {
-      let response = await deleteLabById(profile.data?.user?.token || '', [Number(slug)]);
+      let response = await deleteItemById(profile.data?.user?.token || '', [Number(slug)]);
       if (response) {
         queryClient.invalidateQueries({
-          queryKey: ['labs']
+          queryKey: ['items']
         })
         setConfirmLoading(false);
         setOpen(false);
-        navigate('/admin/lab');
+        navigate('/admin/item');
       }
     } catch (error: any) {
       setConfirmLoading(false);
@@ -115,39 +115,53 @@ export default function AdminKitSlug() {
           <Row justify="center">
             <Col span={12}>
               <Row justify={"space-between"}>
-                <Title level={2} className="text-center">Lab Info</Title>
+                <Title level={2} className="text-center">Item Info</Title>
                 <IoTrashOutline className="cursor-pointer self-center text-red-500"
                   onClick={showModal}
                 />
               </Row>
               <Form
-                name="update_lab"
-                initialValues={{ remember: true, ...lab }}
+                name="create_item"
+                initialValues={{ remember: true, ...items }}
                 onFinish={onFinish}
                 layout="vertical"
               >
-                <Form.Item label="Lab Name" name="labName" rules={[{ required: true, message: 'Please input!' }]}>
+                <Form.Item label="Item Name" name="istemName" rules={[{ required: true, message: 'Please input!' }]}>
+                  <Input allowClear />
+                </Form.Item>
+                <Form.Item label="Image URL" name="img" rules={[{ required: true, message: 'Please input!', type: 'url' }]}>
                   <Input allowClear />
                 </Form.Item>
                 <Form.Item
-                  label="Description"
-                  name="labDescription"
-                  rules={[{ required: true, message: 'Please input!' }]}
+                  label="Warranty Months"
+                  name="warrantyMonths"
+                  rules={[{ required: true, message: 'Please input!', type: 'number', min: 1 }]}
                 >
-                  <Input.TextArea allowClear />
-                </Form.Item>
-                <Form.Item label="Video URL" name="videoUrl" rules={[{ required: true, message: 'Please input!', type: 'url' }]}>
-                  <Input allowClear />
+                  <InputNumber style={{ width: '100%' }} />
                 </Form.Item>
                 <Form.Item
-                  label="Category Lab"
-                  name="categoryLabId"
+                  label="Price"
+                  name="price"
+                  rules={[{ required: true, message: 'Please input!', type: 'number', min: 1 }]}
+                >
+                  <InputNumber style={{ width: '100%' }} />
+                </Form.Item>
+                <Form.Item
+                  label="Stock"
+                  name="stock"
+                  rules={[{ required: true, message: 'Please input!', type: 'number' }]}
+                >
+                  <InputNumber style={{ width: '100%' }} />
+                </Form.Item>
+                <Form.Item
+                  label="Kit"
+                  name="kitId"
                   rules={[{ required: true, message: 'Please input!' }]}
                 >
-                  <Select options={_.map(categoryLab.data?.data, (item) => {
+                  <Select defaultValue={items.kitId} options={_.map(kits.data?.data, (item) => {
                     return {
-                      label: item.categoryLabName,
-                      value: item.categoryLabId,
+                      label: item.kitName,
+                      value: item.kitId
                     }
                   })} />
                 </Form.Item>
@@ -162,7 +176,7 @@ export default function AdminKitSlug() {
         </div>
       </Content>
       <Modal
-        title="Delete Lab"
+        title="Delete Combo"
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
