@@ -381,3 +381,42 @@ export type ProvinceResponse = {
 };
 
 export type NotificationType = 'success' | 'info' | 'warning' | 'error';
+
+export type Blog = {
+  blogId: number;
+  title: string;
+  content: string;
+  categoryId: number;
+  createdAt: string;
+  updatedAt: string;
+  userId: number;
+  status: string;
+  image: string;
+  category: any | null; // Adjust the type if you have a more specific structure for category
+  user: any | null; // Adjust the type if you have a more specific structure for user
+};
+
+export type BlogsResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message: string | null;
+  data: Blog[];
+};
+
+export type BlogDetail = {
+  title: string;
+  content: string;
+  categoryName: string;
+  userName: string;
+};
+
+export type BlogDetailResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message: string | null;
+  data: BlogDetail;
+};
+
+export type UpdateBlogRQ = {
+  content: string;
+}
