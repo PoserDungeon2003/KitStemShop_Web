@@ -60,6 +60,10 @@ const navbar = [
     to: '/support'
   },
   {
+    name: 'Blog',
+    to: '/blog'
+  },
+  {
     name: "Dashboard",
     to: "/admin/dashboard"
   }
