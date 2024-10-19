@@ -454,3 +454,11 @@ export type CreateCategoryRQ = {
 export type UpdateCategoryComboRQ = {
   categoryName: string;
 }
+
+export type UpdateCategoryBlogRQ = {
+  categoryName: string;
+}
+
+export type UpdateCategoryLabRQ = {
+  categoryLabName: string;
+}
