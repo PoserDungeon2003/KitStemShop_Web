@@ -12,7 +12,7 @@ export const handle = {
   hideCopyright: true,
 }
 
-export default function AdminCombo() {
+export default function AdminItem() {
   const items = useGetAllItems();
   const kits = useGetAllKits();
   const navigate = useNavigate();

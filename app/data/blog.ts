@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL } from "./request";
-import { BlogCategoriesResponse, BlogDetailResponse, BlogsResponse, UpdateBlogRQ } from "./types";
+import { BlogCategoriesResponse, BlogDetailResponse, BlogsResponse, CreateCategoryRQ, UpdateBlogRQ } from "./types";
 import _ from "lodash";
 
 export async function getAllBlogs(): Promise<BlogsResponse> {
@@ -24,6 +24,15 @@ export async function updateBlogById(token: string, blogId: number, body: Update
     ...body,
     blogId,
   }, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+}
+
+export async function createNewCategoryBlog(token: string, body: CreateCategoryRQ): Promise<any> {
+  return await request.post(`${BASE_URL}/api/CategoryBlog/insert-cate-Blog-by-id`, body, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',

@@ -208,7 +208,7 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
         {
           key: "view-category",
           icon: <IoListOutline />,
-          label: "View Blog",
+          label: "View Category",
           onClick: () => {
             navigate('/admin/category');
           },

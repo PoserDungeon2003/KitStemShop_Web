@@ -17,7 +17,7 @@ export const handle = {
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
-export default function AdminComboCreate() {
+export default function AdminItemCreate() {
   const labs = useGetAllLabs();
   const categoryCombo = useGetAllCategoriesCombo();
   const kits = useGetAllKits();

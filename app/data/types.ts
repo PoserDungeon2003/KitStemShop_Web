@@ -446,3 +446,11 @@ export type CreateBlogRQ = {
     fileList: FileList;
   };
 }
+
+export type CreateCategoryRQ = {
+  categoryName: string;
+}
+
+export type UpdateCategoryComboRQ = {
+  categoryName: string;
+}

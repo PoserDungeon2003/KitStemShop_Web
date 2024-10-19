@@ -28,7 +28,7 @@ const getBase64 = (file: FileType): Promise<string> =>
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
-export default function AdminKitCreate() {
+export default function AdminBlogCreate() {
   const profile = useGetProfile();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();

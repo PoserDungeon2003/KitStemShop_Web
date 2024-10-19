@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL } from "./request";
-import { CategoryLabResponse, CreateLabRQ, LabDetailResponse, LabsResponse, UpdateLabRQ } from "./types";
+import { CategoryLabResponse, CreateCategoryRQ, CreateLabRQ, LabDetailResponse, LabsResponse, UpdateLabRQ } from "./types";
 import _ from "lodash";
 
 export async function getLabById(id: number): Promise<LabDetailResponse> {
@@ -25,6 +25,15 @@ export async function updateLabById(token: string, labId: number, body: UpdateLa
 
 export async function createNewLab(token: string, body: CreateLabRQ): Promise<any> {
   return await request.post(`${BASE_URL}/api/Lab/insert-Lab-by-id`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+}
+
+export async function createNewCategoryLab(token: string, body: CreateCategoryRQ): Promise<any> {
+  return await request.post(`${BASE_URL}/api/CategoryLab/insert-cate-Lab-by-id`, body, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',

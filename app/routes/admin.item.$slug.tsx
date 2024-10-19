@@ -35,7 +35,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 }
 
-export default function AdminComboSlug() {
+export default function AdminItemSlug() {
   const { items, slug } = useLoaderData<LoaderData>();
   const kits = useGetAllKits();
   const [isLoading, setIsLoading] = useState<boolean>(false);

@@ -17,7 +17,7 @@ export const handle = {
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
-export default function AdminKitCreate() {
+export default function AdminLabCreate() {
   const profile = useGetProfile();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();

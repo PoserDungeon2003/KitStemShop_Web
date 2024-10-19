@@ -14,7 +14,7 @@ export const handle = {
   hideCopyright: true,
 }
 
-export default function AdminKit() {
+export default function AdminBlog() {
   const blogs = useGetAllBlogs();
   const categoryBlog = useGetAllCategoriesBlog();
 

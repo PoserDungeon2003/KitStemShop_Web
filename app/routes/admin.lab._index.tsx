@@ -12,7 +12,7 @@ export const handle = {
   hideCopyright: true,
 }
 
-export default function AdminKit() {
+export default function AdminLab() {
   const labs = useGetAllLabs();
   const categoryLab = useGetAllCategoriesLab();
   

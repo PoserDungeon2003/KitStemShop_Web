@@ -35,7 +35,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 }
 
-export default function AdminKitSlug() {
+export default function AdminLabSlug() {
   const { lab, slug } = useLoaderData<LoaderData>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
