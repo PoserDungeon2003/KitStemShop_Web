@@ -38,6 +38,14 @@ export default function AdminKit() {
       title: 'Name',
       dataIndex: 'kitName',
       key: 'kitName',
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (kitName: string) => (
+        <Tooltip placement="topLeft" title={kitName}>
+          {kitName}
+        </Tooltip>
+      )
     },
     {
       title: 'Combo',

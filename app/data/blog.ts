@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL } from "./request";
-import { BlogDetailResponse, BlogsResponse, UpdateBlogRQ } from "./types";
+import { BlogCategoriesResponse, BlogDetailResponse, BlogsResponse, UpdateBlogRQ } from "./types";
 import _ from "lodash";
 
 export async function getAllBlogs(): Promise<BlogsResponse> {
@@ -38,6 +38,20 @@ export async function deleteBlogById(token: string, blogById: number[]): Promise
       Authorization: `Bearer ${token}`,
     },
   });
+}
+
+export async function getAllCategoriesBlog(): Promise<BlogCategoriesResponse> {
+  return await request.get(`${BASE_URL}/api/CategoryBlog/get-all-category-Blog`);
+}
+
+export const useGetAllCategoriesBlog = (
+  config?: UseQueryOptions<BlogCategoriesResponse>
+) => {
+  return useQuery({
+    queryKey: ['categories-blog'],
+    queryFn: getAllCategoriesBlog,
+    ...config,
+  })
 }
 
 export const useGetAllBlogs = (

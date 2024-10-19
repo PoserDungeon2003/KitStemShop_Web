@@ -177,6 +177,29 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
         },
       ],
     },
+    {
+      key: 'blog',
+      icon: dashboard,
+      label: 'Blog',
+      children: [
+        {
+          key: "view-blog",
+          icon: <IoListOutline />,
+          label: "View Blog",
+          onClick: () => {
+            navigate('/admin/blog');
+          },
+        },
+        {
+          key: "create-blog",
+          icon: <IoAddCircle />,
+          label: "Create Blog",
+          onClick: () => {
+            navigate('/admin/blog/create');
+          },
+        },
+      ],
+    },
   ]
 
   return (

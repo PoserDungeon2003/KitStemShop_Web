@@ -421,3 +421,17 @@ export type BlogDetailResponse = {
 export type UpdateBlogRQ = {
   content: string;
 }
+
+export type BlogCategory = {
+  categoryId: number;
+  categoryName: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type BlogCategoriesResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message: string | null;
+  data: BlogCategory[];
+};

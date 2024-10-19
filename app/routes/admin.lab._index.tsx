@@ -20,7 +20,7 @@ export default function AdminKit() {
 
   const mapCategoryLab = useMemo(() => {
     return _.mapKeys(categoryLab.data?.data,  it => it.categoryLabId);
-  }, [labs.data?.data]);
+  }, [categoryLab.data?.data]);
 
   const datasource = useMemo(() => {
     return _(labs.data?.data)
