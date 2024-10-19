@@ -1,6 +1,6 @@
 import { useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button, Col, Form, Input, Layout, message, notification, Row, Select, Typography, Upload, UploadFile, UploadProps } from "antd"
+import { Button, Col, Form, GetProp, Image, Input, Layout, message, notification, Row, Select, Typography, Upload, UploadFile, UploadProps } from "antd"
 import _ from "lodash";
 import { useState } from "react";
 import { IoCloudUpload } from "react-icons/io5";
@@ -16,6 +16,16 @@ export const handle = {
   hideCopyright: true,
 }
 
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+
+const getBase64 = (file: FileType): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 export default function AdminKitCreate() {
@@ -28,6 +38,8 @@ export default function AdminKitCreate() {
   const [api, contextHolder] = notification.useNotification();
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
 
   const openNotificationWithIcon = (type: NotificationType, showProgress: boolean, pauseOnHover: boolean, message?: string, description?: string) => {
     api[type]({
@@ -39,8 +51,21 @@ export default function AdminKitCreate() {
     });
   };
 
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as FileType);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+  };
+
+  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
+    setFileList(newFileList);
+
   const uploadProps: UploadProps = {
     accept: '.jpg',
+    listType: 'picture-card',
     onRemove: (file) => {
       setFileList((prev) => prev.filter((f) => f.uid !== file.uid));
     },
@@ -61,6 +86,7 @@ export default function AdminKitCreate() {
     fileList,
     onChange(info) {
       const { status } = info.file;
+      setFileList(info.fileList);
       if (status !== 'uploading') {
         console.log(info.file, info.fileList);
       }
@@ -73,6 +99,7 @@ export default function AdminKitCreate() {
     onDrop(e) {
       console.log('Dropped files', e.dataTransfer.files);
     },
+    onPreview: handlePreview,
   };
 
   const onFinish = async (values: CreateBlogRQ) => {
@@ -83,7 +110,7 @@ export default function AdminKitCreate() {
     formData.append('content', values.content);
     formData.append('categoryId', values.categoryId.toString());
     if (fileList.length > 0) {
-      formData.append('image', values.image.file);      
+      formData.append('image', values.image.file);
     }
     try {
       let response = await createNewBlog(profile.data?.user?.token || '', formData);
@@ -131,9 +158,23 @@ export default function AdminKitCreate() {
                   <Upload
                     {...uploadProps}
                   >
-                    {fileList.length > 0 ? null : <Button icon={<IoCloudUpload />}>Click to Upload</Button>}
+                    {fileList.length > 0 ? null : <button className="flex flex-col items-center" style={{ border: 0, background: 'none' }} type="button">
+                      <IoCloudUpload />
+                      <div style={{ marginTop: 8 }}>Upload</div>
+                    </button>}
                   </Upload>
                 </Form.Item>
+                {previewImage && (
+                  <Image
+                    wrapperStyle={{ display: 'none' }}
+                    preview={{
+                      visible: previewOpen,
+                      onVisibleChange: (visible) => setPreviewOpen(visible),
+                      afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                    }}
+                    src={previewImage}
+                  />
+                )}
                 <Form.Item
                   label="Blog Category"
                   name="categoryId"
