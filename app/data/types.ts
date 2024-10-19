@@ -435,3 +435,13 @@ export type BlogCategoriesResponse = {
   message: string | null;
   data: BlogCategory[];
 };
+
+export type CreateBlogRQ = {
+  title: string;
+  content: string;
+  categoryId: number;
+  image: {
+    file: File;
+    fileList: FileList;
+  };
+}
