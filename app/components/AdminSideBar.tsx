@@ -200,6 +200,29 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
         },
       ],
     },
+    {
+      key: 'category',
+      icon: dashboard,
+      label: 'Category',
+      children: [
+        {
+          key: "view-category",
+          icon: <IoListOutline />,
+          label: "View Blog",
+          onClick: () => {
+            navigate('/admin/category');
+          },
+        },
+        // {
+        //   key: "create-blog",
+        //   icon: <IoAddCircle />,
+        //   label: "Create Blog",
+        //   onClick: () => {
+        //     navigate('/admin/blog/create');
+        //   },
+        // },
+      ],
+    },
   ]
 
   return (
