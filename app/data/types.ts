@@ -420,6 +420,7 @@ export type BlogDetailResponse = {
 
 export type UpdateBlogRQ = {
   content: string;
+  categoryId: number;
 }
 
 export type BlogCategory = {

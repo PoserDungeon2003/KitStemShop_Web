@@ -7,7 +7,7 @@ export async function getAllBlogs(): Promise<BlogsResponse> {
   return await request.get(`${BASE_URL}/api/Blog/get-all-Blog`);
 }
 
-export async function getBlogById(id: string): Promise<BlogDetailResponse> {
+export async function getBlogById(id: number): Promise<BlogDetailResponse> {
   return await request.get(`${BASE_URL}/api/Blog/get-Blog-by-id?blogId=${id}`);
 }
 

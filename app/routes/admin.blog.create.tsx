@@ -60,9 +60,6 @@ export default function AdminKitCreate() {
     setPreviewOpen(true);
   };
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
-
   const uploadProps: UploadProps = {
     accept: '.jpg',
     listType: 'picture-card',
