@@ -1,6 +1,9 @@
 import { Link } from "@remix-run/react";
 import _ from "lodash"
 import { FaHeart, FaMagnifyingGlass, FaStar } from "react-icons/fa6"
+import { formatMoney } from "./utils";
+import { addToCart, useGetProfile } from "~/data";
+import { useQueryClient } from "@tanstack/react-query";
 
 type ProductCardProps = {
   title: string;
@@ -9,6 +12,7 @@ type ProductCardProps = {
   rating?: number[];
   link?: string;
   imageUrl?: string;
+  comboId: number;
 }
 
 export const ProductCard = ({
@@ -18,7 +22,32 @@ export const ProductCard = ({
   rating,
   link,
   imageUrl,
+  comboId,
 }: ProductCardProps) => {
+  const profile = useGetProfile();
+  const queryClient = useQueryClient();
+
+  const handleAddToCart = async (price: number, labKitId: number) => {
+    try {
+      let response = await addToCart(profile.data?.user?.token || "", {
+        totalPrice: price,
+        orderDetailsDTO: [
+          {
+            labKitId,
+            iStemId: 0,
+          }
+        ]
+      });
+      if (response) {
+        console.log(response);
+        queryClient.invalidateQueries({
+          queryKey: ['cart']
+        })
+      }
+    } catch (error) {
+      
+    }
+  }
   return (
     <div className="bg-white shadow rounded overflow-hidden group">
       <div className="relative">
@@ -41,8 +70,8 @@ export const ProductCard = ({
           <h4 className="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition line-clamp-1">{title}</h4>
         </Link>
         <div className="flex items-baseline mb-1 space-x-2">
-          <p className="text-xl text-primary font-semibold">${discountPrice}</p>
-          <p className="text-sm text-gray-400 line-through">${price}</p>
+          <p className="text-xl text-primary font-semibold">{formatMoney(discountPrice || 0)}</p>
+          <p className="text-sm text-gray-400 line-through">{formatMoney(price)}</p>
         </div>
         <div className="flex items-center">
           <div className="flex gap-1 text-sm text-yellow-400">
@@ -55,7 +84,9 @@ export const ProductCard = ({
           <div className="text-xs text-gray-500 ml-3">({_.random(1, 150)})</div>
         </div>
       </div>
-      <a href="#"
+      <a onClick={() => {
+        handleAddToCart(price, comboId)
+      }}
         className="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">Add to cart
       </a>
     </div>

@@ -13,7 +13,7 @@ async function _get<T>(url: string, options?: AxiosRequestConfig): Promise<T> {
   return response.data;
 }
 
-async function _post(url: string, data?: any, options?: any) {
+async function _post(url: string, data?: any, options?: AxiosRequestConfig) {
   const response = await axios.post(url, JSON.stringify(data), {
     headers: { 'Content-Type': 'application/json' },
     ...options,

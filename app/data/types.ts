@@ -462,3 +462,19 @@ export type UpdateCategoryBlogRQ = {
 export type UpdateCategoryLabRQ = {
   categoryLabName: string;
 }
+
+export type OrderDetailDTO = {
+  labKitId: number;
+  iStemId: number;
+};
+
+export type Cart = {
+  usertID?: number;
+  totalPrice: number;
+  orderDetailsDTO: OrderDetailDTO[];
+};
+
+export type CartResponse = {
+  message: string;
+  cartItems: Cart[];
+};

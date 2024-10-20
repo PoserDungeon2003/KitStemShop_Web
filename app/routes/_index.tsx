@@ -146,7 +146,7 @@ export default function Index() {
         <h2 className="text-2xl font-medium text-gray-800 uppercase mb-6">Top New Arrival</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {_.map(topNewArrivalCombos, (combo, index) => (
-            <ProductCard imageUrl={combo.image} link={`/combo/${combo.compoId}`} price={combo.price} discountPrice={combo.price} title={combo.labKitName} key={index} />
+            <ProductCard comboId={combo.compoId} imageUrl={combo.image} link={`/combo/${combo.compoId}`} price={combo.price} discountPrice={combo.price} title={combo.labKitName} key={index} />
           ))}
           {/* Repeat for other products with adjusted image paths and product details */}
         </div>
@@ -166,7 +166,7 @@ export default function Index() {
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {_.map(recommendedCombos, (combo, index) => (
-            <ProductCard imageUrl={combo.image} link={`/combo/${combo.compoId}`} price={combo.price} discountPrice={combo.price} title={combo.labKitName} key={index} />
+            <ProductCard comboId={combo.compoId} imageUrl={combo.image} link={`/combo/${combo.compoId}`} price={combo.price} discountPrice={combo.price} title={combo.labKitName} key={index} />
           ))}
         </div>
       </div>

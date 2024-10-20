@@ -1,30 +1,34 @@
 import { Link, useMatches } from "@remix-run/react";
 import _ from 'lodash';
 import { FaBagShopping, FaHeart, FaMagnifyingGlass, FaUser } from "react-icons/fa6";
-
-const navbar = [
-  {
-    name: "Wishlist",
-    to: "/account/wishlist",
-    length: 8,
-    icon: FaHeart
-  },
-  {
-    name: "Cart",
-    to: "/cart",
-    length: 2,
-    icon: FaBagShopping
-  },
-  {
-    name: "Account",
-    to: "/account",
-    icon: FaUser
-  },
-]
+import { useGetProfile } from "~/data";
+import { useGetCart } from "~/data/cart";
 
 export const Header = () => {
   const matches = useMatches();
   const last = (_.last(matches) as any)?.handle;
+  const profile = useGetProfile();
+  const cart = useGetCart(profile.data?.user?.token || "");
+
+  const navbar = [
+    // {
+    //   name: "Wishlist",
+    //   to: "/account/wishlist",
+    //   length: 8,
+    //   icon: FaHeart
+    // },
+    {
+      name: "Cart",
+      to: "/cart",
+      length: cart.data?.orderDetailsDTO.length,
+      icon: FaBagShopping
+    },
+    {
+      name: "Account",
+      to: "/account",
+      icon: FaUser
+    },
+  ]
 
   if (last?.hideHeader) return;
   return (

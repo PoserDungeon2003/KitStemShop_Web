@@ -566,7 +566,7 @@ export default function Shop() {
 
         <div className="grid md:grid-cols-3 grid-cols-2 gap-6 mb-5">
           {_.map(data, (combo, index) => (
-            <ProductCard imageUrl={combo.image} link={`/combo/${combo.compoId}`} price={combo.price} discountPrice={combo.price} title={combo.labKitName} key={index} />
+            <ProductCard comboId={combo.compoId} imageUrl={combo.image} link={`/combo/${combo.compoId}`} price={combo.price} discountPrice={combo.price} title={combo.labKitName} key={index} />
           ))}
         </div>
 

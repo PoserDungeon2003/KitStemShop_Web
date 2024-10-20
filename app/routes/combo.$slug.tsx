@@ -227,7 +227,7 @@ export default function ComboDetail() {
         <div className="grid grid-cols-4 gap-6 w-full max-w-full overflow-y-hidden overflow-x-auto">
           {_.map(relatedItems, (item, index) => {
             return (
-              <ProductCard key={index} price={item.price} discountPrice={item.price} title={item.istemName} imageUrl={item.img || '/images/combo/1.jpg'} />
+              <ProductCard comboId={Number(slug)} key={index} price={item.price} discountPrice={item.price} title={item.istemName} imageUrl={item.img || '/images/combo/1.jpg'} />
             )
           })}
         </div>
