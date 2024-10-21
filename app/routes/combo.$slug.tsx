@@ -4,7 +4,8 @@ import _ from "lodash";
 import { useMemo, useState } from "react";
 import { FaBagShopping, FaFacebookF, FaInstagram, FaStar, FaTwitter } from "react-icons/fa6";
 import { ProductCard } from "~/components";
-import { ComboLabKitDetail, getComboById, useGetAllItems, useGetAllKits, useGetLabById, useGetProfile } from "~/data";
+import { formatMoney } from "~/components/utils";
+import { ComboLabKitDetail, getComboById, useGetAllItems, useGetAllKits, useGetLabById, useGetOrdersByUserId, useGetProfile } from "~/data";
 
 export const handle = {
   breadcrumb: true,
@@ -35,6 +36,12 @@ export default function ComboDetail() {
   const kits = useGetAllKits();
   const profile = useGetProfile();
   const isLogin = !!profile.data?.detail?.username;
+  const myOrders = useGetOrdersByUserId(profile.data?.user?.token || "");
+
+  const getLabById = useMemo(() => {
+    return _(myOrders.data?.data)
+      .find((it) => it.labId === detail.labId)
+  }, [myOrders.data?.data, detail])
 
   const filterKitsByComboId = useMemo(() => {
     if (!kits.data?.data) return [];
@@ -96,8 +103,8 @@ export default function ComboDetail() {
           </div>
 
           <div className="flex items-baseline mb-1 space-x-2 font-roboto mt-4">
-            <p className="text-xl text-primary font-semibold">${detail.price}</p>
-            <p className="text-base text-gray-400 line-through">${detail.price}</p>
+            <p className="text-xl text-primary font-semibold">{formatMoney(detail.price)}</p>
+            <p className="text-base text-gray-400 line-through">{formatMoney(detail.price)}</p>
           </div>
 
           <p className="mt-4 text-gray-600">
@@ -185,7 +192,7 @@ export default function ComboDetail() {
       </div>
       <div className="container pb-16">
         <h3 className="border-b border-gray-200 font-roboto text-gray-800 pb-3 font-medium">Lab details</h3>
-        {isLogin ? (
+        {isLogin && getLabById?.statusLabActive == true ? (
           <div className="w-3/5 pt-6 space-y-2">
             {/* <div className="space-y-2">
                   <h4 className="text-xl font-medium text-gray-800">Lab Name: {labDetail.data?.data.labName}</h4>

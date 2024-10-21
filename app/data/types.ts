@@ -478,3 +478,26 @@ export type CartResponse = {
   message: string;
   cartItems: Cart[];
 };
+
+export type OrderDetail = {
+  // Define the structure of orderDetails if you have more specific details
+};
+
+export type Order = {
+  orderId: number;
+  userId: number;
+  orderDate: string;
+  totalAmount: number;
+  statusPayment: string;
+  statusLabActive: boolean;
+  labId: number;
+  lab: any | null; // Adjust the type if you have a more specific structure for lab
+  orderDetails: OrderDetail[];
+  user: any | null; // Adjust the type if you have a more specific structure for user
+};
+
+export type OrdersResponse = {
+  status: number;
+  message: string;
+  data: Order[];
+};
