@@ -95,6 +95,7 @@ export default function AdminKit() {
       ),
     },
   ];
+  
   return (
     <div>
       <Table loading={kits.isLoading} columns={columns} dataSource={datasource}>

@@ -489,7 +489,7 @@ export type Order = {
   orderDate: string;
   totalAmount: number;
   statusPayment: string;
-  statusLabActive: boolean;
+  statusLabActive: string;
   labId: number;
   lab: any | null; // Adjust the type if you have a more specific structure for lab
   orderDetails: OrderDetail[];
