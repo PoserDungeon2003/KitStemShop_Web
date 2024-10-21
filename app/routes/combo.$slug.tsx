@@ -58,7 +58,7 @@ export default function ComboDetail() {
         })
       }
     } catch (error) {
-      
+
     }
   }
 
@@ -70,7 +70,7 @@ export default function ComboDetail() {
   const filterKitsByComboId = useMemo(() => {
     if (!kits.data?.data) return [];
     return _(kits.data?.data)
-      .filter((it) => it.compoId == Number(slug || 0))
+      .filter((it) => it.compoId == Number(slug || 0) && it.status === 'Active')
       .value();
   }, [kits.data]);
 
@@ -211,6 +211,24 @@ export default function ComboDetail() {
             <a href="#" className="text-gray-400 hover:text-gray-500 h-8 w-8 rounded-full border border-gray-300 flex items-center justify-center">
               <FaInstagram />
             </a>
+          </div>
+        </div>
+      </div>
+      <div className="container pb-16">
+        <h3 className="border-b border-gray-200 font-roboto text-gray-800 pb-3 font-medium">Kit included</h3>
+        <div className="w-3/5 pt-6 space-y-2">
+          {/* <div className="space-y-2">
+                  <h4 className="text-xl font-medium text-gray-800">Lab Name: {labDetail.data?.data.labName}</h4>
+                  <h4 className="text-xl font-medium text-gray-800">Lab Category: {labDetail.data?.data.categoryLabName}</h4>
+                </div> */}
+          <div className="pl-10">
+            <ul className="list-disc text-md">
+              {_.map(filterKitsByComboId, (item, index) => {
+                return (
+                  <li key={index} className="text-gray-600">{item.kitName}</li>
+                )
+              })}
+            </ul>
           </div>
         </div>
       </div>
