@@ -1,26 +1,26 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
 import { useMemo, useState } from "react";
-import { FaBagShopping, FaFacebookF, FaInstagram, FaStar, FaTwitter } from "react-icons/fa6";
+import { FaAngleLeft, FaBagShopping, FaFacebookF, FaInstagram, FaStar, FaTwitter } from "react-icons/fa6";
 import { ItemCard, ProductCard } from "~/components";
 import { formatMoney } from "~/components/utils";
-import { addToCart, ComboLabKitDetail, getComboById, useGetAllItems, useGetAllKits, useGetLabById, useGetOrdersByUserId, useGetProfile } from "~/data";
+import { addToCart, ComboLabKitDetail, getComboById, getItemById, Item, useGetAllItems, useGetAllKits, useGetLabById, useGetOrdersByUserId, useGetProfile } from "~/data";
 
 export const handle = {
   breadcrumb: true,
 }
 
 type LoaderData = {
-  detail: ComboLabKitDetail,
+  detail: Item,
   slug?: string,
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
   let slug = params.slug;
   try {
-    let comboDetail = await getComboById(slug || '');
+    let comboDetail = await getItemById(slug || '');
     let detail = comboDetail?.data;
     if (!detail) return json({ detail: {} }, { status: 404 });
     return json({ detail, slug }, { status: 200 });
@@ -32,13 +32,14 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function ComboDetail() {
   const { detail, slug } = useLoaderData<LoaderData>();
   const [quantity, setQuantity] = useState<number>(1);
-  const labDetail = useGetLabById(detail.labId || 0);
+  const labDetail = useGetLabById(detail.istemId || 0);
   const items = useGetAllItems();
   const kits = useGetAllKits();
   const profile = useGetProfile();
   const isLogin = !!profile.data?.detail?.username;
   const myOrders = useGetOrdersByUserId(profile.data?.user?.token || "");
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const handleAddToCart = async () => {
     try {
@@ -46,8 +47,8 @@ export default function ComboDetail() {
         totalPrice: detail.price,
         orderDetailsDTO: [
           {
-            labKitId: Number(slug),
-            iStemId: 0,
+            labKitId: 0,
+            iStemId: Number(slug),
           }
         ]
       });
@@ -64,7 +65,7 @@ export default function ComboDetail() {
 
   const getLabById = useMemo(() => {
     return _(myOrders.data?.data)
-      .find((it) => it.labId === detail.labId)
+      .find((it) => it.labId === detail.istemId)
   }, [myOrders.data?.data, detail])
 
   const filterKitsByComboId = useMemo(() => {
@@ -84,7 +85,7 @@ export default function ComboDetail() {
     <main>
       <div className="container grid grid-cols-2 gap-6">
         <div>
-          <img src={detail.image || '/images/products/product2.jpg'} alt={detail.labKitName} className="w-full h-full aspect-[612/453]" />
+          <img src={detail.img || '/images/products/product2.jpg'} alt={detail.istemName} className="w-full h-full aspect-[612/453]" />
           <div className="grid grid-cols-5 gap-4 mt-4">
             {/* <img src="/images/products/product2.jpg" alt="product2" className="w-full cursor-pointer border border-primary" />
             <img src="/images/products/product3.jpg" alt="product2" className="w-full cursor-pointer border" />
@@ -95,7 +96,7 @@ export default function ComboDetail() {
         </div>
 
         <div>
-          <h2 className="text-3xl font-medium uppercase mb-2">{detail.labKitName}</h2>
+          <h2 className="text-3xl font-medium uppercase mb-2">{detail.istemName}</h2>
           <div className="flex items-center mb-4">
             <div className="flex gap-1 text-sm text-yellow-400">
               {_.map([1, 2, 3, 4, 5], (item, index) => {
@@ -108,18 +109,18 @@ export default function ComboDetail() {
           </div>
 
           <div className="space-y-2">
-            {/* <p className="text-gray-800 font-semibold space-x-2">
-              <span>Availability: </span>
-              <span className="text-green-600">In Stock</span>
-            </p> */}
-            {/* <p className="space-x-2">
-              <span className="text-gray-800 font-semibold">Brand: </span>
-              <span className="text-gray-600">Apex</span>
-            </p> */}
+            <p className="text-gray-800 font-semibold space-x-2">
+              <span>Availability:</span>
+              <span className="text-green-600">{detail.stock} In Stock</span>
+            </p>
             <p className="space-x-2">
+              <span className="text-gray-800 font-semibold">Warranty Months: </span>
+              <span className="text-gray-600">{detail.warrantyMonths} months</span>
+            </p>
+            {/* <p className="space-x-2">
               <span className="text-gray-800 font-semibold">Category: </span>
               <span className="text-gray-600">{detail.categoryName}</span>
-            </p>
+            </p> */}
             {/* <p className="space-x-2">
               <span className="text-gray-800 font-semibold">SKU: </span>
               <span className="text-gray-600">BE45VGRT</span>
@@ -131,9 +132,9 @@ export default function ComboDetail() {
             <p className="text-base text-gray-400 line-through">{formatMoney(detail.price)}</p>
           </div>
 
-          <p className="mt-4 text-gray-600">
+          {/* <p className="mt-4 text-gray-600">
             {detail.labKitDescription}
-          </p>
+          </p> */}
 
           {/* <div className="pt-4">
             <h3 className="text-sm text-gray-800 uppercase mb-1">Size</h3>
@@ -193,12 +194,12 @@ export default function ComboDetail() {
           </div>
 
           <div className="mt-6 flex gap-3 border-b border-gray-200 pb-5 pt-5">
+            <div onClick={() => navigate(-1)} className="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
+              <FaAngleLeft /> Back
+            </div>
             <button onClick={handleAddToCart} className="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
               <FaBagShopping /> Add to cart
             </button>
-            {/* <a href="#" className="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
-              <FaStar /> Wishlist
-            </a> */}
           </div>
 
           <div className="flex gap-3 mt-4">
@@ -215,63 +216,9 @@ export default function ComboDetail() {
         </div>
       </div>
       <div className="container pb-16">
-        <h3 className="border-b border-gray-200 font-roboto text-gray-800 pb-3 font-medium">Kit included</h3>
-        <div className="w-3/5 pt-6 space-y-2">
-          {/* <div className="space-y-2">
-                  <h4 className="text-xl font-medium text-gray-800">Lab Name: {labDetail.data?.data.labName}</h4>
-                  <h4 className="text-xl font-medium text-gray-800">Lab Category: {labDetail.data?.data.categoryLabName}</h4>
-                </div> */}
-          <div className="pl-10">
-            <ul className="list-disc text-md">
-              {_.map(filterKitsByComboId, (item, index) => {
-                return (
-                  <li key={index} className="text-gray-600">{item.kitName}</li>
-                )
-              })}
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div className="container pb-16">
-        <h3 className="border-b border-gray-200 font-roboto text-gray-800 pb-3 font-medium">Lab details</h3>
-        {isLogin && getLabById?.statusLabActive == true ? (
-          <div className="w-3/5 pt-6 space-y-2">
-            {/* <div className="space-y-2">
-                  <h4 className="text-xl font-medium text-gray-800">Lab Name: {labDetail.data?.data.labName}</h4>
-                  <h4 className="text-xl font-medium text-gray-800">Lab Category: {labDetail.data?.data.categoryLabName}</h4>
-                </div> */}
-            <div className="text-gray-600">
-              <p>{labDetail.data?.data?.labDescription}</p>
-              {/* <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, quae accusantium voluptatem blanditiis sapiente voluptatum. Autem ab, dolorum assumenda earum veniam eius illo fugiat possimus illum dolor totam, ducimus excepturi.</p>
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error quia modi ut expedita! Iure molestiae labore cumque nobis quasi fuga, quibusdam rem? Temporibus consectetur corrupti rerum veritatis numquam labore amet.</p> */}
-            </div>
 
-            <iframe src={labDetail.data?.data?.videoUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ?si=7BXV8q5SAzRVvZkl'}></iframe>
-
-            <table className="table-auto border-collapse w-full text-left text-gray-600 text-sm mt-6">
-              <tbody>
-                <tr>
-                  <th className="py-2 px-4 border border-gray-300 w-40 font-medium">Lab Name</th>
-                  <th className="py-2 px-4 border border-gray-300">{labDetail.data?.data?.labName}</th>
-                </tr>
-                <tr>
-                  <th className="py-2 px-4 border border-gray-300 w-40 font-medium">Lab Category</th>
-                  <th className="py-2 px-4 border border-gray-300">{labDetail.data?.data?.categoryLabName}</th>
-                </tr>
-                {/* <tr>
-                    <th className="py-2 px-4 border border-gray-300 w-40 font-medium">Kit</th>
-                    <th className="py-2 px-4 border border-gray-300">{detail.labKitName}</th>
-                  </tr> */}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <div>
-            <p className="text-gray-600">Please login and purchase to view lab details</p>
-          </div>
-        )}
       </div>
-      <div className="container pb-16">
+      {/* <div className="container pb-16">
         <h2 className="text-2xl font-medium text-gray-800 uppercase mb-6">Items people also buy</h2>
         <div className="grid grid-cols-4 gap-6 w-full max-w-full overflow-y-hidden overflow-x-auto">
           {_.map(relatedItems, (item, index) => {
@@ -280,7 +227,7 @@ export default function ComboDetail() {
             )
           })}
         </div>
-      </div>
+      </div> */}
     </main>
   )
 }
