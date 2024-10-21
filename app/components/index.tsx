@@ -10,3 +10,4 @@ export * from './AdminSideBar';
 export * from './AdminLayout';
 export * from './AdminHeader';
 export * from './AdminFooter';
+export * from './ItemCard';

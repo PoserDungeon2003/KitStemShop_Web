@@ -10,17 +10,6 @@ export const handle = {
   breadcrumb: true,
 }
 
-const categories = [
-  {
-    name: "Kit",
-    value: "kit",
-  },
-  {
-    name: "Combo Kit & Lab",
-    value: "combo",
-  },
-];
-
 export default function Shop() {
   const kits = useGetAllKits();
   const combos = useGetAllCombos();
@@ -31,6 +20,20 @@ export default function Shop() {
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get("category");
   const categoryComboId = searchParams.get("categoryComboId");
+  const [categoryState, setCategoryState] = useState<string>(category || "combo");
+
+  const categories = [
+    {
+      name: "Kit",
+      value: "kit",
+      quantity: kits.data?.data?.length,
+    },
+    {
+      name: "Combo Kit & Lab",
+      value: "combo",
+      quantity: combos.data?.data?.length,
+    },
+  ];
 
   const handleChange = (pageNumber: number, pageSize: number) => {
     setPage(pageNumber);
@@ -43,7 +46,7 @@ export default function Shop() {
     setPage(1);
   };
 
-  const sortedData = useMemo(() => {
+  const sortedComboData = useMemo(() => {
     if (!combos.data?.data) return [];
 
     let filteredData = [...combos.data.data];
@@ -71,14 +74,14 @@ export default function Shop() {
     return filteredData;
   }, [combos.data?.data, sortOption, categoryComboId]);
 
-  const data = useMemo(() => {
+  const comboData = useMemo(() => {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
 
-    return _(sortedData)
+    return _(sortedComboData)
       .take(pageSize)
       .value();
-  }, [sortedData, page, pageSize]);
+  }, [sortedComboData, page, pageSize]);
 
   return (
     <main className="container grid md:grid-cols-4 grid-cols-2 gap-6 pt-4 pb-16 items-start">
@@ -399,10 +402,12 @@ export default function Shop() {
             <div className="space-y-2">
               {_.map(categories, (category, index) => (
                 <div key={index} className="flex items-center">
-                  <input onChange={(e) => console.log(e.target.value)} value={category.value} type="radio" name="cat-1" id="cat-1"
+                  <input checked={category.value == categoryState} onChange={(e) => {
+                    setCategoryState(e.target.value);
+                  }} value={category.value} type="radio" name="cat-1" id="cat-1"
                     className="text-primary focus:ring-0 rounded-sm cursor-pointer" />
                   <label htmlFor="cat-1" className="text-gray-600 ml-3 cursor-pointer">{category.name}</label>
-                  <div className="ml-auto text-gray-600 text-sm">(15)</div>
+                  <div className="ml-auto text-gray-600 text-sm">({category.quantity})</div>
                 </div>
               ))}
               {/* <div className="flex items-center">
@@ -565,7 +570,7 @@ export default function Shop() {
         </div>
 
         <div className="grid md:grid-cols-3 grid-cols-2 gap-6 mb-5">
-          {_.map(data, (combo, index) => (
+          {_.map(comboData, (combo, index) => (
             <ProductCard comboId={combo.compoId} imageUrl={combo.image} link={`/combo/${combo.compoId}`} price={combo.price} discountPrice={combo.price} title={combo.labKitName} key={index} />
           ))}
         </div>
