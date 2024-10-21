@@ -501,3 +501,46 @@ export type OrdersResponse = {
   message: string;
   data: Order[];
 };
+
+export type CreateOrderRQ = {
+  labId: number;
+  statusPayment: string;
+  orderDetailsDTO: OrderDetailDTO[];
+};
+
+export type CreateOrderResponse = {
+  status: number;
+  message: string;
+  data: Order;
+};
+
+export type VnPayPaymentRS = {
+  status: number;
+  message: string;
+  data: string;
+};
+
+export type VnPayResponse = {
+  bankTranNo: string;
+  payDate: string;
+  orderInfo: string;
+  responseCode: string;
+  transactionId: string;
+  transactionStatus: string;
+  cardType: string;
+  txnRef: string;
+  amount: number;
+  bankCode: string;
+};
+
+export type VnPayCallbackData = {
+  responseCodeMessage: string;
+  transactionStatusMessage: string;
+  vnPayResponse: VnPayResponse;
+};
+
+export type VnPayCallbackResponse = {
+  status: number;
+  message: string;
+  data: VnPayCallbackData;
+};

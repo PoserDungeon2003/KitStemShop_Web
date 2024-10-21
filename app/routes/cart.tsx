@@ -1,4 +1,5 @@
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { useNavigate } from "@remix-run/react";
 import _ from "lodash";
 import { useMemo } from "react";
 import { CartItems } from "~/components";
@@ -19,6 +20,7 @@ export default function Cart() {
   const cart = useGetCart(profile.data?.user?.token || "");
   const combo = useGetAllCombos();
   const items = useGetAllItems();
+  const navigate = useNavigate();
 
   const mapCombo = useMemo(() => {
     return _.mapKeys(combo.data?.data, it => it.compoId)
@@ -28,12 +30,25 @@ export default function Cart() {
     return _.mapKeys(items.data?.data, it => it.istemId)
   }, [items.data?.data]);
 
+  const totalPrice = useMemo(() => {
+    return _.sumBy(cart.data?.orderDetailsDTO, (it) => {
+      if (it.iStemId == 0) {
+        return mapCombo[it.labKitId]?.price;
+      } else {
+        return mapItem[it.iStemId]?.price;
+      }
+    });
+  }, [cart.data?.orderDetailsDTO]);
+
   return (
     <section className="py-24 relative">
       <div className="w-full max-w-7xl px-4 md:px-5 lg-6 mx-auto">
 
         <h2 className="title font-manrope font-bold text-4xl leading-10 mb-8 text-center text-black">Shopping Cart
         </h2>
+        {!cart.data && <h4 className="flex items-center justify-center py-10 text-xl">
+          No items in cart
+        </h4>}
         {_.map(cart.data?.orderDetailsDTO, (item, index) => {
           return (
             <CartItems
@@ -54,7 +69,7 @@ export default function Cart() {
             <button
               className="rounded-full py-2.5 px-3 bg-indigo-50 text-indigo-600 font-semibold text-xs text-center whitespace-nowrap transition-all duration-500 hover:bg-indigo-100">Promo
               Code?</button>
-            <h6 className="font-manrope font-bold text-3xl lead-10 text-indigo-600">{formatMoney(cart.data?.totalPrice || 0)}</h6>
+            <h6 className="font-manrope font-bold text-3xl lead-10 text-indigo-600">{formatMoney(totalPrice || 0)}</h6>
           </div>
         </div>
         <div className="max-lg:max-w-lg max-lg:mx-auto">
@@ -62,7 +77,10 @@ export default function Cart() {
             calculated
             at checkout</p> */}
           <button
-            className="rounded-full border-2 border-primary py-4 px-6 bg-primary text-white font-semibold text-lg w-full text-center transition-all duration-500 hover:bg-transparent hover:text-primary ">Checkout</button>
+            onClick={() => navigate('/checkout')}
+            className="rounded-full border-2 border-primary py-4 px-6 bg-primary text-white font-semibold text-lg w-full text-center transition-all duration-500 hover:bg-transparent hover:text-primary ">
+            Checkout
+          </button>
 
         </div>
       </div>
