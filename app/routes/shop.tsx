@@ -1,9 +1,9 @@
 import _ from "lodash";
-import { SetStateAction, useMemo, useState } from "react";
+import { SetStateAction, useEffect, useMemo, useState } from "react";
 import { FaGripVertical, FaList } from "react-icons/fa6";
 import { Pagination } from "antd";
-import { ProductCard } from "~/components";
-import { useGetAllCombos, useGetAllKits } from "~/data";
+import { ItemCard, ProductCard } from "~/components";
+import { useGetAllCombos, useGetAllItems, useGetAllKits } from "~/data";
 import { useLocation } from "@remix-run/react";
 
 export const handle = {
@@ -11,7 +11,7 @@ export const handle = {
 }
 
 export default function Shop() {
-  const kits = useGetAllKits();
+  const items = useGetAllItems();
   const combos = useGetAllCombos();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -21,12 +21,14 @@ export default function Shop() {
   const category = searchParams.get("category");
   const categoryComboId = searchParams.get("categoryComboId");
   const [categoryState, setCategoryState] = useState<string>(category || "combo");
+  const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
+  const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
 
   const categories = [
     {
-      name: "Kit",
-      value: "kit",
-      quantity: kits.data?.data?.length,
+      name: "Item",
+      value: "item",
+      quantity: items.data?.data?.length,
     },
     {
       name: "Combo Kit & Lab",
@@ -57,6 +59,22 @@ export default function Shop() {
         .value();
     }
 
+    if (minPrice) {
+      filteredData = _(filteredData)
+        .filter(combo => combo.price >= minPrice)
+        .value();
+    }
+    else if (maxPrice) {
+      filteredData = _(filteredData)
+        .filter(combo => combo.price <= maxPrice)
+        .value();
+    }
+    else if (minPrice && maxPrice) {
+      filteredData = _(filteredData)
+        .filter(combo => combo.price >= minPrice && combo.price <= maxPrice)
+        .value();
+    }
+
     switch (sortOption) {
       case "price-low-to-high":
         filteredData = _(filteredData).orderBy("price", "asc").value();
@@ -72,7 +90,7 @@ export default function Shop() {
     }
 
     return filteredData;
-  }, [combos.data?.data, sortOption, categoryComboId]);
+  }, [combos.data?.data, sortOption, categoryComboId, minPrice, maxPrice]);
 
   const comboData = useMemo(() => {
     const startIndex = (page - 1) * pageSize;
@@ -81,7 +99,60 @@ export default function Shop() {
     return _(sortedComboData)
       .take(pageSize)
       .value();
+  }, [sortedComboData, page, pageSize, categoryState]);
+
+  const sortedItemData = useMemo(() => {
+    if (!items.data?.data) return [];
+
+    let filteredData = [...items.data?.data];
+
+    if (minPrice) {
+      filteredData = _(filteredData)
+        .filter(item => item.price >= minPrice)
+        .value();
+    }
+    else if (maxPrice) {
+      filteredData = _(filteredData)
+        .filter(item => item.price <= maxPrice)
+        .value();
+    }
+    else if (minPrice && maxPrice) {
+      filteredData = _(filteredData)
+        .filter(item => item.price >= minPrice && item.price <= maxPrice)
+        .value();
+    }
+
+    switch (sortOption) {
+      case "price-low-to-high":
+        filteredData = _(filteredData).orderBy("price", "asc").value();
+        break;
+      case "price-high-to-low":
+        filteredData = _(filteredData).orderBy("price", "desc").value();
+        break;
+      case "latest":
+        filteredData = _(filteredData).orderBy("createdAt", "desc").value();
+        break;
+      default:
+        break;
+    }
+
+    return filteredData;
+  }, [items.data?.data, sortOption, categoryState, maxPrice, minPrice]);
+
+  const itemsData = useMemo(() => {
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+
+    return _(sortedItemData)
+      .take(pageSize)
+      .value();
   }, [sortedComboData, page, pageSize]);
+
+  useEffect(() => {
+    if (category) {
+      setCategoryState(category);
+    }
+  }, [category])
 
   return (
     <main className="container grid md:grid-cols-4 grid-cols-2 gap-6 pt-4 pb-16 items-start">
@@ -431,7 +502,7 @@ export default function Shop() {
             </div>
           </div>
 
-          <div className="pt-4">
+          {/* <div className="pt-4">
             <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">Brands</h3>
             <div className="space-y-2">
               <div className="flex items-center">
@@ -465,22 +536,24 @@ export default function Shop() {
                 <div className="ml-auto text-gray-600 text-sm">(10)</div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="pt-4">
             <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">Price</h3>
             <div className="mt-4 flex items-center">
-              <input type="text" name="min" id="min"
+              <input type="text" name="min"
+                onChange={(e) => setMinPrice(Number(e.target.value))}
                 className="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
                 placeholder="min" />
               <span className="mx-3 text-gray-500">-</span>
-              <input type="text" name="max" id="max"
+              <input type="text" name="max"
+                onChange={(e) => setMaxPrice(Number(e.target.value))}
                 className="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
                 placeholder="max" />
             </div>
           </div>
 
-          <div className="pt-4">
+          {/* <div className="pt-4">
             <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">Size</h3>
             <div className="flex items-center gap-2">
               <div className="size-selector">
@@ -509,9 +582,9 @@ export default function Shop() {
                   className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600">XL</label>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <div className="pt-4">
+          {/* <div className="pt-4">
             <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">Color</h3>
             <div className="flex items-center gap-2">
               <div className="color-selector">
@@ -533,7 +606,7 @@ export default function Shop() {
                   style={{ backgroundColor: '#fff' }}></label>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -570,9 +643,15 @@ export default function Shop() {
         </div>
 
         <div className="grid md:grid-cols-3 grid-cols-2 gap-6 mb-5">
-          {_.map(comboData, (combo, index) => (
-            <ProductCard comboId={combo.compoId} imageUrl={combo.image} link={`/combo/${combo.compoId}`} price={combo.price} discountPrice={combo.price} title={combo.labKitName} key={index} />
-          ))}
+          {categoryState === 'combo' ? (
+            _.map(comboData, (combo, index) => (
+              <ProductCard comboId={combo.compoId} imageUrl={combo.image} link={`/combo/${combo.compoId}`} price={combo.price} discountPrice={combo.price} title={combo.labKitName} key={index} />
+            ))
+          ) : (
+            _.map(itemsData, (item, index) => (
+              <ItemCard itemId={item.istemId} imageUrl={item.img} link={`/item/${item.istemId}`} price={item.price} discountPrice={item.price} title={item.istemName} key={index} />
+            ))
+          )}
         </div>
 
         <Pagination

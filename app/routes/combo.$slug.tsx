@@ -1,11 +1,12 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
 import { useMemo, useState } from "react";
 import { FaBagShopping, FaFacebookF, FaInstagram, FaStar, FaTwitter } from "react-icons/fa6";
-import { ProductCard } from "~/components";
+import { ItemCard, ProductCard } from "~/components";
 import { formatMoney } from "~/components/utils";
-import { ComboLabKitDetail, getComboById, useGetAllItems, useGetAllKits, useGetLabById, useGetOrdersByUserId, useGetProfile } from "~/data";
+import { addToCart, ComboLabKitDetail, getComboById, useGetAllItems, useGetAllKits, useGetLabById, useGetOrdersByUserId, useGetProfile } from "~/data";
 
 export const handle = {
   breadcrumb: true,
@@ -37,6 +38,29 @@ export default function ComboDetail() {
   const profile = useGetProfile();
   const isLogin = !!profile.data?.detail?.username;
   const myOrders = useGetOrdersByUserId(profile.data?.user?.token || "");
+  const queryClient = useQueryClient();
+
+  const handleAddToCart = async () => {
+    try {
+      let response = await addToCart(profile.data?.user?.token || "", {
+        totalPrice: detail.price,
+        orderDetailsDTO: [
+          {
+            labKitId: Number(slug),
+            iStemId: 0,
+          }
+        ]
+      });
+      if (response) {
+        console.log(response);
+        queryClient.invalidateQueries({
+          queryKey: ['cart']
+        })
+      }
+    } catch (error) {
+      
+    }
+  }
 
   const getLabById = useMemo(() => {
     return _(myOrders.data?.data)
@@ -169,7 +193,7 @@ export default function ComboDetail() {
           </div>
 
           <div className="mt-6 flex gap-3 border-b border-gray-200 pb-5 pt-5">
-            <button className="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
+            <button onClick={handleAddToCart} className="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
               <FaBagShopping /> Add to cart
             </button>
             {/* <a href="#" className="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
@@ -234,7 +258,7 @@ export default function ComboDetail() {
         <div className="grid grid-cols-4 gap-6 w-full max-w-full overflow-y-hidden overflow-x-auto">
           {_.map(relatedItems, (item, index) => {
             return (
-              <ProductCard comboId={Number(slug)} key={index} price={item.price} discountPrice={item.price} title={item.istemName} imageUrl={item.img || '/images/combo/1.jpg'} />
+              <ItemCard itemId={Number(slug)} key={index} price={item.price} discountPrice={item.price} title={item.istemName} imageUrl={item.img || '/images/combo/1.jpg'} />
             )
           })}
         </div>

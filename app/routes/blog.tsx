@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { useMemo } from "react";
 import { useGetAllBlogs } from "~/data";
+import { BASE_URL } from "~/data/request";
 
 export default function BlogList() {
   const blogs = useGetAllBlogs();
@@ -16,7 +17,7 @@ export default function BlogList() {
       {_.map(filterBlogs, (blog, index) => (
         <div key={index} className="bg-white shadow-md border border-gray-200 rounded-lg max-w-sm mb-5">
           <a href="#">
-            <img className="rounded-t-lg" src={blog.image} alt={blog.title} />
+            <img className="rounded-t-lg" src={blog.image.startsWith('/images') ? `${BASE_URL}${blog.image}` : blog.image} alt={blog.title} />
           </a>
           <span>
           </span>

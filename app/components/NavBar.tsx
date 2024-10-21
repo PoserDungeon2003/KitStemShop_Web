@@ -9,12 +9,12 @@ const dropDownList = [
   {
     name: "Combo Kit & Lab",
     icon: "/images/icons/sofa.svg",
-    to: '/products/sofa',
+    to: '/shop?category=combo',
   },
   {
     name: "Items",
     icon: "/images/icons/terrace.svg",
-    to: '/products/terrace',
+    to: '/shop?category=item',
   },
   // {
   //   name: "Bed",
