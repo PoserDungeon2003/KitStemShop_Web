@@ -1,14 +1,39 @@
-export const CartItems = () => {
+import { Link } from "@remix-run/react";
+import { formatMoney } from "./utils";
+
+type CartItemsProps = {
+  name: string;
+  description?: string;
+  quantity?: number;
+  id: number;
+  price: number;
+  image?: string;
+  link: string;
+}
+
+export const CartItems = ({
+  name,
+  description,
+  quantity,
+  id,
+  price,
+  image,
+  link,
+}: CartItemsProps) => {
+
+  const handleDeleteFromCart = async () => {
+
+  }
+  
   return (
     <div className="rounded-3xl border-2 border-gray-200 p-4 lg:p-8 grid grid-cols-12 mb-8 max-lg:max-w-lg max-lg:mx-auto gap-y-4 ">
       <div className="col-span-12 lg:col-span-2 img box">
-        <img src="https://pagedone.io/asset/uploads/1701162826.png" alt="speaker image" className="max-lg:w-full lg:w-[180px] rounded-lg object-cover" />
+        <img src={image || "https://pagedone.io/asset/uploads/1701162826.png"} alt={name} className="max-lg:w-full lg:w-[180px] rounded-lg object-cover" />
       </div>
       <div className="col-span-12 lg:col-span-10 detail w-full lg:pl-3">
         <div className="flex items-center justify-between w-full mb-4">
-          <h5 className="font-manrope font-bold text-2xl leading-9 text-gray-900">Round white portable
-            speaker</h5>
-          <button className="rounded-full group flex items-center justify-center focus-within:outline-red-500">
+          <h5 className="font-manrope font-bold text-2xl leading-9 text-gray-900">{name}</h5>
+          <button onClick={handleDeleteFromCart} className="rounded-full group flex items-center justify-center focus-within:outline-red-500">
             <svg width="34" height="34" viewBox="0 0 34 34" fill="none"
               xmlns="http://www.w3.org/2000/svg">
               <circle className="fill-red-50 transition-all duration-500 group-hover:fill-red-400"
@@ -19,9 +44,9 @@ export const CartItems = () => {
             </svg>
           </button>
         </div>
-        <p className="font-normal text-base leading-7 text-gray-500 mb-6">
-          Introducing our sleek round white portable speaker, the epitome of style and sound! Elevate your auditory experience with this compact yet powerful device that delivers crystal-clear audio wherever you go. <a href="javascript:;"
-            className="text-indigo-600">More....</a>
+        <p className="font-normal text-base leading-7 text-gray-500 mb-6 line-clamp-2">
+          {description} <Link to={link}
+            className="text-indigo-600">More....</Link>
         </p>
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-4">
@@ -36,7 +61,7 @@ export const CartItems = () => {
             </button>
             <input type="text" id="number"
               className="border border-gray-200 rounded-full w-10 aspect-square outline-none text-gray-900 font-semibold text-sm py-1.5 px-3 bg-gray-100  text-center"
-              placeholder="2" />
+              placeholder="1" />
             <button
               className="group rounded-[50px] border border-gray-200 shadow-sm shadow-transparent p-2.5 flex items-center justify-center bg-white transition-all duration-500 hover:shadow-gray-200 hover:bg-gray-50 hover:border-gray-300 focus-within:outline-gray-300">
               <svg className="stroke-gray-900 transition-all duration-500 group-hover:stroke-black"
@@ -47,7 +72,7 @@ export const CartItems = () => {
               </svg>
             </button>
           </div>
-          <h6 className="text-indigo-600 font-manrope font-bold text-2xl leading-9 text-right">$220</h6>
+          <h6 className="text-indigo-600 font-manrope font-bold text-2xl leading-9 text-right">{formatMoney(price)}</h6>
         </div>
       </div>
     </div>
