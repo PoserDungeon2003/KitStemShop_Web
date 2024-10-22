@@ -12,6 +12,12 @@ export async function addToCart(token: string, data: Cart): Promise<CartResponse
   });
 }
 
+export async function removeFromCart(token: string, compoId: number, istemId: number): Promise<any> {
+  return request.deleteWithOptions(`${BASE_URL}/api/Cart/remove-from-cart`, {
+
+  });
+}
+
 export async function getCart(token: string): Promise<Cart> {
   return await request.get(`${BASE_URL}/api/Cart/get-cart`, {
     headers: {

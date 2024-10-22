@@ -4,6 +4,7 @@ import { FaHeart, FaMagnifyingGlass, FaStar } from "react-icons/fa6"
 import { formatMoney } from "./utils";
 import { addToCart, useGetProfile } from "~/data";
 import { useQueryClient } from "@tanstack/react-query";
+import { message } from "antd";
 
 type ProductCardProps = {
   title: string;
@@ -40,12 +41,13 @@ export const ProductCard = ({
       });
       if (response) {
         console.log(response);
+        message.success("Added to cart successfully")
         queryClient.invalidateQueries({
           queryKey: ['cart']
         })
       }
-    } catch (error) {
-      
+    } catch (error: any) {
+      message.error(`${error?.message}`)
     }
   }
   return (

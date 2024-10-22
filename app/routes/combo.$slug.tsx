@@ -1,6 +1,7 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { message } from "antd";
 import _ from "lodash";
 import { useMemo, useState } from "react";
 import { FaBagShopping, FaFacebookF, FaInstagram, FaStar, FaTwitter } from "react-icons/fa6";
@@ -53,12 +54,13 @@ export default function ComboDetail() {
       });
       if (response) {
         console.log(response);
+        message.success("Added to cart successfully")
         queryClient.invalidateQueries({
           queryKey: ['cart']
         })
       }
-    } catch (error) {
-
+    } catch (error: any) {
+      message.error(`${error?.message}`)
     }
   }
 

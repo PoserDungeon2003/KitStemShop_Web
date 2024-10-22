@@ -22,7 +22,11 @@ export const CartItems = ({
 }: CartItemsProps) => {
 
   const handleDeleteFromCart = async () => {
-
+    // try {
+    //   let response = await delete
+    // } catch (error) {
+      
+    // }
   }
   
   return (
