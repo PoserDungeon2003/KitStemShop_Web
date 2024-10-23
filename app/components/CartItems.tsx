@@ -1,5 +1,8 @@
 import { Link } from "@remix-run/react";
 import { formatMoney } from "./utils";
+import { removeFromCart, useGetProfile } from "~/data";
+import { useQueryClient } from "@tanstack/react-query";
+import { message } from "antd";
 
 type CartItemsProps = {
   name: string;
@@ -9,6 +12,7 @@ type CartItemsProps = {
   price: number;
   image?: string;
   link: string;
+  isCombo: boolean;
 }
 
 export const CartItems = ({
@@ -19,14 +23,28 @@ export const CartItems = ({
   price,
   image,
   link,
+  isCombo,
 }: CartItemsProps) => {
+  const profile = useGetProfile();
+  const queryClient = useQueryClient();
 
   const handleDeleteFromCart = async () => {
-    // try {
-    //   let response = await delete
-    // } catch (error) {
-      
-    // }
+    try {
+      let response;
+      if (isCombo) {
+        response = await removeFromCart(profile.data?.user?.token || "", id, 0);
+      } else {
+        response = await removeFromCart(profile.data?.user?.token || "", 0, id);
+      }
+      if (response) {
+        message.success(response.message);
+        queryClient.invalidateQueries({
+          queryKey: ['cart']
+        })
+      }
+    } catch (error: any) {
+      message.error(error?.message);
+    }
   }
   
   return (

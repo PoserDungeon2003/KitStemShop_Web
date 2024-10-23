@@ -1,4 +1,5 @@
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { message } from "antd";
 import _ from "lodash";
 import { useMemo } from "react";
 import { formatMoney } from "~/components/utils";
@@ -48,8 +49,12 @@ export default function Checkout() {
       let response = await createOrder(profile.data?.user?.token || "", {
         orderDetailsDTO: cart.data?.orderDetailsDTO || [],
         statusPayment: "VnPay",
-        labId: 1, // sửa lại sau
       });
+
+      if (response.status == -4) {
+        message.error(response.message);
+        return;
+      }
 
       if (response.data.orderId) {
         let vnPayResponse = await createVnpayPayment(profile.data?.user?.token || "", response.data.orderId)
@@ -57,8 +62,9 @@ export default function Checkout() {
           window.location.href = vnPayResponse.data;
         }
       }
-    } catch (error) {
 
+    } catch (error: any) {
+      message.error(error?.message);
     }
   }
 
@@ -131,7 +137,7 @@ export default function Checkout() {
                 {/* <p className="text-sm text-gray-600">Size: M</p> */}
               </div>
               <p className="text-gray-600">x1</p>
-              <p className="text-gray-800 font-medium">{formatMoney(it.iStemId != 0 ? mapItem[it.iStemId].price : mapCombo[it.labKitId].price)}</p>
+              <p className="text-gray-800 font-medium">{formatMoney(it.iStemId != 0 ? mapItem[it.iStemId]?.price : mapCombo[it.labKitId]?.price)}</p>
             </div>
           ))}
         </div>

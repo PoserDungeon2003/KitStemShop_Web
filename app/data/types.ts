@@ -503,7 +503,6 @@ export type OrdersResponse = {
 };
 
 export type CreateOrderRQ = {
-  labId: number;
   statusPayment: string;
   orderDetailsDTO: OrderDetailDTO[];
 };
@@ -544,3 +543,8 @@ export type VnPayCallbackResponse = {
   message: string;
   data: VnPayCallbackData;
 };
+
+export type RemoveFromCartRS = {
+  message: string;
+  cartItems: Cart[];
+}

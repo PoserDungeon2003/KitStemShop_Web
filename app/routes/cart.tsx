@@ -53,6 +53,7 @@ export default function Cart() {
           return (
             <CartItems
               key={index}
+              isCombo={item.labKitId !== 0}
               id={item.iStemId == 0 ? item.labKitId : item.iStemId}
               link={item.iStemId == 0 ? `/combo/${item.labKitId}` : `/item/${item.iStemId}`}
               name={item.iStemId == 0 ? mapCombo[item.labKitId]?.labKitName : mapItem[item.iStemId]?.istemName}

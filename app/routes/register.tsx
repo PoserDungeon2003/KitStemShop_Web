@@ -129,7 +129,7 @@ export default function Register() {
                 type="text"
                 {...register('address')}
                 className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                placeholder="Số 123, Đường Nguyễn Huệ"
+                placeholder="Address, Street"
               />
               {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>}
               <div className="mt-2 flex gap-2">

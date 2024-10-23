@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL } from "./request";
-import { Cart, CartResponse } from "./types";
+import { Cart, CartResponse, RemoveFromCartRS } from "./types";
 
 export async function addToCart(token: string, data: Cart): Promise<CartResponse> {
   return await request.post(`${BASE_URL}/api/Cart/add-to-cart`, data, {
@@ -12,9 +12,13 @@ export async function addToCart(token: string, data: Cart): Promise<CartResponse
   });
 }
 
-export async function removeFromCart(token: string, compoId: number, istemId: number): Promise<any> {
-  return request.deleteWithOptions(`${BASE_URL}/api/Cart/remove-from-cart`, {
-
+export async function removeFromCart(token: string, compoId: number, istemId: number): Promise<RemoveFromCartRS> {
+  return request.deleteWithOptions(`${BASE_URL}/api/Cart/remove-from-cart?compoId=${compoId}&istemId=${istemId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    withCredentials: true,
   });
 }
 

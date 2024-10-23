@@ -55,7 +55,7 @@ export const Header = () => {
               <Link key={index} to={item.to} className={`text-center text-gray-700 hover:text-primary transition flex flex-col items-center justify-center`}>
                 <div className="relative">
                   <item.icon className="text-2xl" />
-                  {item.length && (
+                  {item.length! > 0 && (
                     <div
                       className="absolute -right-2 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary !text-white text-xs">
                       {item.length}
