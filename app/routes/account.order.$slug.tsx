@@ -1,6 +1,6 @@
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { Table, TableProps, Tooltip } from "antd";
+import { Table, TableProps, Tag, Tooltip } from "antd";
 import { addYears, format } from "date-fns";
 import _ from "lodash";
 import { useMemo } from "react";
@@ -117,6 +117,13 @@ export default function OrderDetails() {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      render: (status: string) => {
+        return (
+          <Tag color={status == 'Pending' ? "processing" : "green"}>
+            {status}
+          </Tag>
+        )
+      },
     },
   ];
 
