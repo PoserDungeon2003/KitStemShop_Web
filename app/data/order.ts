@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL } from "./request";
-import { CreateOrderRQ, OrdersResponse, VnPayPaymentRS, VnPayCallbackResponse, CreateOrderResponse } from "./types";
+import { CreateOrderRQ, OrdersResponse, VnPayPaymentRS, VnPayCallbackResponse, CreateOrderResponse, OrderDataResponse } from "./types";
 
 export async function getOrdersByUserId(token: string): Promise<OrdersResponse> {
   return await request.get(`${BASE_URL}/api/Order/GetOrdersByUserId`, {
@@ -32,6 +32,14 @@ export async function vnPayCallback(token: string, urlResponse: string): Promise
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
+    },
+  })
+}
+
+export async function getOrderDetails(token: string, orderId: number): Promise<OrderDataResponse> {
+  return await request.get(`${BASE_URL}/api/Order/GetOrderDetails/${orderId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
   })
 }

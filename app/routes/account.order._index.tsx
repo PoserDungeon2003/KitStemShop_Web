@@ -1,8 +1,10 @@
-import { Link } from "@remix-run/react";
+import { Link, Outlet, useNavigate } from "@remix-run/react";
 import { Table, TableProps, Tag, Tooltip } from "antd";
 import { format } from "date-fns";
 import _ from "lodash";
 import { useMemo } from "react";
+import { IoEye } from "react-icons/io5";
+import { formatMoney } from "~/components/utils";
 import { Order, useGetAllCombos, useGetAllKits, useGetAllLabs, useGetOrdersByUserId, useGetProfile } from "~/data"
 
 export default function AccountOrder() {
@@ -10,6 +12,7 @@ export default function AccountOrder() {
   const order = useGetOrdersByUserId(profile.data?.user?.token || "");
   const labs = useGetAllLabs();
   const combo = useGetAllCombos();
+  const navigate = useNavigate();
 
   const mapLab = useMemo(() => {
     return _.mapKeys(labs.data?.data, it => it.labId);
@@ -66,7 +69,7 @@ export default function AccountOrder() {
       key: 'statusPayment',
     },
     {
-      title: 'Status',
+      title: 'Status Lab Active',
       dataIndex: 'statusLabActive',
       key: 'statusLabActive',
       render: (status: string) => {
@@ -81,23 +84,37 @@ export default function AccountOrder() {
       title: 'Order Date',
       dataIndex: 'orderDate',
       key: 'orderDate',
-      render: (text: string) => format(text, "HH:mm:ss dd/MM/yyyy"),
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (text: string) => (
+        <Tooltip placement="topLeft" title={format(text, "HH:mm:ss dd/MM/yyyy")}>
+          {format(text, "HH:mm:ss dd/MM/yyyy")}
+        </Tooltip>
+      ),
     },
-    // {
-    //   title: 'Actions',
-    //   key: 'actions',
-    //   render: (record: KitItem) => (
-    //     <IoEye
-    //       style={{ cursor: 'pointer' }}
-    //       onClick={() => navigate(`/admin/kit/${record.kitId}`)}
-    //     />
-    //   ),
-    // },
+    {
+      title: 'Total Amount',
+      dataIndex: 'totalAmount',
+      key: 'totalAmount',
+      render: (money: number) => formatMoney(money),
+    },
+    {
+      title: 'Detail',
+      key: 'actions',
+      render: (record: Order) => (
+        <IoEye
+          style={{ cursor: 'pointer' }}
+          onClick={() => navigate(`/account/order/${record.orderId}`)}
+        />
+      ),
+    },
   ];
 
   return (
     <div className="col-span-9 space-y-4 overflow-auto">
       <Table dataSource={datasource} columns={columns}></Table>
+      <Outlet />
     </div>
   )
 }

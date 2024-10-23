@@ -480,7 +480,13 @@ export type CartResponse = {
 };
 
 export type OrderDetail = {
-  // Define the structure of orderDetails if you have more specific details
+  orderDetailsId: number;
+  iStemId: number | null;
+  compoId: number;
+  price: number;
+  warrantyStartDate: string | null;
+  warrantyEndDate: string | null;
+  status: string;
 };
 
 export type Order = {
@@ -491,9 +497,24 @@ export type Order = {
   statusPayment: string;
   statusLabActive: string;
   labId: number;
-  lab: any | null; // Adjust the type if you have a more specific structure for lab
+  lab: Lab | null; // Adjust the type if you have a more specific structure for lab
   orderDetails: OrderDetail[];
   user: any | null; // Adjust the type if you have a more specific structure for user
+};
+
+export type OrderData = {
+  userID: number;
+  totalPrice: number;
+  orderDate: string;
+  statusLabActive: string;
+  paymentStatus: string;
+  details: OrderDetail[];
+};
+
+export type OrderDataResponse = {
+  status: number;
+  message: string;
+  data: OrderData;
 };
 
 export type OrdersResponse = {
