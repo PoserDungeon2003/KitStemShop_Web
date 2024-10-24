@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { json, LoaderFunctionArgs, redirect } from '@remix-run/node';
+import { useQueryClient } from '@tanstack/react-query';
 import { message } from 'antd';
 import { da } from 'date-fns/locale';
 import { useState } from 'react';
@@ -23,8 +24,7 @@ export default function SupportRequest() {
   const { register, handleSubmit } = useForm<SupportRequestForm>({
     resolver,
   })
-
-
+  const queryClient = useQueryClient();
   const profile = useGetProfile();
 
   const onSubmit = async (data: SupportRequestForm) => {
@@ -35,15 +35,16 @@ export default function SupportRequest() {
         requestTitle: data.requestTitle,
       });
 
-      console.log(response);
       if (response.status === -4) {
         message.error(response.message);
         return;
       }
 
-      if (response) {
-        message.success("Support request submitted successfully");
-      }
+      queryClient.invalidateQueries({
+        queryKey: ['support-request']
+      })
+      message.success("Support request submitted successfully");
+
     } catch (error: any) {
       message.error(error?.message);
     }

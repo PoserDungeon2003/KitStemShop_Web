@@ -213,14 +213,21 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
             navigate('/admin/category');
           },
         },
-        // {
-        //   key: "create-blog",
-        //   icon: <IoAddCircle />,
-        //   label: "Create Blog",
-        //   onClick: () => {
-        //     navigate('/admin/blog/create');
-        //   },
-        // },
+      ],
+    },
+    {
+      key: 'support',
+      icon: dashboard,
+      label: 'Support',
+      children: [
+        {
+          key: "view-support",
+          icon: <IoListOutline />,
+          label: "View Support",
+          onClick: () => {
+            navigate('/admin/support');
+          },
+        },
       ],
     },
   ]
