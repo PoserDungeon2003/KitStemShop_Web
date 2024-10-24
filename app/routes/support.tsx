@@ -1,60 +1,68 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { json, LoaderFunctionArgs, redirect } from '@remix-run/node';
+import { message } from 'antd';
 import { da } from 'date-fns/locale';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { InferType, object, string } from 'yup';
 import { useGetProfile } from '~/data';
 import { createSupportRequest } from '~/data/supportrequest';
 import { authenticator } from '~/services/auth.server';
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const user = await authenticator.isAuthenticated(request);
-  if (!user) {
-    return redirect("/");
-  }
-  return json({}, { status: 200 });
-}
+const schema = object({
+  requestTitle: string().required(),
+  category: string(),
+  requestDescription: string().required(),
+})
+
+export type SupportRequestForm = InferType<typeof schema>;
+
+const resolver = yupResolver(schema);
 
 export default function SupportRequest() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
+  const { register, handleSubmit } = useForm<SupportRequestForm>({
+    resolver,
+  })
 
-  const userId = useGetProfile().data?.user?.userId;
-  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    const data = {
-      userId: userId,                      
-      requestTitle: title,       
-      requestDescription: description
-    };
-  
+
+  const profile = useGetProfile();
+
+  const onSubmit = async (data: SupportRequestForm) => {
+
     try {
-      const res = await createSupportRequest(data);
-      
-      console.log(res);
-    } catch (error) {
-      console.error("Error submitting support request:", error);
+      const response = await createSupportRequest(profile.data?.user?.token || "", {
+        requestDescription: data.requestDescription,
+        requestTitle: data.requestTitle,
+      });
+
+      console.log(response);
+      if (response.status === -4) {
+        message.error(response.message);
+        return;
+      }
+
+      if (response) {
+        message.success("Support request submitted successfully");
+      }
+    } catch (error: any) {
+      message.error(error?.message);
     }
   };
-  
+
 
   return (
     <div className="py-16 flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
         <h2 className="text-2xl font-bold mb-6 text-gray-700">Submit a Support Request</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label className="block text-gray-600 text-sm font-bold mb-2" htmlFor="title">
               Title
             </label>
             <input
-              id="title"
+              {...register('requestTitle')}
               type="text"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
             />
           </div>
           <div className="mb-4">
@@ -62,11 +70,8 @@ export default function SupportRequest() {
               Category
             </label>
             <select
-              id="category"
+              {...register('category')}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              required
             >
               <option value="">Select Category</option>
               <option value="1">Technical Issue</option>
@@ -81,10 +86,8 @@ export default function SupportRequest() {
             <textarea
               id="description"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              rows="4"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
+              rows={4}
+              {...register('requestDescription')}
             ></textarea>
           </div>
           <button

@@ -127,9 +127,21 @@ export type SupportRequest = {
   lastSupportDate?: Date;
   requestTitle?: string;
   requestDescription?: string;
-  ManagerId?: number;
+  status: string;
+  lab?: LabDetail | null;
+  manager?: any;
+  user?: any;
+  managerId?: number;
   Status?: string;
 }
+
+export type SupportRequestResponse = {
+  isSuccess: boolean;
+  statusCode: number;
+  message?: string | null;
+  data?: SupportRequest[];
+}
+
 export type CategoryCompos = {
   categoryCompoId: number;
   categoryName: string;
@@ -568,4 +580,10 @@ export type VnPayCallbackResponse = {
 export type RemoveFromCartRS = {
   message: string;
   cartItems: Cart[];
+}
+
+export type createSupportRequestRS = {
+  data: SupportRequest;
+  message: string;
+  status: number;
 }
