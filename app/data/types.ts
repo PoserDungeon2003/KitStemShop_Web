@@ -8,13 +8,7 @@ export type LoginRS = {
 
 export type User = {
   token?: string;
-  userId: number;
-  userName?: string;
   role?: string;
-  email?: string;
-  fullName?: string;
-  phone?: string;
-  address?: string;
 }
 
 export type UserProfile = {
@@ -24,7 +18,13 @@ export type UserProfile = {
 
 export type UserDetail = {
   username?: string;
-  roles?: string[];
+  userId: number;
+  userName?: string;
+  role?: string;
+  email?: string;
+  fullName?: string;
+  phone?: string;
+  address?: string;
 }
 
 export type KitItem = {

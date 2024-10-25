@@ -39,7 +39,7 @@ const profileNav = [
 
 export default function Account() {
   const profile = useGetProfile();
-  const username = profile.data?.user?.userName
+  const username = profile.data?.detail?.userName
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -136,9 +136,9 @@ export default function Account() {
                 <a href="#" className="text-primary">Edit</a>
               </div>
               <div className="space-y-1">
-                <h4 className="text-gray-700 font-medium">{profile.data?.user?.fullName || "John Doe"}</h4>
-                <p className="text-gray-800">{profile.data?.user?.email}</p>
-                <p className="text-gray-800">{profile.data?.user?.phone}</p>
+                <h4 className="text-gray-700 font-medium">{profile.data?.detail?.fullName || "John Doe"}</h4>
+                <p className="text-gray-800">{profile.data?.detail?.email}</p>
+                <p className="text-gray-800">{profile.data?.detail?.phone}</p>
               </div>
             </div>
 
@@ -148,10 +148,10 @@ export default function Account() {
                 <a href="#" className="text-primary">Edit</a>
               </div>
               <div className="space-y-1">
-                <h4 className="text-gray-700 font-medium">{profile.data?.user?.fullName || "John Doe"}</h4>
-                <p className="text-gray-800">{profile.data?.user?.address}</p>
+                <h4 className="text-gray-700 font-medium">{profile.data?.detail?.fullName || "John Doe"}</h4>
+                <p className="text-gray-800">{profile.data?.detail?.address}</p>
                 {/* <p className="text-gray-800">20371</p> */}
-                <p className="text-gray-800">{profile.data?.user?.phone}</p>
+                <p className="text-gray-800">{profile.data?.detail?.phone}</p>
               </div>
             </div>
 

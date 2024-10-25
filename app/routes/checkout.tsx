@@ -21,7 +21,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Checkout() {
   const profile = useGetProfile();
-  const splitAddress = _.split(profile.data?.user?.address, ', ');
+  const splitAddress = _.split(profile.data?.detail?.address, ', ');
   const cart = useGetCart(profile.data?.user?.token || "");
   const combo = useGetAllCombos();
   const items = useGetAllItems();
@@ -76,7 +76,7 @@ export default function Checkout() {
         <div className="space-y-4">
           <div>
             <label htmlFor="fullName" className="text-gray-600">Full name <span className="text-primary">*</span></label>
-            <input defaultValue={profile.data?.user?.fullName} type="text" name="company" id="company" className="input-box" />
+            <input defaultValue={profile.data?.detail?.fullName} type="text" name="company" id="company" className="input-box" />
           </div>
           {/* <div className="grid grid-cols-2 gap-4">
             <div>
@@ -102,11 +102,11 @@ export default function Checkout() {
           </div> */}
           <div>
             <label htmlFor="phone" className="text-gray-600">Phone number</label>
-            <input defaultValue={profile.data?.user?.phone} type="text" name="phone" id="phone" className="input-box" />
+            <input defaultValue={profile.data?.detail?.phone} type="text" name="phone" id="phone" className="input-box" />
           </div>
           <div>
             <label htmlFor="email" className="text-gray-600">Email address</label>
-            <input defaultValue={profile.data?.user?.email} type="email" name="email" id="email" className="input-box" />
+            <input defaultValue={profile.data?.detail?.email} type="email" name="email" id="email" className="input-box" />
           </div>
           <div>
             <label htmlFor="address" className="text-gray-600">Street address</label>
