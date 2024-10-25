@@ -74,8 +74,8 @@ export default function AccountOrder() {
       key: 'statusLabActive',
       render: (status: string) => {
         return (
-          <Tag color={status == 'True' ? "green" : "red"}>
-            {status}
+          <Tag color={status.toLowerCase() == 'true' ? "green" : "red"}>
+            {_.upperFirst(status)}
           </Tag>
         )
       },
@@ -113,7 +113,7 @@ export default function AccountOrder() {
 
   return (
     <div className="col-span-9 space-y-4 overflow-auto">
-      <Table dataSource={datasource} columns={columns}></Table>
+      <Table className="overflow-auto" dataSource={datasource} columns={columns}></Table>
       <Outlet />
     </div>
   )

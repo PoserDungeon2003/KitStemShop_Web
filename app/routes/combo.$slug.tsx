@@ -64,10 +64,10 @@ export default function ComboDetail() {
     }
   }
 
-  const getLabById = useMemo(() => {
+  const comboBought = useMemo(() => {
     return _(myOrders.data?.data)
-      .find((it) => it.labId === detail.labId)
-  }, [myOrders.data?.data, detail])
+      .some((it) => it.labId === detail.labId && it.statusLabActive.toLowerCase() === 'true')
+  }, [myOrders.data?.data, detail]);  
 
   const filterKitsByComboId = useMemo(() => {
     if (!kits.data?.data) return [];
@@ -236,7 +236,7 @@ export default function ComboDetail() {
       </div>
       <div className="container pb-16">
         <h3 className="border-b border-gray-200 font-roboto text-gray-800 pb-3 font-medium">Lab details</h3>
-        {isLogin && getLabById?.statusLabActive.toLowerCase() == "true" ? (
+        {isLogin && comboBought ? (
           <div className="w-3/5 pt-6 space-y-2">
             {/* <div className="space-y-2">
                   <h4 className="text-xl font-medium text-gray-800">Lab Name: {labDetail.data?.data.labName}</h4>

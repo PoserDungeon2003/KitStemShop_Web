@@ -44,6 +44,14 @@ export async function getOrderDetails(token: string, orderId: number): Promise<O
   })
 }
 
+export async function confirmOrderReceived(token: string, orderDetailId: number, status: string): Promise<{ status: number, message: string, data: any}> {
+  return await request.put(`${BASE_URL}/api/Order/ChangeStatus/${orderDetailId}/${status}`, {}, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
 export const useGetOrdersByUserId = (
   token: string,
   config?: UseQueryOptions<OrdersResponse>
@@ -51,6 +59,19 @@ export const useGetOrdersByUserId = (
   return useQuery({
     queryKey: ["my-order"],
     queryFn: () => getOrdersByUserId(token),
+    enabled: !!token,
+    ...config,
+  })
+}
+
+export const useGetOrderDetails = (
+  token: string,
+  orderId: number,
+  config?: UseQueryOptions<OrderDataResponse>
+) => {
+  return useQuery({
+    queryKey: ["order-details", orderId],
+    queryFn: () => getOrderDetails(token, orderId),
     enabled: !!token,
     ...config,
   })
