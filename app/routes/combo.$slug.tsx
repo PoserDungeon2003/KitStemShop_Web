@@ -236,7 +236,7 @@ export default function ComboDetail() {
       </div>
       <div className="container pb-16">
         <h3 className="border-b border-gray-200 font-roboto text-gray-800 pb-3 font-medium">Lab details</h3>
-        {isLogin && getLabById?.statusLabActive == "True" ? (
+        {isLogin && getLabById?.statusLabActive.toLowerCase() == "true" ? (
           <div className="w-3/5 pt-6 space-y-2">
             {/* <div className="space-y-2">
                   <h4 className="text-xl font-medium text-gray-800">Lab Name: {labDetail.data?.data.labName}</h4>

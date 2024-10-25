@@ -3,6 +3,7 @@ import { Image, Table, TableProps, Tooltip } from "antd"
 import _ from "lodash";
 import { useMemo } from "react";
 import { IoEye } from "react-icons/io5";
+import { formatMoney } from "~/components/utils";
 import { ComboLabKit, useGetAllCategoriesCombo, useGetAllCombos, useGetAllLabs } from "~/data"
 
 export const handle = {
@@ -68,7 +69,7 @@ export default function AdminCombo() {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
-      render: (text: number) => `$${text.toFixed(2)}`,
+      render: (text: number) => <span>{formatMoney(text)}</span>,
     },
     {
       title: 'Category Name',

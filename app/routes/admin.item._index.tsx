@@ -3,7 +3,8 @@ import { Image, Table, TableProps, Tooltip } from "antd"
 import _ from "lodash";
 import { useMemo } from "react";
 import { IoEye } from "react-icons/io5";
-import { ComboLabKit, Item, useGetAllItems, useGetAllKits } from "~/data"
+import { formatMoney } from "~/components/utils";
+import { Item, useGetAllItems, useGetAllKits } from "~/data"
 
 export const handle = {
   hideFooter: true,
@@ -56,7 +57,7 @@ export default function AdminItem() {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
-      render: (text: number) => `$${text.toFixed(2)}`,
+      render: (text: number) => <span>{formatMoney(text)}</span>,
     },
     {
       title: 'Kit Name',

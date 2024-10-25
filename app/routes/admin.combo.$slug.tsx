@@ -1,7 +1,7 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node"
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button, Col, Form, Input, InputNumber, Layout, Modal, Row, Select, Typography } from "antd";
+import { Button, Col, Form, Input, InputNumber, Layout, message, Modal, Row, Select, Typography } from "antd";
 import _ from "lodash";
 import { useState } from "react";
 import { IoTrashOutline } from "react-icons/io5";
@@ -75,6 +75,7 @@ export default function AdminComboSlug() {
     try {
       let response = await deleteComboById(profile.data?.user?.token || '', [Number(slug)]);
       if (response) {
+        message.success("Update combo successfully")
         queryClient.invalidateQueries({
           queryKey: ['combos']
         })
@@ -84,7 +85,7 @@ export default function AdminComboSlug() {
       }
     } catch (error: any) {
       setConfirmLoading(false);
-      alert(error?.message);
+      message.error(error?.message);
     } finally {
       setConfirmLoading(false);
     }
