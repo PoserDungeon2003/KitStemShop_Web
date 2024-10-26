@@ -25,7 +25,8 @@ export async function removeFromCart(token: string, compoId: number, istemId: nu
 export async function getCart(token: string): Promise<Cart> {
   return await request.get(`${BASE_URL}/api/Cart/get-cart`, {
     headers: {
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
     },
     withCredentials: true,
   })
