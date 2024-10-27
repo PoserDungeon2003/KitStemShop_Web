@@ -494,13 +494,13 @@ body {
   height: 22px;
 }
 
-.h3,
+/* .h3,
 .h4,
 h3,
 h4 {
   font-weight: 700;
   color: #141414;
-}
+} */
 
 .ant-list-item-meta-title > a {
   color: rgba(0, 0, 0, 0.65);
@@ -583,17 +583,17 @@ h4 {
 .settings-drawer .drawer-content p {
   color: #8c8c8c;
 }
-p {
+/* p {
   font-size: 14px;
-}
+} */
 .settings-drawer .drawer-content .sidebar-color h6 {
   margin-bottom: 8px;
 }
 
-.h6,
+/* .h6,
 h6 {
   font-size: 16px;
-}
+} */
 
 .drawer-sidebar .ant-drawer-body {
   padding: 0px;
@@ -755,9 +755,9 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
   border-radius: 8px;
   background: #fff;
 }
-.p-15 {
+/* .p-15 {
   padding: 15px;
-}
+} */
 .card-document {
   width: 32px;
   height: 32px;
@@ -1120,14 +1120,14 @@ span.blue {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
-.py-1 {
+/* .py-1 {
   padding-top: 0.25rem !important;
   padding-bottom: 0.25rem !important;
 }
 .px-2 {
   padding-right: 0.5rem !important;
   padding-left: 0.5rem !important;
-}
+} */
 .d-flex {
   display: flex !important;
 }
@@ -1162,9 +1162,9 @@ span.blue {
   margin: 0px;
 }
 
-.text-xs {
+/* .text-xs {
   color: #8c8c8c;
-}
+} */
 
 .percent-progress span.ant-progress-text {
   display: flex;
@@ -1228,18 +1228,18 @@ span.blue {
 .bg-gradient-primary {
   background-image: linear-gradient(310deg, #2152ff, #21d4fd);
 }
-img {
+/* img {
   max-width: 100%;
-}
+} */
 .border10 {
   border-radius: 10px;
 }
-.py-4 {
+/* .py-4 {
   padding: 20px;
 }
 .mb-5 {
   margin-bottom: 3rem !important;
-}
+} */
 .icon-move-right .anticon-right {
   color: #40a9ff;
   margin-left: 2px;
@@ -1249,9 +1249,9 @@ img {
 
   display: block;
 }
-.mb-4 {
+/* .mb-4 {
   margin-bottom: 1.5rem !important;
-}
+} */
 
 .gradent {
   background: url("../images/info-card-2.jpg") no-repeat center top;
@@ -1396,9 +1396,9 @@ span.ismobile {
   opacity: 0;
 }
 
-.mb-2 {
+/* .mb-2 {
   margin-bottom: 25px;
-}
+} */
 
 .sidebarnav-color button {
   width: 100%;
@@ -1630,9 +1630,9 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
   align-items: center;
 }
 
-.mb-24 {
+/* .mb-24 {
   margin-bottom: 24px;
-}
+} */
 
 .ant-table-thead > tr > th {
   color: #8c8c8c;
@@ -1679,7 +1679,7 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
   color: #8c8c8c;
   font-weight: 600;
 }
-.semibold {
+/* .semibold {
   font-weight: 600;
   color: #8c8c8c;
 }
@@ -1688,12 +1688,12 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
   font-size: 12px;
   color: #8c8c8c;
   font-weight: 600;
-}
+} */
 .ant-progress-project .ant-progress {
   margin-right: 15px;
 }
 
-.semibold {
+/* .semibold {
   font-weight: 600;
   color: #8c8c8c;
 }
@@ -1702,7 +1702,7 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
   font-size: 12px;
   color: #8c8c8c;
   font-weight: 600;
-}
+} */
 
 .ant-progress-project .ant-progress-bg {
   height: 3px !important;
@@ -1737,10 +1737,10 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
   } */
 }
 
-body {
+/* body {
   overflow: visible !important;
   width: 100% !important;
-}
+} */
 
 .card-info-2 .ant-card-body {
   height: 100%;
@@ -1850,9 +1850,9 @@ body {
   font-size: 48px;
   color: #fff;
 }
-.text-lg {
+/* .text-lg {
   font-size: 16px;
-}
+} */
 .card-signup .sign-up-gateways .ant-btn {
   margin-right: 10px;
   margin-left: 10px;
@@ -1886,7 +1886,7 @@ body {
 .sign-up-gateways {
   text-align: center;
 }
-.m-25,
+/* .m-25,
 .mb-25,
 .my-25 {
   margin-bottom: 25px;
@@ -1895,13 +1895,13 @@ body {
 .mt-25,
 .my-25 {
   margin-top: 25px;
-}
-.text-center {
+} */
+/* .text-center {
   text-align: center;
 }
 .font-semibold {
   font-weight: 600;
-}
+} */
 .text-muted {
   color: #8c8c8c;
 }
@@ -1916,12 +1916,12 @@ body {
   height: 40px;
   border: 1px solid #d9d9d9;
 }
-.font-bold {
+/* .font-bold {
   font-weight: 700;
-}
-.text-dark {
+} */
+/* .text-dark {
   color: #141414;
-}
+} */
 .ant-btn,
 .ant-radio-group .ant-radio-button-wrapper {
   font-weight: 600;
@@ -2108,9 +2108,9 @@ body {
 .layout-default .ant-layout-content {
   padding-top: 40px;
 }
-.font-regular {
+/* .font-regular {
   font-weight: 400;
-}
+} */
 .signin h1 {
   font-size: 48px;
   font-weight: 700;
@@ -2141,9 +2141,9 @@ body {
 .signin .ant-form-item-control-input button.ant-switch {
   margin-right: 5px;
 }
-.text-dark {
+/* .text-dark {
   color: #141414;
-}
+} */
 .sign-img img {
   width: 100%;
   max-width: 500px;
@@ -2234,11 +2234,11 @@ button.ant-btn.bell strong {
   padding: 0;
   margin: 0 20px 0;
 }
-.m-10,
+/* .m-10,
 .mr-10,
 .mx-10 {
   margin-right: 10px !important;
-}
+} */
 
 .ant-table-tbody > tr > td h6 {
   font-size: 14px;
@@ -2297,7 +2297,7 @@ section.ant-layout.layout-content .ant-layout-content.content-ant {
   display: flex;
   align-items: flex-end;
 }
-.m-auto,
+/* .m-auto,
 .ml-auto {
   margin-left: auto !important;
 }
@@ -2305,7 +2305,7 @@ section.ant-layout.layout-content .ant-layout-content.content-ant {
 .mr-30,
 .mx-30 {
   margin-right: 30px !important;
-}
+} */
 .card-credit .card-footer h6,
 .card-credit .card-footer p {
   margin-bottom: 0;
@@ -2316,12 +2316,12 @@ section.ant-layout.layout-content .ant-layout-content.content-ant {
 .card-credit .card-footer h6 {
   font-weight: 700;
 }
-.width-100 {
+/* .width-100 {
   width: 100%;
 }
 .p-20 {
   padding: "0px 20px 0px 0px";
-}
+} */
 .layout-default .ant-layout-content.p-0 {
   padding: 0px;
 }
@@ -2418,9 +2418,9 @@ section.ant-layout.layout-content .ant-layout-content.content-ant {
   margin-bottom: 0;
   color: #141414;
 }
-.m-0 {
+/* .m-0 {
   margin: 0px;
-}
+} */
 
 .ant-card.ant-card-bordered.payment-method-card .ant-card-body {
   padding-top: 16px;
@@ -2700,7 +2700,7 @@ section.ant-layout.ant-layout-has-sider.layout-dashboard.layout-profile
   opacity: 0.2;
 }
 
-.p-5,
+/* .p-5,
 .pr-5,
 .px-5 {
   padding-right: 5px !important;
@@ -2719,7 +2719,7 @@ section.ant-layout.ant-layout-has-sider.layout-dashboard.layout-profile
 .ml-5,
 .mx-5 {
   margin-left: 5px !important;
-}
+} */
 
 .card-profile-information .ant-descriptions .ant-descriptions-row > td,
 .card-profile-information .ant-descriptions .ant-descriptions-row > th {
@@ -2820,10 +2820,10 @@ section.ant-layout.ant-layout-has-sider.layout-dashboard.layout-profile
   width: 20px;
   height: 20px;
 }
-
+/* 
 .text-right {
   text-align: right;
-}
+} */
 
 .layout-dashboard-rtl {
   background: transparent;
