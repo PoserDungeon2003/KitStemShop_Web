@@ -97,18 +97,18 @@ export default function Index() {
   return (
     <main>
       {/* Banner */}
-      <div className="bg-cover bg-no-repeat bg-center py-36" style={{ backgroundImage: "url('/images/banner-bg.jpg')" }
+      <div className="bg-cover bg-no-repeat bg-center py-36 aspect-[16/5] w-full h-auto" style={{ backgroundImage: "url('/images/banner-bg.jpg')" }
       }>
         <div className="container">
           <h1 className="text-6xl text-gray-800 font-medium mb-4 capitalize">
-            best collection for <br /> home decoration
+            ignite curiosity with <br /> hands-on stem kits
           </h1>
-          <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aperiam <br />
-            accusantium perspiciatis, sapiente
-            magni eos dolorum ex quos dolores odio</p>
+          <p>Discover, create, and explore with kits designed to inspire the next generation of innovators.</p>
+
           <div className="mt-12">
-            <a href="#" className="bg-primary border border-primary text-white px-8 py-3 font-medium 
-                rounded-md hover:bg-transparent hover:text-primary">Shop Now</a>
+            <Link to="/shop" className="bg-primary border border-primary text-white px-8 py-3 font-medium 
+                rounded-md hover:bg-transparent hover:text-primary">Shop Now
+            </Link>
           </div>
         </div>
       </div>
@@ -165,11 +165,11 @@ export default function Index() {
       </div>
 
       {/* Ads Section */}
-      <div className="container pb-16">
+      {/* <div className="container pb-16">
         <a href="#">
-          <img src="/images/offer.jpg" alt="ads" className="w-full" />
+          <img src="/images/offer.jpg" alt="ads" className="w-full h-auto aspect-[992/239]" />
         </a>
-      </div>
+      </div> */}
 
       {/* Product */}
       <div className="container pb-16">
