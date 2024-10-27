@@ -113,7 +113,7 @@ export const NavBar = () => {
         <div className="flex items-center justify-between flex-grow pl-12">
           <div className="flex items-center space-x-6 capitalize">
             {_.map(navbar, (item, index) => {
-              if (profile.data?.detail?.role?.toLowerCase() !== 'admin' && item.name === 'Dashboard') return;
+              if (profile.data?.detail?.role === 'Customer' && item.name === 'Dashboard') return;
               return (
                 <Link key={index} to={item.to} className="text-gray-200 hover:text-white transition">
                   {item.name}

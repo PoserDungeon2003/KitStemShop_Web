@@ -4,6 +4,7 @@ import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import _ from "lodash";
 import { FaCircleUser, FaCreditCard, FaFlag, FaHouseUser, FaRightToBracket, FaTable } from "react-icons/fa6";
 import { IoAddCircle, IoListOutline } from "react-icons/io5";
+import { Role, useGetProfile } from "~/data";
 
 type AdminSideBarProps = {
   color: string;
@@ -13,6 +14,7 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
   const { pathname } = useLocation();
   const page = pathname.replace("/", "");
   const navigate = useNavigate();
+  const profile = useGetProfile();
 
   const dashboard = [
     <FaHouseUser />,
@@ -28,10 +30,6 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
 
   const rtl = [
     <FaFlag />,
-  ];
-
-  const profile = [
-    <FaCircleUser />
   ];
 
   const signin = [
@@ -71,7 +69,7 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
     },
     {
       title: 'Profile',
-      icon: profile,
+      icon: <FaCircleUser />,
       to: '/profile',
     }
   ]
@@ -231,6 +229,18 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
       ],
     },
   ]
+  const getFilteredMenuItems = (role: Role) => {
+    const rolePermissions = {
+      Admin: ['dashboard', 'combo', 'kit', 'lab', 'item', 'blog', 'category', 'support'],
+      Manager: ['dashboard', 'combo', 'kit', 'lab', 'item', 'support', 'blog'],
+      Staff: ['dashboard', 'support', 'category'],
+      Customer: [''],
+    };
+  
+    return _.filter(menuItems, (item) => rolePermissions[role].includes(item?.key?.toString() || ''));
+  };
+
+  const filteredMenuItems = getFilteredMenuItems(profile.data?.detail?.role || 'Customer');
 
   return (
     <>
@@ -239,7 +249,7 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
         <span>KitStemShop Dashboard</span>
       </div>
       <hr />
-      <Menu items={menuItems} theme="light" mode="inline">
+      <Menu items={filteredMenuItems} theme="light" mode="inline">
       </Menu>
       <div className="aside-footer">
         <Link to="/logout?redirectTo=/?action=logout" className="text-center">

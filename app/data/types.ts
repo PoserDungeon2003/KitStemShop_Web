@@ -8,7 +8,7 @@ export type LoginRS = {
 
 export type User = {
   token?: string;
-  role?: string;
+  role?: Role;
 }
 
 export type UserProfile = {
@@ -20,7 +20,7 @@ export type UserDetail = {
   username?: string;
   userId: number;
   userName?: string;
-  role?: string;
+  role?: Role;
   email?: string;
   fullName?: string;
   phone?: string;
@@ -587,3 +587,5 @@ export type createSupportRequestRS = {
   message: string;
   status: number;
 }
+
+export type Role = 'Admin' | 'Manager' | 'Staff' | 'Customer';
