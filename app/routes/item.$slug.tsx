@@ -30,12 +30,12 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export default function ComboDetail() {
+  const profile = useGetProfile();
   const { detail, slug } = useLoaderData<LoaderData>();
   const [quantity, setQuantity] = useState<number>(1);
-  const labDetail = useGetLabById(detail.istemId || 0);
+  const labDetail = useGetLabById(detail.istemId || 0, profile.data?.user?.token || "");
   const items = useGetAllItems();
   const kits = useGetAllKits();
-  const profile = useGetProfile();
   const isLogin = !!profile.data?.detail?.username;
   const myOrders = useGetOrdersByUserId(profile.data?.user?.token || "");
   const queryClient = useQueryClient();

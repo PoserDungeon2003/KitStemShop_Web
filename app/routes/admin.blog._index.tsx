@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import _ from "lodash";
 import { useMemo } from "react";
 import { IoEye } from "react-icons/io5";
-import { Blog, Lab, useGetAllBlogs, useGetAllCategoriesBlog, useGetAllCategoriesLab, useGetAllLabs } from "~/data"
+import { Blog, useGetAllBlogs, useGetAllCategoriesBlog } from "~/data"
 import { BASE_URL } from "~/data/request";
 
 export const handle = {

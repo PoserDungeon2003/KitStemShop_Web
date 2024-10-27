@@ -4,7 +4,7 @@ import _ from "lodash";
 import { useMemo } from "react";
 import { IoEye } from "react-icons/io5";
 import { formatMoney } from "~/components/utils";
-import { ComboLabKit, useGetAllCategoriesCombo, useGetAllCombos, useGetAllLabs } from "~/data"
+import { ComboLabKit, useGetAllCategoriesCombo, useGetAllCombos, useGetAllLabs, useGetProfile } from "~/data"
 
 export const handle = {
   hideFooter: true,
@@ -14,8 +14,9 @@ export const handle = {
 }
 
 export default function AdminCombo() {
+  const profile = useGetProfile();
   const combo = useGetAllCombos();
-  const labs = useGetAllLabs();
+  const labs = useGetAllLabs(profile.data?.user?.token || "");
   const categoryCombo = useGetAllCategoriesCombo();
   const navigate = useNavigate();
 

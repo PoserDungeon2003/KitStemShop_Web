@@ -1,11 +1,10 @@
-import { useNavigate } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 import { Table, TableProps, Tag, Tooltip } from "antd"
 import { format } from "date-fns";
 import _ from "lodash";
 import { useMemo } from "react";
 import { IoEye } from "react-icons/io5";
-import { KitItem, SupportRequest, useGetAllCombos, useGetAllKits, useGetProfile } from "~/data"
-import { useGetSupportRequest } from "~/data/supportrequest";
+import { KitItem, SupportRequest, useGetAllCombos, useGetAllKits, useGetProfile, useGetSupportRequest } from "~/data"
 
 export const handle = {
   hideFooter: true,
@@ -95,8 +94,8 @@ export default function AdminSupport() {
     {
       title: 'Actions',
       key: 'actions',
-      render: (record: KitItem) => (
-        <a>Edit</a>
+      render: (record: SupportRequest) => (
+        <Link to={`/admin/support/${record.supportRequestId}`}>Edit</Link>
       ),
     },
   ];

@@ -18,9 +18,9 @@ export const handle = {
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 export default function AdminComboCreate() {
-  const labs = useGetAllLabs();
   const categoryCombo = useGetAllCategoriesCombo();
   const profile = useGetProfile();
+  const labs = useGetAllLabs(profile.data?.user?.token || "");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();

@@ -3,7 +3,7 @@ import { Table, TableProps, Tag, Tooltip } from "antd"
 import _ from "lodash";
 import { useMemo } from "react";
 import { IoEye } from "react-icons/io5";
-import { Lab, useGetAllCategoriesLab, useGetAllLabs } from "~/data"
+import { Lab, useGetAllCategoriesLab, useGetAllLabs, useGetProfile } from "~/data"
 
 export const handle = {
   hideFooter: true,
@@ -13,7 +13,8 @@ export const handle = {
 }
 
 export default function AdminLab() {
-  const labs = useGetAllLabs();
+  const profile = useGetProfile();
+  const labs = useGetAllLabs(profile.data?.user?.token || "");
   const categoryLab = useGetAllCategoriesLab();
   
   const navigate = useNavigate();

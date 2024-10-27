@@ -5,12 +5,12 @@ import _ from "lodash";
 import { useMemo } from "react";
 import { IoEye } from "react-icons/io5";
 import { formatMoney } from "~/components/utils";
-import { Order, useGetAllCombos, useGetAllKits, useGetAllLabs, useGetOrdersByUserId, useGetProfile } from "~/data"
+import { Order, useGetAllCombos, useGetAllLabs, useGetOrdersByUserId, useGetProfile } from "~/data"
 
 export default function AccountOrder() {
   const profile = useGetProfile();
   const order = useGetOrdersByUserId(profile.data?.user?.token || "");
-  const labs = useGetAllLabs();
+  const labs = useGetAllLabs(profile.data?.user?.token || "");
   const combo = useGetAllCombos();
   const navigate = useNavigate();
 

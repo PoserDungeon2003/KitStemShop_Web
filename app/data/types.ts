@@ -589,3 +589,16 @@ export type createSupportRequestRS = {
 }
 
 export type Role = 'Admin' | 'Manager' | 'Staff' | 'Customer';
+
+export type UpdateSupportRequestRQ = {
+  supportRequestId: number;
+  userId: number;
+  labId: number;
+  supportCount: number;
+  maxSupportCount: number;
+  lastSupportDate: string;
+  status: string;
+  requestTitle: string;
+  requestDescription: string;
+  managerId: number;
+};

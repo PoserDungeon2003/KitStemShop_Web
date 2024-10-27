@@ -1,7 +1,7 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node"
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button, Col, Form, Input, Layout, Modal, Row, Select, Typography } from "antd";
+import { Button, Col, Form, Input, Layout, message, Modal, Row, Select, Typography } from "antd";
 import _ from "lodash";
 import { useState } from "react";
 import { IoTrashOutline } from "react-icons/io5";
@@ -83,7 +83,7 @@ export default function AdminKitSlug() {
       }
     } catch (error: any) {
       setConfirmLoading(false);
-      alert(error?.message);
+      message.error(error?.message);
     } finally {
       setConfirmLoading(false);
     }

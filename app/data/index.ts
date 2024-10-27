@@ -7,3 +7,4 @@ export * from "./items";
 export * from "./blog";
 export * from "./cart";
 export * from "./order";
+export * from "./supportrequest";

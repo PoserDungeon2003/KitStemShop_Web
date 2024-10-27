@@ -37,13 +37,13 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 export default function AdminComboSlug() {
   const { combo, slug } = useLoaderData<LoaderData>();
-  const labs = useGetAllLabs();
   const categoryCombo = useGetAllCategoriesCombo();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('Do you want to delete this combo?');
   const profile = useGetProfile();
+  const labs = useGetAllLabs(profile.data?.user?.token || "");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 

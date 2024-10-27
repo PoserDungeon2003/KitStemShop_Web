@@ -47,7 +47,7 @@ async function _deleteWithOptions<T>(url: string, options?: AxiosRequestConfig):
   return response.data;
 }
 
-async function _patch(url: string, data?: any, options?: any) {
+async function _patch(url: string, data?: any, options?: AxiosRequestConfig) {
   const response = await axios.patch(url, JSON.stringify(data), {
     headers: { 'Content-Type': 'application/json' },
     ...options

@@ -3,12 +3,20 @@ import request, { BASE_URL } from "./request";
 import { CategoryLabResponse, CreateCategoryRQ, CreateLabRQ, LabDetailResponse, LabsResponse, UpdateCategoryLabRQ, UpdateLabRQ } from "./types";
 import _ from "lodash";
 
-export async function getLabById(id: number): Promise<LabDetailResponse> {
-  return await request.get(`${BASE_URL}/api/Lab/get-Lab-by-id?labId=${id}`);
+export async function getLabById(id: number, token: string): Promise<LabDetailResponse> {
+  return await request.get(`${BASE_URL}/api/Lab/get-Lab-by-id?labId=${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }
 
-export async function getAllLabs(): Promise<LabsResponse> {
-  return await request.get(`${BASE_URL}/api/Lab/get-all-Lab`);
+export async function getAllLabs(token: string): Promise<LabsResponse> {
+  return await request.get(`${BASE_URL}/api/Lab/get-all-Lab`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 }
 
 export async function updateLabById(token: string, labId: number, body: UpdateLabRQ): Promise<any> {
@@ -86,22 +94,24 @@ export const useGetAllCategoriesLab = (
 }
 
 export const useGetAllLabs = (
+  token: string,
   config?: Partial<UseQueryOptions<LabsResponse>>
 ) => {
   return useQuery({
     queryKey: ['labs'],
-    queryFn: () => getAllLabs(),
+    queryFn: () => getAllLabs(token),
     ...config,
   })
 }
 
 export const useGetLabById = (
   id: number,
+  token: string,
   config?: Partial<UseQueryOptions<LabDetailResponse>>
 ) => {
   return useQuery({
     queryKey: ['lab', id],
-    queryFn: () => getLabById(id),
+    queryFn: () => getLabById(id, token),
     ...config,
   })
 } 

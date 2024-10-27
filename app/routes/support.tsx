@@ -6,8 +6,7 @@ import { da } from 'date-fns/locale';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { InferType, object, string } from 'yup';
-import { useGetProfile } from '~/data';
-import { createSupportRequest } from '~/data/supportrequest';
+import { createSupportRequest, useGetProfile } from '~/data';
 import { authenticator } from '~/services/auth.server';
 
 const schema = object({

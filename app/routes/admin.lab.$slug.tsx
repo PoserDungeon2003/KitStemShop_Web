@@ -1,4 +1,4 @@
-import { json, LoaderFunctionArgs } from "@remix-run/node"
+import { json, LoaderFunctionArgs, redirect } from "@remix-run/node"
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button, Col, Form, Input, Layout, Modal, notification, Row, Select, Typography } from "antd";
@@ -6,6 +6,7 @@ import _ from "lodash";
 import { useState } from "react";
 import { IoTrashOutline } from "react-icons/io5";
 import { deleteLabById, getLabById, Lab, NotificationType, updateLabById, UpdateLabRQ, useGetAllCategoriesLab, useGetProfile } from "~/data";
+import { authenticator } from "~/services/auth.server";
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -22,10 +23,12 @@ type LoaderData = {
   slug: string;
 }
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   let slug = params.slug;
+  let user = await authenticator.isAuthenticated(request);
+  if (!user) return redirect("/login");
   try {
-    let lab = await getLabById(Number(slug));
+    let lab = await getLabById(Number(slug), user?.token || '');
     if (lab.data) {
       return json({ lab: lab.data, slug }, { status: 200 });
     }
