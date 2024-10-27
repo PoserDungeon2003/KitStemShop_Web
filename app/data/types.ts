@@ -121,10 +121,10 @@ export type ItemsResponse = {
 export type SupportRequest = {
   supportRequestId: number;
   userId?: number;
-  LabId?: number;
+  labId?: number;
   supportCount?: number;
   MaxSupportCount?: number;
-  lastSupportDate?: Date;
+  lastSupportDate?: string;
   requestTitle?: string;
   requestDescription?: string;
   status: string;

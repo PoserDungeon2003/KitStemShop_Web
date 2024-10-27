@@ -100,6 +100,7 @@ export const useGetAllLabs = (
   return useQuery({
     queryKey: ['labs'],
     queryFn: () => getAllLabs(token),
+    enabled: !!token,
     ...config,
   })
 }
@@ -112,6 +113,7 @@ export const useGetLabById = (
   return useQuery({
     queryKey: ['lab', id],
     queryFn: () => getLabById(id, token),
+    enabled: !!token,
     ...config,
   })
 } 

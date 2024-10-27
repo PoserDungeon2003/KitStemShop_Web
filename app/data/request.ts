@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 
-export const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5253'
+export const BASE_URL = 'http://localhost:5000'
 export const GHN_API_TOKEN = import.meta.env.VITE_GHN_API_TOKEN || ''
 export const GHN_API_URL = import.meta.env.VITE_GHN_API_URL || ''
 

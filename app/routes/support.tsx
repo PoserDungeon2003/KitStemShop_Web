@@ -1,17 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { json, LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { useQueryClient } from '@tanstack/react-query';
-import { message } from 'antd';
-import { da } from 'date-fns/locale';
-import { useState } from 'react';
+import { message, Tooltip } from 'antd';
+import _ from 'lodash';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { InferType, object, string } from 'yup';
-import { createSupportRequest, useGetProfile } from '~/data';
-import { authenticator } from '~/services/auth.server';
+import { InferType, number, object, string } from 'yup';
+import { createSupportRequest, useGetAllLabs, useGetOrdersByUserId, useGetProfile } from '~/data';
 
 const schema = object({
   requestTitle: string().required(),
-  category: string(),
+  labId: number().required(),
   requestDescription: string().required(),
 })
 
@@ -20,11 +18,23 @@ export type SupportRequestForm = InferType<typeof schema>;
 const resolver = yupResolver(schema);
 
 export default function SupportRequest() {
-  const { register, handleSubmit } = useForm<SupportRequestForm>({
+  const { register, handleSubmit, formState: { errors } } = useForm<SupportRequestForm>({
     resolver,
   })
   const queryClient = useQueryClient();
   const profile = useGetProfile();
+  const labs = useGetAllLabs(profile.data?.user?.token || "");
+  const orders = useGetOrdersByUserId(profile.data?.user?.token || "");
+
+  const mapLab = useMemo(() => {
+    return _.mapKeys(labs.data?.data, it => it.labId);
+  }, [labs.data?.data]);
+
+  const filterActiveLab = useMemo(() => {
+    return _(orders.data?.data)
+      .filter(it => it.statusLabActive.toLowerCase() == 'true')
+      .value();
+  }, [orders.data?.data]);
 
   const onSubmit = async (data: SupportRequestForm) => {
 
@@ -32,6 +42,7 @@ export default function SupportRequest() {
       const response = await createSupportRequest(profile.data?.user?.token || "", {
         requestDescription: data.requestDescription,
         requestTitle: data.requestTitle,
+        labId: data.labId,
       });
 
       if (response.status === -4) {
@@ -64,20 +75,25 @@ export default function SupportRequest() {
               type="text"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             />
+            {errors.requestTitle && <p className="text-red-500 text-sm mt-1">{errors.requestTitle.message}</p>}
           </div>
           <div className="mb-4">
             <label className="block text-gray-600 text-sm font-bold mb-2" htmlFor="category">
-              Category
+              Lab
             </label>
             <select
-              {...register('category')}
+              {...register('labId')}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
             >
-              <option value="">Select Category</option>
-              <option value="1">Technical Issue</option>
-              <option value="2">Billing</option>
-              <option value="3">Other</option>
+              <option value="">Select lab</option>
+              {_.isEmpty(filterActiveLab) && <option value="" disabled>No active lab</option>}
+              {_.map(filterActiveLab, (item, index) => {
+                return (
+                  <option key={index} value={item.labId}>{mapLab[item.labId]?.labName}</option>
+                )
+              })}
             </select>
+            {errors.labId && <p className="text-red-500 text-sm mt-1">{errors.labId.message}</p>}
           </div>
           <div className="mb-4">
             <label className="block text-gray-600 text-sm font-bold mb-2" htmlFor="description">
@@ -89,6 +105,7 @@ export default function SupportRequest() {
               rows={4}
               {...register('requestDescription')}
             ></textarea>
+            {errors.requestDescription && <p className="text-red-500 text-sm mt-1">{errors.requestDescription.message}</p>}
           </div>
           <button
             type="submit"

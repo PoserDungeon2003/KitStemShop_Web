@@ -29,7 +29,7 @@ export async function getSupportRequestById(token: string, id: number): Promise<
 	});
 }
 
-export async function updateSupportRequestById(token: string, data: UpdateSupportRequestRQ): Promise<any> {
+export async function updateSupportRequestById(token: string, data: UpdateSupportRequestRQ): Promise<{ status: number, message: string, data: any}> {
 	return await request.patch(`${BASE_URL}/api/SupportRequest`, data, {
 		headers: {
 			Authorization: `Bearer ${token}`,
