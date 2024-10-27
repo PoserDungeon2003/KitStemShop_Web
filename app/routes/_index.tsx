@@ -1,7 +1,8 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import { Link, useLocation } from "@remix-run/react";
+import { message } from "antd";
 import _ from "lodash";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { ProductCard } from "~/components";
 import { useGetAllCategoriesCombo, useGetAllCombos, useGetAllKits } from "~/data";
 
@@ -52,7 +53,18 @@ export default function Index() {
   const kits = useGetAllKits();
   const combos = useGetAllCombos();
   const categoryCombos = useGetAllCategoriesCombo();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search)
+  const messageParams = searchParams.get('message')
+  const type = searchParams.get('type')
 
+  useEffect(() => {
+    if (messageParams) {
+      if (type == 'error') {
+        message.error(messageParams)
+      }
+    }
+  }, [messageParams])
   const filterKits = useMemo(() => {
     return _(kits.data?.data)
       .filter(it => it.status === 'Active')

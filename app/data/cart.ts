@@ -40,6 +40,7 @@ export const useGetCart = (
     queryKey: ['cart'],
     queryFn: () => getCart(token),
     enabled: !!token,
+    retry: 1,
     ...config,
   })
 }
