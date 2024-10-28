@@ -104,7 +104,7 @@ export const AdminHeader = ({
         <Col span={24} md={6}>
           <Breadcrumb>
             <Breadcrumb.Item>
-              <NavLink to="/">Pages</NavLink>
+              <NavLink to="/admin">Pages</NavLink>
             </Breadcrumb.Item>
             <Breadcrumb.Item className="uppercase">
               {name.replace("/", "")}

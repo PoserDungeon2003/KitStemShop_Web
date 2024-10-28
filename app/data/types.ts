@@ -431,6 +431,7 @@ export type BlogDetailResponse = {
 };
 
 export type UpdateBlogRQ = {
+  title: string;
   content: string;
   categoryId: number;
 }
