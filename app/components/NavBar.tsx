@@ -49,12 +49,12 @@ const navbar = [
   },
   {
     name: 'About us',
-    to: '#'
+    to: '/about'
   },
-  {
-    name: 'Contact us',
-    to: '#'
-  },
+  // {
+  //   name: 'Contact us',
+  //   to: '#'
+  // },
   {
     name: 'Support',
     to: '/support'
