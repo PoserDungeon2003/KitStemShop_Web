@@ -20,6 +20,7 @@ export default function Shop() {
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get("category");
   const categoryComboId = searchParams.get("categoryComboId");
+  const search = searchParams.get("search");
   const [categoryState, setCategoryState] = useState<string>(category || "combo");
   const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
   const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
@@ -75,6 +76,12 @@ export default function Shop() {
         .value();
     }
 
+    if (search && search.length > 0) {
+      filteredData = _(filteredData)
+        .filter(combo => combo.labKitName.toLowerCase().trim().includes(search.toLowerCase()))
+        .value();
+    }
+
     switch (sortOption) {
       case "price-low-to-high":
         filteredData = _(filteredData).orderBy("price", "asc").value();
@@ -90,7 +97,7 @@ export default function Shop() {
     }
 
     return filteredData;
-  }, [combos.data?.data, sortOption, categoryComboId, minPrice, maxPrice]);
+  }, [combos.data?.data, sortOption, categoryComboId, minPrice, maxPrice, search]);
 
   const comboData = useMemo(() => {
     const startIndex = (page - 1) * pageSize;
@@ -122,6 +129,12 @@ export default function Shop() {
         .value();
     }
 
+    if (search && search.length > 0) {
+      filteredData = _(filteredData)
+        .filter(item => item.istemName.toLowerCase().trim().includes(search.toLowerCase()))
+        .value();
+    }
+
     switch (sortOption) {
       case "price-low-to-high":
         filteredData = _(filteredData).orderBy("price", "asc").value();
@@ -137,7 +150,7 @@ export default function Shop() {
     }
 
     return filteredData;
-  }, [items.data?.data, sortOption, categoryState, maxPrice, minPrice]);
+  }, [items.data?.data, sortOption, categoryState, maxPrice, minPrice, search]);
 
   const itemsData = useMemo(() => {
     const startIndex = (page - 1) * pageSize;

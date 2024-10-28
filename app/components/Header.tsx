@@ -1,4 +1,4 @@
-import { Link, useMatches } from "@remix-run/react";
+import { Link, useMatches, useNavigate } from "@remix-run/react";
 import _ from 'lodash';
 import { FaBagShopping, FaHeart, FaMagnifyingGlass, FaUser } from "react-icons/fa6";
 import { useGetProfile } from "~/data";
@@ -9,6 +9,7 @@ export const Header = () => {
   const last = (_.last(matches) as any)?.handle;
   const profile = useGetProfile();
   const cart = useGetCart(profile.data?.user?.token || "");
+  const navigate = useNavigate();
 
   const navbar = [
     // {
@@ -30,6 +31,12 @@ export const Header = () => {
     },
   ]
 
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const search = new FormData(e.currentTarget).get("search") as string;
+    navigate(`/shop?search=${search}`);
+  }
+
   if (last?.hideHeader) return;
   return (
     <header className="py-4 shadow-sm bg-white">
@@ -38,7 +45,7 @@ export const Header = () => {
           <img src="/images/logo.svg" alt="Logo" className="w-32" />
         </Link>
 
-        <div className="w-full max-w-xl relative flex">
+        <form onSubmit={handleSearch} className="w-full max-w-xl relative flex">
           <span className="absolute left-4 top-4 text-lg text-gray-400">
             <FaMagnifyingGlass />
           </span>
@@ -46,8 +53,9 @@ export const Header = () => {
             className="w-full border border-primary border-r-0 pl-12 py-3 pr-3 rounded-l-md focus:outline-none"
             placeholder="Search" />
           <button
+            type="submit"
             className="bg-primary border border-primary text-white px-8 rounded-r-md hover:bg-transparent hover:text-primary transition">Search</button>
-        </div>
+        </form>
 
         <div className="flex items-center space-x-4">
           {_.map(navbar, (item, index) => {
