@@ -39,7 +39,7 @@ const profileNav = [
 
 export default function Account() {
   const profile = useGetProfile();
-  const username = profile.data?.detail?.userName
+  const username = profile.data?.detail?.fullName || profile.data?.detail?.userName
   const location = useLocation();
   const navigate = useNavigate();
 

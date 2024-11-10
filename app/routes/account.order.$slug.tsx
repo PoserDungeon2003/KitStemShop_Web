@@ -160,7 +160,7 @@ export default function OrderDetails() {
       title: 'Confirm',
       key: 'actions',
       render: (record: OrderDetail) => {
-        if (record.status.toLowerCase() === 'done') return null;
+        if (record.status.toLowerCase() === 'done' || orderDetails.data?.data.paymentStatus.toLowerCase() === 'fail') return null;
         return (
           <Button onClick={() => handleConfirmOrder(record.orderDetailsId, record.compoId, record.iStemId)}>
             Order Received
