@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, json } from "@remix-run/node";
 import { Form, Link, useLocation, useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { FormEvent, useEffect } from "react";
@@ -26,13 +26,12 @@ export async function action({ request }: ActionFunctionArgs) {
       throwOnError: true,
     })
   } catch (error: any) {
-    console.log('error', error.cause?.cause?.name);
-    let cause = (error.cause?.cause) as any
+    let cause = (error.cause?.cause) as any;
     if (error instanceof Response) return error;
     if (error instanceof AuthorizationError) {
-      return error;
+      return json({ errors: { passwordHash: { message: cause?.message } } });
     }
-    return error;
+    return json({ errors: { passwordHash: { message: cause?.message } } });
   }
 }
 

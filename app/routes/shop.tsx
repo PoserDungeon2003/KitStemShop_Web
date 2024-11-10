@@ -104,7 +104,7 @@ export default function Shop() {
     const endIndex = startIndex + pageSize;
 
     return _(sortedComboData)
-      .take(pageSize)
+      .slice(startIndex, endIndex)
       .value();
   }, [sortedComboData, page, pageSize, categoryState]);
 
@@ -157,7 +157,7 @@ export default function Shop() {
     const endIndex = startIndex + pageSize;
 
     return _(sortedItemData)
-      .take(pageSize)
+      .slice(startIndex, endIndex)
       .value();
   }, [sortedComboData, page, pageSize]);
 

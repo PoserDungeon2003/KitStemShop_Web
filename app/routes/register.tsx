@@ -23,7 +23,7 @@ const schema = object({
     .required(),
   email: string().email('Invalid email').required('Email is required').trim(),
   address: string().required('Address is required').trim(),
-  phone: number().required('Phone number is required').typeError('Phone number is required').positive('Phone number is required').integer('Phone number is required'),
+  phone: string().matches(/^[0-9]{10}$/, "Số điện thoại độ dài tối đa 10").required("Vui lòng nhập số điện thoại của bạn").trim(),
   province: string().required('Province is required').trim(),
   district: string().required('District is required').trim(),
   ward: string().required('Ward is required').trim(),
@@ -138,53 +138,62 @@ export default function Register() {
                     <option key={index} value={province.ProvinceID}>{province.ProvinceName}</option>
                   ))}
                 </select> */}
-                <Select
-                  onChange={(value) => {
-                    setValue('province', value)
-                  }}
-                  loading={provinces.isLoading}
-                  className="w-1/3"
-                  placeholder="Province/City"
-                  options={_.map(provinces.data?.data, (province) => {
-                    return {
-                      label: province.ProvinceName,
-                      value: province.ProvinceID,
-                    }
-                  })}
-                >
-                </Select>
-                <Select
-                  onChange={(value) => {
-                    setValue('district', value)
-                  }}
-                  loading={districts.isLoading}
-                  disabled={!watch('province')}
-                  className="w-1/3"
-                  placeholder="Districts"
-                  options={_.map(filterDistrictsByProviceId, (district) => {
-                    return {
-                      label: district.DistrictName,
-                      value: district.DistrictID,
-                    }
-                  })}
-                >
-                </Select>
-                <Select
-                  onChange={(value) => {
-                    setValue('ward', value)
-                  }}
-                  disabled={!watch('district')}
-                  loading={wards.isLoading}
-                  className="w-1/3"
-                  placeholder="Wards"
-                  options={_.map(wards.data?.data, (ward) => {
-                    return {
-                      label: ward.WardName,
-                      value: ward.WardCode,
-                    }
-                  })}
-                >
-                </Select>
+                <div className="flex flex-col w-1/3">
+                  <Select
+                    onChange={(value) => {
+                      setValue('province', value)
+                    }}
+                    loading={provinces.isLoading}
+                    className="w-full"
+                    placeholder="Province/City"
+                    options={_.map(provinces.data?.data, (province) => {
+                      return {
+                        label: province.ProvinceName,
+                        value: province.ProvinceID,
+                      }
+                    })}
+                  >
+                  </Select>
+                  {errors.province && <p className="text-red-500 text-sm mt-1">{errors.province.message}</p>}
+                </div>
+                <div className="flex flex-col w-1/3">
+                  <Select
+                    onChange={(value) => {
+                      setValue('district', value)
+                    }}
+                    loading={districts.isLoading}
+                    disabled={!watch('province')}
+                    className="w-full"
+                    placeholder="Districts"
+                    options={_.map(filterDistrictsByProviceId, (district) => {
+                      return {
+                        label: district.DistrictName,
+                        value: district.DistrictID,
+                      }
+                    })}
+                  >
+                  </Select>
+                  {errors.district && <p className="text-red-500 text-sm mt-1">{errors.district.message}</p>}
+                </div>
+                <div className="flex flex-col w-1/3">
+                  <Select
+                    onChange={(value) => {
+                      setValue('ward', value)
+                    }}
+                    disabled={!watch('district')}
+                    loading={wards.isLoading}
+                    className="w-full"
+                    placeholder="Wards"
+                    options={_.map(wards.data?.data, (ward) => {
+                      return {
+                        label: ward.WardName,
+                        value: ward.WardCode,
+                      }
+                    })}
+                  >
+                  </Select>
+                  {errors.ward && <p className="text-red-500 text-sm mt-1">{errors.ward.message}</p>}
+                </div>
               </div>
             </div>
             <div>
