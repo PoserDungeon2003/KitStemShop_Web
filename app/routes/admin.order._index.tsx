@@ -83,6 +83,17 @@ export default function AdminOrder() {
           </Tag>
         )
       },
+      filters: [
+        {
+          text: 'Success',
+          value: 'success',
+        },
+        {
+          text: 'Fail',
+          value: 'Fail',
+        },
+      ],
+      onFilter: (value, record) => record.statusPayment.toLowerCase().includes(value.toString().toLowerCase()),
     },
     {
       title: 'Order Date',
