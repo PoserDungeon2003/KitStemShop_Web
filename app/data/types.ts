@@ -603,3 +603,9 @@ export type UpdateSupportRequestRQ = {
   requestDescription: string;
   managerId: number;
 };
+
+export type UpdateUserRequest = {
+  address: string;
+  phone: string;
+  fullName: number;
+}

@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL, GHN_API_TOKEN, GHN_API_URL } from "./request";
-import { DistrictResponse, LoginRS, ProvinceResponse, RegisterForm, UserProfile, WardResponse } from "./types";
+import { DistrictResponse, LoginRS, ProvinceResponse, RegisterForm, UpdateUserRequest, UserProfile, WardResponse } from "./types";
 
 export async function login(username: string, password: string): Promise<LoginRS> {
   return request.post(`${BASE_URL}/api/Login`, { username, password }, {
@@ -92,4 +92,23 @@ export const useGetProfile = () => {
     queryKey: ['profile'],
     queryFn: getProfile,
   })
+}
+
+export async function updateProfile(token: string, body: UpdateUserRequest): Promise<any> {
+  const response = await fetch(`${BASE_URL}/api/UpdateUser`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      'accept': '*/*'
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to update profile: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data;
 }
