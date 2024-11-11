@@ -10,7 +10,7 @@ import { InferType, object, string } from "yup";
 import { authenticator } from "~/services/auth.server";
 
 let loginSchema = object({
-  username: string().email("Email is invalid").trim().required("Username is a required field"),
+  username: string().trim().required("Username is a required field"),
   passwordHash: string().trim().required("Password is a required field"),
   loginType: string().trim().required(),
 })
@@ -65,7 +65,7 @@ export default function Login() {
           <input type="text" hidden value={'user-pass'} {...register('loginType')} />
           <div className="space-y-2">
             <div>
-              <label htmlFor="email" className="text-gray-600 mb-2 block">Email address</label>
+              <label htmlFor="email" className="text-gray-600 mb-2 block">Email address / Username</label>
               <input
                 type="email"
                 id="email"

@@ -254,11 +254,11 @@ export const AdminHeader = ({
               {profile.data?.detail?.username}
             </span> : <span>Sign in</span>}
           </Link>
-          <Input
+          {/* <Input
             className="header-search"
             placeholder="Type here..."
             prefix={<FaMagnifyingGlass />}
-          />
+          /> */}
         </Col>
       </Row>
     </>

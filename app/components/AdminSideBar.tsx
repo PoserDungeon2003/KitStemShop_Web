@@ -228,11 +228,26 @@ export const AdminSideBar = ({ color }: AdminSideBarProps) => {
         },
       ],
     },
+    {
+      key: 'order',
+      icon: dashboard,
+      label: 'Order',
+      children: [
+        {
+          key: "view-order",
+          icon: <IoListOutline />,
+          label: "View Order",
+          onClick: () => {
+            navigate('/admin/order');
+          },
+        },
+      ],
+    },
   ]
   const getFilteredMenuItems = (role: Role) => {
     const rolePermissions = {
-      Admin: ['dashboard', 'combo', 'kit', 'lab', 'item', 'blog', 'category', 'support'],
-      Manager: ['dashboard', 'combo', 'kit', 'lab', 'item', 'support', 'blog'],
+      Admin: ['dashboard', 'combo', 'kit', 'lab', 'item', 'blog', 'category', 'support', 'order'],
+      Manager: ['dashboard', 'combo', 'kit', 'lab', 'item', 'support', 'blog', 'order'],
       Staff: ['dashboard', 'support', 'category'],
       Customer: [''],
     };

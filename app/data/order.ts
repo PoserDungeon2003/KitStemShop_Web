@@ -52,6 +52,26 @@ export async function confirmOrderReceived(token: string, orderDetailId: number,
   })
 }
 
+export async function getAllOrders(token: string): Promise<OrdersResponse> {
+  return await request.get(`${BASE_URL}/api/Order/GetAll`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export const useGetAllOrders = (
+  token: string,
+  config?: UseQueryOptions<OrdersResponse>
+) => {
+  return useQuery({
+    queryKey: ["all-order"],
+    queryFn: () => getAllOrders(token),
+    enabled: !!token,
+    ...config,
+  })
+}
+
 export const useGetOrdersByUserId = (
   token: string,
   config?: UseQueryOptions<OrdersResponse>

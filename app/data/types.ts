@@ -133,6 +133,8 @@ export type SupportRequest = {
   user?: any;
   managerId?: number;
   Status?: string;
+  userPhoneNumber?: string;
+  userEmail?: string;
 }
 
 export type SupportRequestResponse = {
