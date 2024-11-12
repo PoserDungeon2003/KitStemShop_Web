@@ -31,7 +31,7 @@ const data = [
     title: "New message from Sophie",
     description: <><FaClock /> 2 days ago</>,
 
-    avatar: "/images/face-2.jpg",
+    avatar: "/images/dashboard/face-2.jpg",
   },
   {
     title: "New album by Travis Scott",
