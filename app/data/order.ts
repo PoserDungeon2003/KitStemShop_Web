@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL } from "./request";
-import { CreateOrderRQ, OrdersResponse, VnPayPaymentRS, VnPayCallbackResponse, CreateOrderResponse, OrderDataResponse } from "./types";
+import { CreateOrderRQ, OrdersResponse, VnPayPaymentRS, VnPayCallbackResponse, CreateOrderResponse, OrderDataResponse, RevenueResponse } from "./types";
 
 export async function getOrdersByUserId(token: string): Promise<OrdersResponse> {
   return await request.get(`${BASE_URL}/api/Order/GetOrdersByUserId`, {
@@ -57,6 +57,27 @@ export async function getAllOrders(token: string): Promise<OrdersResponse> {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+  })
+}
+
+export async function getRevenue(token: string, type: number): Promise<RevenueResponse> {
+  return await request.get(`${BASE_URL}/api/Order/GetRenuve/${type}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export const useGetRevenue = (
+  token: string,
+  type: number,
+  config?: UseQueryOptions<RevenueResponse>
+) => {
+  return useQuery({
+    queryKey: ["revenue", type],
+    queryFn: () => getRevenue(token, type),
+    enabled: !!token,
+    ...config,
   })
 }
 

@@ -2,6 +2,7 @@ import { Button, Card, Col, message, Progress, Radio, RadioChangeEvent, Row, Tim
 import { useState } from "react";
 import { FaAngleRight, FaDoorClosed, FaUpload } from "react-icons/fa6";
 import { EChart, LineChart } from "~/components/chart";
+import { useGetProfile, useGetRevenue } from "~/data";
 
 export const handle = {
   hideFooter: true,
@@ -16,6 +17,8 @@ export default function AdminDashboard() {
   const onChange = (e: RadioChangeEvent) => console.log(`radio checked:${e.target.value}`);
 
   const [reverse, setReverse] = useState(false);
+  const profile = useGetProfile();
+  const dailyRevenue = useGetRevenue(profile.data?.user?.token || '', 1);
 
   const dollor = [
     <svg
@@ -42,7 +45,7 @@ export default function AdminDashboard() {
       ></path>
     </svg>,
   ];
-  const profile = [
+  const profileIcon = [
     <svg
       width="22"
       height="22"
@@ -115,7 +118,7 @@ export default function AdminDashboard() {
       today: "Today’s Users",
       title: "3,200",
       persent: "+20%",
-      icon: profile,
+      icon: profileIcon,
       bnb: "bnb2",
     },
     {

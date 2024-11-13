@@ -611,3 +611,16 @@ export type UpdateUserRequest = {
   phone: string;
   fullName: number;
 }
+
+export type RevenueData = {
+  period: string;
+  totalRevenue: number;
+  successfulOrders: number;
+  averageOrderValue: number;
+};
+
+export type RevenueResponse = {
+  status: number;
+  message: string;
+  data: RevenueData;
+};
