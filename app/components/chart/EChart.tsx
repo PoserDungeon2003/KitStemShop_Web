@@ -1,4 +1,3 @@
-import eChart from "./configs/eChart"
 import { Col, Row, Typography } from "antd";
 import _ from "lodash";
 

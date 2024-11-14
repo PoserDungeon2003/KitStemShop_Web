@@ -1,9 +1,11 @@
 import { Button, Card, Col, message, Progress, Radio, RadioChangeEvent, Row, Timeline, Tooltip, Typography, Upload, UploadProps } from "antd"
-import { useState } from "react";
+import { format, parseISO } from "date-fns";
+import _ from "lodash";
+import { useMemo, useState } from "react";
 import { FaAngleRight, FaDoorClosed, FaUpload } from "react-icons/fa6";
 import { EChart, LineChart } from "~/components/chart";
-import { formatMoney } from "~/components/utils";
-import { useGetProfile, useGetRevenue } from "~/data";
+import { formatMoney, percentageChange } from "~/components/utils";
+import { useGetAllOrders, useGetProfile, useGetRevenue } from "~/data";
 
 export const handle = {
   hideFooter: true,
@@ -17,10 +19,46 @@ const { Title, Text, Paragraph } = Typography;
 export default function AdminDashboard() {
   const onChange = (e: RadioChangeEvent) => console.log(`radio checked:${e.target.value}`);
 
-  const [reverse, setReverse] = useState(false);
+  const [reverse, setReverse] = useState(true);
   const profile = useGetProfile();
   const dailyRevenue = useGetRevenue(profile.data?.user?.token || '', 1);
   const monthlyRevenue = useGetRevenue(profile.data?.user?.token || '', 2);
+  const orders = useGetAllOrders(profile.data?.user?.token || "");
+
+  const orderHistory = useMemo(() => {
+    return _(orders.data?.data)
+      .orderBy(it => it.orderDate, 'desc')
+      .map(item => {
+        return {
+          children: `${format(parseISO(item.orderDate), 'dd MMM h:mm a')} - New order #${item.orderId}`,
+        }
+      })
+      .take(5)
+      .value();
+  }, [orders.data]);
+
+  const { thisMonthTotal, lastMonthTotal, changePercent } = useMemo(() => {
+    const groupedByMonth = _(orders.data?.data)
+      .filter(it => it.statusPayment.toLowerCase() === 'success')
+      .groupBy(item => format(parseISO(item.orderDate), 'yyyy-MM'))
+      .map((items, month) => ({
+        month,
+        totalAmount: _.sumBy(items, 'totalAmount'),
+      }))
+      .orderBy('month', 'desc')
+      .value();
+
+    const thisMonth = _.nth(groupedByMonth, 0)?.totalAmount || 0;
+    const lastMonth = _.nth(groupedByMonth, 1)?.totalAmount || 0;
+
+    const changePercent = percentageChange(thisMonth, lastMonth);
+
+    return {
+      thisMonthTotal: thisMonth,
+      lastMonthTotal: lastMonth,
+      changePercent,
+    };
+  }, [orders.data]);
 
   const dollor = [
     <svg
@@ -529,27 +567,29 @@ export default function AdminDashboard() {
               <div className="timeline-box">
                 <Title level={5}>Orders History</Title>
                 <Paragraph className="lastweek" style={{ marginBottom: 24 }}>
-                  this month <span className="bnb2">20%</span>
+                  this month <span className={`${ changePercent <= 0 ? 'text-red-500' : '' } bnb2`}>{changePercent}%</span>
                 </Paragraph>
 
                 <Timeline
-                  pending="Recording..."
+                  pending={orders.isLoading ? "Recording..." : null}
                   className="timelinelist"
                   reverse={reverse}
+                  items={orderHistory}
                 >
-                  {timelineList.map((t, index) => (
-                    <Timeline.Item color={t.color} key={index}>
-                      <Title level={5}>{t.title}</Title>
-                      <Text>{t.time}</Text>
+                  {/* {_.map(orderHistory, (item, index) => (
+                    <Timeline.Item key={index}>
+                      <Title level={5}>New order #{item.orderId}</Title>
+                      <Text>{format(item.orderDate, 'dd MMM h:mm a')}</Text>
                     </Timeline.Item>
-                  ))}
+                  ))} */}
                 </Timeline>
                 <Button
                   type="primary"
-                  className="width-100"
-                  onClick={() => setReverse(!reverse)}
+                  className="width-100 uppercase"
+                  loading={orders.isFetching}
+                  onClick={() => orders.refetch()}
                 >
-                  {<FaDoorClosed />} REVERSE
+                  {<FaDoorClosed />} Reload
                 </Button>
               </div>
             </Card>

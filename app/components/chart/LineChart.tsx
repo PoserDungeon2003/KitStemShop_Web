@@ -6,14 +6,9 @@ import _ from "lodash";
 import { format, parseISO } from "date-fns";
 import { Chart } from "react-chartjs-2";
 import 'chart.js/auto';
-import { formatMoney } from "../utils";
+import { formatMoney, percentageChange } from "../utils";
 
 const { Title, Paragraph } = Typography;
-
-const percentageChange = (thisMonth: number, lastMonth: number) => {
-  if (lastMonth === 0) return thisMonth > 0 ? 100 : 0;
-  return ((thisMonth - lastMonth) / Math.abs(lastMonth)) * 100;
-};
 
 export const LineChart = () => {
   const profile = useGetProfile();
