@@ -2,6 +2,7 @@ import { Button, Card, Col, message, Progress, Radio, RadioChangeEvent, Row, Tim
 import { useState } from "react";
 import { FaAngleRight, FaDoorClosed, FaUpload } from "react-icons/fa6";
 import { EChart, LineChart } from "~/components/chart";
+import { formatMoney } from "~/components/utils";
 import { useGetProfile, useGetRevenue } from "~/data";
 
 export const handle = {
@@ -19,6 +20,7 @@ export default function AdminDashboard() {
   const [reverse, setReverse] = useState(false);
   const profile = useGetProfile();
   const dailyRevenue = useGetRevenue(profile.data?.user?.token || '', 1);
+  const monthlyRevenue = useGetRevenue(profile.data?.user?.token || '', 2);
 
   const dollor = [
     <svg
@@ -310,7 +312,7 @@ export default function AdminDashboard() {
     <>
       <div className="layout-content">
         <Row className="rowgap-vbox" gutter={[24, 0]}>
-          {count.map((c, index) => (
+          {/* {count.map((c, index) => (
             <Col
               key={index}
               xs={24}
@@ -336,15 +338,115 @@ export default function AdminDashboard() {
                 </div>
               </Card>
             </Col>
-          ))}
+          ))} */}
+          <Col
+            xs={24}
+            sm={24}
+            md={12}
+            lg={6}
+            xl={6}
+            className="mb-24"
+          >
+            <Card bordered={false} className="criclebox ">
+              <div className="number">
+                <Row align="middle" gutter={[24, 0]}>
+                  <Col xs={18}>
+                    <span>{"Today's Orders"}</span>
+                    <Title level={3}>
+                      {dailyRevenue.data?.data.successfulOrders}
+                      {/* <small className="bnb2">{"10%"}</small> */}
+                    </Title>
+                  </Col>
+                  <Col xs={6}>
+                    {/* <div className="icon-box">{c.icon}</div> */}
+                  </Col>
+                </Row>
+              </div>
+            </Card>
+          </Col>
+          <Col
+            xs={24}
+            sm={24}
+            md={12}
+            lg={6}
+            xl={6}
+            className="mb-24"
+          >
+            <Card bordered={false} className="criclebox ">
+              <div className="number">
+                <Row align="middle" gutter={[24, 0]}>
+                  <Col xs={18}>
+                    <span>{"Today's Revenue"}</span>
+                    <Title level={3}>
+                      {formatMoney(dailyRevenue.data?.data.totalRevenue || 0)}
+                      {/* <small className="bnb2">{"10%"}</small> */}
+                    </Title>
+                  </Col>
+                  <Col xs={6}>
+                    {/* <div className="icon-box">{c.icon}</div> */}
+                  </Col>
+                </Row>
+              </div>
+            </Card>
+          </Col>
+          <Col
+            xs={24}
+            sm={24}
+            md={12}
+            lg={6}
+            xl={6}
+            className="mb-24"
+          >
+            <Card bordered={false} className="criclebox ">
+              <div className="number">
+                <Row align="middle" gutter={[24, 0]}>
+                  <Col xs={18}>
+                    <span>{"This Month's Orders"}</span>
+                    <Title level={3}>
+                      {monthlyRevenue.data?.data.successfulOrders}
+                      {/* <small className="bnb2">{"10%"}</small> */}
+                    </Title>
+                  </Col>
+                  <Col xs={6}>
+                    {/* <div className="icon-box">{c.icon}</div> */}
+                  </Col>
+                </Row>
+              </div>
+            </Card>
+          </Col>
+          <Col
+            xs={24}
+            sm={24}
+            md={12}
+            lg={6}
+            xl={6}
+            className="mb-24"
+          >
+            <Card bordered={false} className="criclebox ">
+              <div className="number">
+                <Row align="middle" gutter={[24, 0]}>
+                  <Col xs={18}>
+                    <span>{"Average Order Value"}</span>
+                    <Title level={3}>
+                      {formatMoney(monthlyRevenue.data?.data.averageOrderValue || 0)}
+                      {/* <small className="bnb2">{"10%"}</small> */}
+                    </Title>
+                  </Col>
+                  <Col xs={6}>
+                    {/* <div className="icon-box">{c.icon}</div> */}
+                  </Col>
+                </Row>
+              </div>
+            </Card>
+          </Col>
         </Row>
 
         <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={12} lg={12} xl={10} className="mb-24">
+          {/* <Col xs={24} sm={24} md={12} lg={12} xl={10} className="mb-24">
             <Card bordered={false} className="criclebox h-full">
               <EChart />
             </Card>
-          </Col>
+          </Col> */}
           <Col xs={24} sm={24} md={12} lg={12} xl={14} className="mb-24">
             <Card bordered={false} className="criclebox h-full">
               <LineChart />
@@ -353,7 +455,7 @@ export default function AdminDashboard() {
         </Row>
 
         <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={12} lg={12} xl={16} className="mb-24">
+          {/* <Col xs={24} sm={24} md={12} lg={12} xl={16} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
               <div className="project-ant">
                 <div>
@@ -421,7 +523,7 @@ export default function AdminDashboard() {
                 </Upload>
               </div>
             </Card>
-          </Col>
+          </Col> */}
           <Col xs={24} sm={24} md={12} lg={12} xl={8} className="mb-24">
             <Card bordered={false} className="criclebox h-full">
               <div className="timeline-box">
@@ -454,7 +556,7 @@ export default function AdminDashboard() {
           </Col>
         </Row>
 
-        <Row gutter={[24, 0]}>
+        {/* <Row gutter={[24, 0]}>
           <Col xs={24} md={12} sm={24} lg={12} xl={14} className="mb-24">
             <Card bordered={false} className="criclebox h-full">
               <Row>
@@ -518,7 +620,7 @@ export default function AdminDashboard() {
               </div>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
       </div>
     </>
   )
