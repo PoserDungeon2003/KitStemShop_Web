@@ -1,7 +1,26 @@
-import { useLocation } from "@remix-run/react";
+import { json, useLocation } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { FaCircleCheck, FaCircleXmark } from "react-icons/fa6";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, LoaderFunctionArgs, redirect, useNavigate } from "react-router-dom";
+import { clearCart } from "~/data";
+import { authenticator } from "~/services/auth.server";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  let user = await authenticator.isAuthenticated(request);
+  console.log('user', user);
+  
+  if (!user) return redirect("/");
+
+  try {
+    const response = await clearCart(user?.token || "");
+    if (response) {
+      return json({}, { status: 200 });
+    }
+    return json({}, { status: 400 });
+  } catch (error) {
+    return redirect(`/checkout?message=${encodeURIComponent('Giao dịch thất bại')}&type=error`);
+  }
+}
 
 export default function CheckoutSuccess() {
   const location = useLocation();

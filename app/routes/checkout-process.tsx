@@ -16,6 +16,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }
     return redirect(`/checkout-success?message=${encodeURIComponent(response.data.responseCodeMessage)}&code=${response.data.vnPayResponse.responseCode}`);
   } catch (error) {
-    return redirect('/checkout');
+    console.log('error', error);
+    
+    return redirect(`/checkout?message=${encodeURIComponent('Giao dịch thất bại')}&type=error`);
   }
 }
