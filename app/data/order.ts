@@ -68,6 +68,14 @@ export async function getRevenue(token: string, type: number): Promise<RevenueRe
   })
 }
 
+export async function clearCart(token: string): Promise<any> {
+  return request.post(`${BASE_URL}/api/Order/ClearCart`, {}, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
 export const useGetRevenue = (
   token: string,
   type: number,

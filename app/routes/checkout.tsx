@@ -1,7 +1,8 @@
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { useLocation } from "@remix-run/react";
 import { message } from "antd";
 import _ from "lodash";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { formatMoney } from "~/components/utils";
 import { createOrder, createVnpayPayment, useGetAllCombos, useGetAllItems, useGetCart, useGetProfile } from "~/data";
 import { authenticator } from "~/services/auth.server";
@@ -25,6 +26,18 @@ export default function Checkout() {
   const cart = useGetCart(profile.data?.user?.token || "");
   const combo = useGetAllCombos();
   const items = useGetAllItems();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const messageParams = queryParams.get("message");
+  const type = queryParams.get("type");
+
+  useEffect(() => {
+    if (messageParams) {
+      if (type == 'error') {
+        message.error(messageParams)
+      }
+    }
+  }, [messageParams])
 
   const mapCombo = useMemo(() => {
     return _.mapKeys(combo.data?.data, it => it.compoId)
