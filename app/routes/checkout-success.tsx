@@ -7,9 +7,6 @@ import { Link, LoaderFunctionArgs, redirect, useNavigate } from "react-router-do
 import { clearCart, useGetProfile } from "~/data";
 import { authenticator } from "~/services/auth.server";
 
-export async function loader({ request }: LoaderFunctionArgs) {
-}
-
 export default function CheckoutSuccess() {
   const profile = useGetProfile();
   const location = useLocation();
@@ -19,20 +16,20 @@ export default function CheckoutSuccess() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  // const clearCartItems = async () => {
-  //   try {
-  //     const response = await clearCart(profile.data?.user?.token || "");
-  //     if (response) {
-  //       message.success("Thanh toán thành công");
-  //     }
-  //   } catch (error) {
-  //     return navigate(`/checkout?message=${encodeURIComponent('Giao dịch thất bại')}&type=error`);
-  //   }
-  // }
+  const clearCartItems = async () => {
+    try {
+      const response = await clearCart(profile.data?.user?.token || "");
+      if (response) {
+        message.success("Thanh toán thành công");
+      }
+    } catch (error) {
+      return navigate(`/checkout?message=${encodeURIComponent('Giao dịch thất bại')}&type=error`);
+    }
+  }
 
-  // useEffect(() => {
-  //   clearCartItems();
-  // }, [])
+  useEffect(() => {
+    clearCartItems();
+  }, [])
 
   return (
     <main className="mt-20">
