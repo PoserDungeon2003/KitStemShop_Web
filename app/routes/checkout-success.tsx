@@ -16,20 +16,20 @@ export default function CheckoutSuccess() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const clearCartItems = async () => {
-    try {
-      const response = await clearCart(profile.data?.user?.token || "");
-      if (response) {
-        message.success("Thanh toán thành công");
-      }
-    } catch (error) {
-      return navigate(`/checkout?message=${encodeURIComponent('Giao dịch thất bại')}&type=error`);
-    }
-  }
+  // const clearCartItems = async () => {
+  //   try {
+  //     const response = await clearCart(profile.data?.user?.token || "");
+  //     if (response) {
+  //       message.success("Thanh toán thành công");
+  //     }
+  //   } catch (error) {
+  //     return navigate(`/checkout?message=${encodeURIComponent('Giao dịch thất bại')}&type=error`);
+  //   }
+  // }
 
-  useEffect(() => {
-    clearCartItems();
-  }, [])
+  // useEffect(() => {
+  //   clearCartItems();
+  // }, [])
 
   return (
     <main className="mt-20">
