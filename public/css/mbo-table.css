@@ -1,0 +1,422 @@
+/* MBO Management Table - Beautiful UI without changing any logic/values */
+
+:root {
+  --mbo-bg: #0b1220;
+  --mbo-card: #0f172a;
+  --mbo-card-2: #111a2e;
+  --mbo-border: rgba(148, 163, 184, 0.12);
+  --mbo-text: #e2e8f0;
+  --mbo-text-dim: #94a3b8;
+  --mbo-primary: #7c3aed;
+  --mbo-primary-2: #06b6d4;
+  --mbo-success: #10b981;
+  --mbo-warning: #f59e0b;
+  --mbo-danger: #ef4444;
+  --mbo-muted: #64748b;
+  --mbo-surface: rgba(255, 255, 255, 0.04);
+  --mbo-hover: rgba(124, 58, 237, 0.08);
+  --mbo-shadow: 0 8px 24px rgba(2, 6, 23, 0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+/* Container and Card */
+.mbo-container {
+  padding: 0 1rem;
+  margin-top: 8px;
+}
+
+.mbo-container .card {
+  background: linear-gradient(180deg, var(--mbo-card), var(--mbo-card-2));
+  border: 1px solid var(--mbo-border);
+  border-radius: 16px;
+  box-shadow: var(--mbo-shadow);
+  color: var(--mbo-text);
+  overflow: hidden;
+}
+
+.mbo-container .card-header {
+  background: radial-gradient(1200px 200px at 10% -20%, rgba(124,58,237,0.35), transparent),
+              linear-gradient(90deg, rgba(124,58,237,0.25), rgba(6,182,212,0.25));
+  border-bottom: 1px solid var(--mbo-border);
+  padding: 1.25rem 1.5rem;
+}
+
+.mbo-container .card-header h2 {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.mbo-container .card-header i {
+  color: var(--mbo-primary-2);
+}
+
+.mbo-container .card-body {
+  padding: 1.25rem 1.25rem 1rem;
+}
+
+/* Search Form */
+.mbo-container .search-form .form-label {
+  color: var(--mbo-text-dim);
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.mbo-container .search-form .input-group {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.mbo-container .search-form .input-group .input-group-text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.75rem;
+  background: var(--mbo-surface);
+  border: 1px solid var(--mbo-border);
+  border-radius: 12px;
+  color: var(--mbo-text-dim);
+}
+
+.mbo-container .search-form .form-control {
+  flex: 1 1 auto;
+  height: 44px;
+  padding: 0 0.875rem;
+  background: var(--mbo-surface);
+  border: 1px solid var(--mbo-border);
+  border-radius: 12px;
+  color: var(--mbo-text);
+  outline: none;
+  transition: border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.mbo-container .search-form .form-control::placeholder {
+  color: var(--mbo-text-dim);
+}
+
+.mbo-container .search-form .form-control:focus {
+  border-color: rgba(124,58,237,0.5);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.mbo-container .btn.btn-search {
+  height: 44px;
+  padding: 0 1rem;
+  border: 0;
+  border-radius: 12px;
+  color: white;
+  background: linear-gradient(135deg, var(--mbo-primary), var(--mbo-primary-2));
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.mbo-container .btn.btn-search:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+.mbo-container .btn.btn-search:active {
+  transform: translateY(0);
+}
+
+/* Table */
+.mbo-container .table-responsive {
+  width: 100%;
+  overflow: auto;
+  border: 1px solid var(--mbo-border);
+  border-radius: 14px;
+  background: rgba(2, 6, 23, 0.25);
+  /* Constrain height to viewport so it fits on one screen */
+  max-height: calc(100vh - 320px);
+}
+
+.mbo-container .mbo-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.95rem;
+}
+
+.mbo-container .mbo-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: linear-gradient(180deg, rgba(15,23,42,0.95), rgba(17,26,46,0.95));
+  color: var(--mbo-text-dim);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  padding: 0.875rem 0.75rem;
+  border-bottom: 1px solid var(--mbo-border);
+  backdrop-filter: blur(6px);
+}
+
+/* --- Admin layout refinements: sidebar, header, content spacing --- */
+.layout-dashboard .ant-layout-content {
+  /* Reduce excessive gap from sidebar and screen edges */
+  margin: 0 12px 0 12px !important;
+}
+
+.layout-dashboard .ant-layout-header {
+  margin: 12px 12px 8px 12px !important;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.86));
+  box-shadow: 0 6px 18px rgba(2,6,23,0.08);
+}
+
+.layout-dashboard .ant-layout-footer {
+  margin: 8px 12px 12px 12px !important;
+}
+
+.layout-dashboard .ant-layout-sider.sider-primary {
+  border-right: 1px solid rgba(148, 163, 184, 0.18);
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+}
+
+.layout-dashboard .ant-layout-sider.sider-primary .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 14px 10px 14px;
+}
+
+.layout-dashboard .ant-layout-sider.sider-primary .brand img {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(2,6,23,0.12);
+}
+
+.layout-dashboard .ant-layout-sider.sider-primary .brand span {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.layout-dashboard .ant-layout-sider.sider-primary .ant-menu {
+  background: transparent;
+  padding: 8px 10px 12px 10px;
+}
+
+.layout-dashboard .ant-layout-sider.sider-primary .ant-menu-item,
+.layout-dashboard .ant-layout-sider.sider-primary .ant-menu-submenu-title {
+  margin: 4px 6px;
+  height: 42px;
+  line-height: 42px;
+  border-radius: 10px;
+}
+
+.layout-dashboard .ant-layout-sider.sider-primary .ant-menu-item:hover,
+.layout-dashboard .ant-layout-sider.sider-primary .ant-menu-submenu-title:hover {
+  background: linear-gradient(90deg, rgba(124,58,237,0.10), rgba(6,182,212,0.10));
+}
+
+.layout-dashboard .ant-layout-sider.sider-primary .ant-menu-item-selected {
+  background: linear-gradient(135deg, #7c3aed, #06b6d4) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 20px rgba(124,58,237,0.25);
+}
+
+.layout-dashboard .ant-layout-sider.sider-primary .ant-menu-item a,
+.layout-dashboard .ant-layout-sider.sider-primary .ant-menu-submenu-title a {
+  color: #334155;
+}
+
+.layout-dashboard .ant-layout-sider.sider-primary .ant-menu-item-selected a {
+  color: #fff !important;
+}
+
+.layout-dashboard .ant-layout-sider.sider-primary .aside-footer {
+  margin-top: auto;
+  padding: 10px 14px 16px 14px;
+}
+
+.mbo-container .mbo-table tbody td {
+  padding: 0.875rem 0.75rem;
+  border-bottom: 1px solid var(--mbo-border);
+  color: var(--mbo-text);
+  vertical-align: middle;
+}
+
+.mbo-container .mbo-table tbody tr:hover {
+  background: linear-gradient(90deg, rgba(124,58,237,0.06), rgba(6,182,212,0.06));
+}
+
+.mbo-container .mbo-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.mbo-container .font-monospace {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.875rem;
+}
+
+/* Play button */
+.mbo-container .play-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(124,58,237,0.9), rgba(6,182,212,0.85));
+  color: white;
+  box-shadow: 0 8px 18px rgba(124,58,237,0.35);
+  transition: transform 0.12s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.mbo-container .play-btn:hover {
+  transform: scale(1.05);
+  filter: brightness(1.05);
+}
+
+/* Status badges */
+.mbo-container .status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: 1px solid var(--mbo-border);
+}
+
+.mbo-container .status-badge.status-answered {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+.mbo-container .status-badge.status-busy {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.mbo-container .status-badge.status-noanswer {
+  color: #94a3b8;
+  background: rgba(148, 163, 184, 0.08);
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+.mbo-container .status-badge.status-failed {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.mbo-container .status-badge.status-unknown {
+  color: #a78bfa;
+  background: rgba(167, 139, 250, 0.08);
+  border-color: rgba(167, 139, 250, 0.35);
+}
+
+/* Skeleton rows */
+.mbo-container .skeleton-row td {
+  padding: 0.875rem 0.75rem;
+}
+
+.mbo-container .skeleton-row td > div {
+  height: 14px;
+  width: 100%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.12), rgba(255,255,255,0.05));
+  background-size: 200% 100%;
+  animation: mbo-shimmer 1.2s infinite;
+}
+
+@keyframes mbo-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Empty/alert message */
+.mbo-container .alert-message {
+  color: var(--mbo-text-dim);
+  padding: 1rem;
+  border-radius: 12px;
+  background: var(--mbo-surface);
+  border: 1px dashed var(--mbo-border);
+}
+
+/* Pagination */
+.mbo-container .pagination-container {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.mbo-container .pagination-info {
+  color: var(--mbo-text-dim);
+  font-size: 0.9rem;
+}
+
+.mbo-container .pagination {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mbo-container .page-item .page-link,
+.mbo-container .page-item.disabled .page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 0.5rem;
+  border-radius: 10px;
+  border: 1px solid var(--mbo-border);
+  background: var(--mbo-surface);
+  color: var(--mbo-text);
+  cursor: pointer;
+  transition: background 0.2s ease, border 0.2s ease, transform 0.12s ease;
+}
+
+.mbo-container .page-item .page-link:hover {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: rgba(124, 58, 237, 0.35);
+}
+
+.mbo-container .page-item.active .page-link {
+  background: linear-gradient(135deg, var(--mbo-primary), var(--mbo-primary-2));
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+}
+
+.mbo-container .page-item.disabled .page-link {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Utilities for layout when Bootstrap is not present */
+.mbo-container .row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+}
+
+.mbo-container .col-md-6,
+.mbo-container .col-lg-4 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .mbo-container .col-md-6 { width: 50%; }
+}
+
+@media (min-width: 992px) {
+  .mbo-container .col-lg-4 { width: 33.3333%; }
+}
+

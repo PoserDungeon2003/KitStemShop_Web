@@ -18,7 +18,9 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles, as: "style" },
   { rel: "stylesheet", href: "/css/tailwind1.css?v=1" },
   { rel: "stylesheet", href: "/css/ant-design.css?v=1" },
+  { rel: "stylesheet", href: "/css/mbo-table.css?v=1" },
   { rel: "stylesheet", href: "/css/responsive.css" },
+  { rel: "stylesheet", href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" },
 ];
 
 const redirectLogin = _.throttle(() => {
